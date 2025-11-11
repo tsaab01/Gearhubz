@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .calculator-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .date-inputs {
+            display: flex;
+            gap: 15px;
+        }
+
+        .date-input {
+            flex: 1;
+        }
+
+        .date-input input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .date-input input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .calculate-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        .quick-select {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quick-btn {
+            flex: 1;
+            padding: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .quick-btn:hover {
+            border-color: var(--primary-blue);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .results-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .age-display {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin: 20px 0;
+            line-height: 1;
+        }
+
+        .age-details {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .additional-info {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .info-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .zodiac-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .zodiac-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+
+        .zodiac-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .zodiac-dates {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            color: #EF4444;
+            text-align: center;
+            padding: 15px;
+            background: #FEF2F2;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .birthday-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .birthday-message.active {
+            display: block;
+        }
+
+        .birthday-icon {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .age-details {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Calculate your exact age in years, months, and days. Find out interesting facts about your birth date.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="calculator-section">
+                <h2 class="section-title"><i class="fas fa-birthday-cake"></i> Enter Birth Date</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Birth Date</label>
+                    <div class="date-inputs">
+                        <div class="date-input">
+                            <input type="number" id="day" min="1" max="31" placeholder="DD">
+                        </div>
+                        <div class="date-input">
+                            <input type="number" id="month" min="1" max="12" placeholder="MM">
+                        </div>
+                        <div class="date-input">
+                            <input type="number" id="year" min="1900" max="2030" placeholder="YYYY">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Reference Date (Optional)</label>
+                    <div class="date-inputs">
+                        <div class="date-input">
+                            <input type="number" id="ref-day" min="1" max="31" placeholder="DD">
+                        </div>
+                        <div class="date-input">
+                            <input type="number" id="ref-month" min="1" max="12" placeholder="MM">
+                        </div>
+                        <div class="date-input">
+                            <input type="number" id="ref-year" min="1900" max="2030" placeholder="YYYY">
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" id="calculate-btn">Calculate Age</button>
+                
+                <div class="quick-select">
+                    <div class="quick-btn" id="today-btn">Today</div>
+                    <div class="quick-btn" id="tomorrow-btn">Tomorrow</div>
+                    <div class="quick-btn" id="yesterday-btn">Yesterday</div>
+                </div>
+                
+                <div class="error-message" id="error-message">
+                    Please enter a valid date.
+                </div>
+                
+                <div class="birthday-message" id="birthday-message">
+                    <div class="birthday-icon">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <h3>Happy Birthday!</h3>
+                    <p>It's your special day today! 🎉</p>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title"><i class="fas fa-calculator"></i> Age Results</h2>
+                
+                <div class="results-container">
+                    <div class="age-display" id="age-display">0</div>
+                    <p>years old</p>
+                    
+                    <div class="age-details">
+                        <div class="detail-item">
+                            <div class="detail-value" id="months-value">0</div>
+                            <div class="detail-label">Months</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value" id="days-value">0</div>
+                            <div class="detail-label">Days</div>
+                        </div>
+                    </div>
+                    
+                    <div class="additional-info">
+                        <div class="info-title">Additional Information</div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Total Days</div>
+                                <div class="info-value" id="total-days">0</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Total Weeks</div>
+                                <div class="info-value" id="total-weeks">0</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Total Months</div>
+                                <div class="info-value" id="total-months">0</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Next Birthday</div>
+                                <div class="info-value" id="next-birthday">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="zodiac-section">
+                        <div class="zodiac-icon" id="zodiac-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="zodiac-name" id="zodiac-name">-</div>
+                        <div class="zodiac-dates" id="zodiac-dates">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const dayInput = document.getElementById('day');
+            const monthInput = document.getElementById('month');
+            const yearInput = document.getElementById('year');
+            const refDayInput = document.getElementById('ref-day');
+            const refMonthInput = document.getElementById('ref-month');
+            const refYearInput = document.getElementById('ref-year');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const todayBtn = document.getElementById('today-btn');
+            const tomorrowBtn = document.getElementById('tomorrow-btn');
+            const yesterdayBtn = document.getElementById('yesterday-btn');
+            const errorMessage = document.getElementById('error-message');
+            const birthdayMessage = document.getElementById('birthday-message');
+            const ageDisplay = document.getElementById('age-display');
+            const monthsValue = document.getElementById('months-value');
+            const daysValue = document.getElementById('days-value');
+            const totalDays = document.getElementById('total-days');
+            const totalWeeks = document.getElementById('total-weeks');
+            const totalMonths = document.getElementById('total-months');
+            const nextBirthday = document.getElementById('next-birthday');
+            const zodiacIcon = document.getElementById('zodiac-icon');
+            const zodiacName = document.getElementById('zodiac-name');
+            const zodiacDates = document.getElementById('zodiac-dates');
+            
+            // Set today's date as default for reference date
+            const today = new Date();
+            refDayInput.value = today.getDate();
+            refMonthInput.value = today.getMonth() + 1;
+            refYearInput.value = today.getFullYear();
+            
+            // Event Listeners
+            calculateBtn.addEventListener('click', calculateAge);
+            todayBtn.addEventListener('click', setToday);
+            tomorrowBtn.addEventListener('click', setTomorrow);
+            yesterdayBtn.addEventListener('click', setYesterday);
+            
+            // Functions
+            function setToday() {
+                const today = new Date();
+                refDayInput.value = today.getDate();
+                refMonthInput.value = today.getMonth() + 1;
+                refYearInput.value = today.getFullYear();
+            }
+            
+            function setTomorrow() {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                refDayInput.value = tomorrow.getDate();
+                refMonthInput.value = tomorrow.getMonth() + 1;
+                refYearInput.value = tomorrow.getFullYear();
+            }
+            
+            function setYesterday() {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                refDayInput.value = yesterday.getDate();
+                refMonthInput.value = yesterday.getMonth() + 1;
+                refYearInput.value = yesterday.getFullYear();
+            }
+            
+            function calculateAge() {
+                // Hide messages
+                errorMessage.style.display = 'none';
+                birthdayMessage.classList.remove('active');
+                
+                // Get input values
+                const birthDay = parseInt(dayInput.value);
+                const birthMonth = parseInt(monthInput.value) - 1; // JS months are 0-indexed
+                const birthYear = parseInt(yearInput.value);
+                
+                const refDay = parseInt(refDayInput.value) || today.getDate();
+                const refMonth = parseInt(refMonthInput.value) - 1; // JS months are 0-indexed
+                const refYear = parseInt(refYearInput.value) || today.getFullYear();
+                
+                // Validate inputs
+                if (isNaN(birthDay) || isNaN(birthMonth) || isNaN(birthYear) ||
+                    birthDay < 1 || birthDay > 31 ||
+                    birthMonth < 0 || birthMonth > 11 ||
+                    birthYear < 1900 || birthYear > 2030) {
+                    errorMessage.textContent = 'Please enter a valid birth date.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                
+                // Create date objects
+                const birthDate = new Date(birthYear, birthMonth, birthDay);
+                const refDate = new Date(refYear, refMonth, refDay);
+                
+                // Validate dates
+                if (birthDate > refDate) {
+                    errorMessage.textContent = 'Birth date cannot be in the future.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                
+                // Check if it's the user's birthday
+                if (birthDay === refDay && birthMonth === refMonth) {
+                    birthdayMessage.classList.add('active');
+                }
+                
+                // Calculate age
+                let years = refYear - birthYear;
+                let months = refMonth - birthMonth;
+                let days = refDay - birthDay;
+                
+                // Adjust for negative days
+                if (days < 0) {
+                    months--;
+                    // Get days in previous month
+                    const prevMonth = new Date(refYear, refMonth, 0);
+                    days += prevMonth.getDate();
+                }
+                
+                // Adjust for negative months
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+                
+                // Update display
+                ageDisplay.textContent = years;
+                monthsValue.textContent = months;
+                daysValue.textContent = days;
+                
+                // Calculate additional info
+                const totalDaysValue = Math.floor((refDate - birthDate) / (1000 * 60 * 60 * 24));
+                totalDays.textContent = totalDaysValue;
+                totalWeeks.textContent = Math.floor(totalDaysValue / 7);
+                totalMonths.textContent = years * 12 + months;
+                
+                // Calculate next birthday
+                const nextBirthYear = (refMonth > birthMonth || (refMonth === birthMonth && refDay >= birthDay)) 
+                    ? refYear + 1 
+                    : refYear;
+                
+                const nextBirthDate = new Date(nextBirthYear, birthMonth, birthDay);
+                const daysUntilBirthday = Math.floor((nextBirthDate - refDate) / (1000 * 60 * 60 * 24));
+                nextBirthday.textContent = `${daysUntilBirthday} days`;
+                
+                // Determine zodiac sign
+                determineZodiac(birthMonth, birthDay);
+            }
+            
+            function determineZodiac(month, day) {
+                // Zodiac signs with date ranges
+                const zodiacSigns = [
+                    { name: "Capricorn", dates: "Dec 22 - Jan 19", icon: "♑" },
+                    { name: "Aquarius", dates: "Jan 20 - Feb 18", icon: "♒" },
+                    { name: "Pisces", dates: "Feb 19 - Mar 20", icon: "♓" },
+                    { name: "Aries", dates: "Mar 21 - Apr 19", icon: "♈" },
+                    { name: "Taurus", dates: "Apr 20 - May 20", icon: "♉" },
+                    { name: "Gemini", dates: "May 21 - Jun 20", icon: "♊" },
+                    { name: "Cancer", dates: "Jun 21 - Jul 22", icon: "♋" },
+                    { name: "Leo", dates: "Jul 23 - Aug 22", icon: "♌" },
+                    { name: "Virgo", dates: "Aug 23 - Sep 22", icon: "♍" },
+                    { name: "Libra", dates: "Sep 23 - Oct 22", icon: "♎" },
+                    { name: "Scorpio", dates: "Oct 23 - Nov 21", icon: "♏" },
+                    { name: "Sagittarius", dates: "Nov 22 - Dec 21", icon: "♐" }
+                ];
+                
+                // Determine sign based on month and day
+                let signIndex = 0;
+                
+                if ((month === 0 && day >= 20) || (month === 1 && day <= 18)) signIndex = 1;
+                else if ((month === 1 && day >= 19) || (month === 2 && day <= 20)) signIndex = 2;
+                else if ((month === 2 && day >= 21) || (month === 3 && day <= 19)) signIndex = 3;
+                else if ((month === 3 && day >= 20) || (month === 4 && day <= 20)) signIndex = 4;
+                else if ((month === 4 && day >= 21) || (month === 5 && day <= 20)) signIndex = 5;
+                else if ((month === 5 && day >= 21) || (month === 6 && day <= 22)) signIndex = 6;
+                else if ((month === 6 && day >= 23) || (month === 7 && day <= 22)) signIndex = 7;
+                else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) signIndex = 8;
+                else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) signIndex = 9;
+                else if ((month === 9 && day >= 23) || (month === 10 && day <= 21)) signIndex = 10;
+                else if ((month === 10 && day >= 22) || (month === 11 && day <= 21)) signIndex = 11;
+                
+                zodiacIcon.innerHTML = zodiacSigns[signIndex].icon;
+                zodiacName.textContent = zodiacSigns[signIndex].name;
+                zodiacDates.textContent = zodiacSigns[signIndex].dates;
+            }
+            
+            // Initialize with a sample calculation
+            // Set sample birth date
+            dayInput.value = "15";
+            monthInput.value = "7";
+            yearInput.value = "1990";
+            
+            // Calculate initial age
+            setTimeout(calculateAge, 100);
+        });
+    </script>
+</body>
+</html>
+
