@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro-Skill 7-Day Challenge Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f7ff, #ffffff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .tool-container {
+            padding: 30px;
+        }
+
+        .generator-card {
+            background: #f0f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.1);
+        }
+
+        .card-title {
+            color: #007BFF;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .skill-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .skill-option {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 20px 10px;
+            background: white;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .skill-option:hover {
+            background: #e0f2ff;
+            transform: translateY(-5px);
+        }
+
+        .skill-option.selected {
+            background: #007BFF;
+            color: white;
+        }
+
+        .skill-option input {
+            display: none;
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .custom-skill {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .custom-skill input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            font-size: 1.1rem;
+        }
+
+        .generate-btn {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .generate-btn:hover {
+            background: #0069d9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        .challenge-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.1);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .challenge-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .challenge-title {
+            color: #007BFF;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .challenge-description {
+            color: #555;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .day-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-card.completed {
+            background: #e8f5e9;
+            border-color: #28a745;
+        }
+
+        .day-card.today {
+            border: 2px solid #007BFF;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .day-number {
+            width: 40px;
+            height: 40px;
+            background: #007BFF;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .day-status {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .status-pending {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .status-completed {
+            background: #28a745;
+            color: white;
+        }
+
+        .day-task {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .complete-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .complete-btn:hover {
+            background: #218838;
+        }
+
+        .complete-btn.completed {
+            background: #6c757d;
+        }
+
+        .progress-section {
+            background: #f0f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .progress-title {
+            color: #007BFF;
+            font-size: 1.5rem;
+        }
+
+        .progress-percent {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #007BFF;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .restart-btn {
+            background: #007BFF;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .share-btn {
+            background: #ffc107;
+            color: #212529;
+            box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #28a745;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #007BFF;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                padding: 20px;
+            }
+            
+            .skill-selection {
+                flex-direction: column;
+            }
+            
+            .custom-skill {
+                flex-direction: column;
+            }
+            
+            .week-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-graduation-cap"></i> Micro-Skill 7-Day Challenge</h1>
+            <p>Master a new skill in just one week!</p>
+        </header>
+        
+        <div class="tool-container">
+            <div class="generator-card">
+                <h2 class="card-title">Choose Your Skill</h2>
+                
+                <div class="skill-selection">
+                    <div class="skill-option" data-skill="meditation">
+                        <input type="radio" id="meditation" name="skill" value="meditation">
+                        <div class="skill-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <label for="meditation">Meditation</label>
+                    </div>
+                    
+                    <div class="skill-option" data-skill="journaling">
+                        <input type="radio" id="journaling" name="skill" value="journaling">
+                        <div class="skill-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <label for="journaling">Journaling</label>
+                    </div>
+                    
+                    <div class="skill-option" data-skill="reading">
+                        <input type="radio" id="reading" name="skill" value="reading">
+                        <div class="skill-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <label for="reading">Reading</label>
+                    </div>
+                    
+                    <div class="skill-option" data-skill="exercise">
+                        <input type="radio" id="exercise" name="skill" value="exercise">
+                        <div class="skill-icon">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <label for="exercise">Exercise</label>
+                    </div>
+                    
+                    <div class="skill-option" data-skill="language">
+                        <input type="radio" id="language" name="skill" value="language">
+                        <div class="skill-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <label for="language">Language</label>
+                    </div>
+                </div>
+                
+                <div class="custom-skill">
+                    <input type="text" id="customSkill" class="form-control" placeholder="Or enter your own skill...">
+                    <button id="setCustomBtn" class="generate-btn">Set Custom Skill</button>
+                </div>
+                
+                <button id="generateBtn" class="generate-btn">Generate My Challenge</button>
+            </div>
+            
+            <div class="challenge-container" id="challengeContainer">
+                <div class="challenge-header">
+                    <h2 class="challenge-title" id="challengeTitle">7-Day Meditation Challenge</h2>
+                    <p class="challenge-description" id="challengeDescription">Develop mindfulness and reduce stress through daily meditation practice.</p>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <h3 class="progress-title">Your Progress</h3>
+                        <div class="progress-percent" id="progressPercent">0%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="week-grid" id="weekGrid">
+                    <!-- Day cards will be inserted here by JavaScript -->
+                </div>
+                
+                <div class="actions">
+                    <button class="action-btn restart-btn" id="restartBtn">
+                        <i class="fas fa-redo"></i> Start New Challenge
+                    </button>
+                    <button class="action-btn share-btn" id="shareBtn">
+                        <i class="fas fa-share-alt"></i> Share Challenge
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Multi-Tool Website | Micro-Skill 7-Day Challenge Generator</p>
+        </footer>
+    </div>
+    
+    <div class="notification" id="notification">Challenge generated successfully!</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const skillOptions = document.querySelectorAll('.skill-option');
+            const customSkillInput = document.getElementById('customSkill');
+            const setCustomBtn = document.getElementById('setCustomBtn');
+            const generateBtn = document.getElementById('generateBtn');
+            const challengeContainer = document.getElementById('challengeContainer');
+            const challengeTitle = document.getElementById('challengeTitle');
+            const challengeDescription = document.getElementById('challengeDescription');
+            const weekGrid = document.getElementById('weekGrid');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressFill = document.getElementById('progressFill');
+            const restartBtn = document.getElementById('restartBtn');
+            const shareBtn = document.getElementById('shareBtn');
+            const notification = document.getElementById('notification');
+            
+            // Challenge data
+            const challengeData = {
+                meditation: {
+                    title: "7-Day Meditation Challenge",
+                    description: "Develop mindfulness and reduce stress through daily meditation practice.",
+                    tasks: [
+                        "Start with 5 minutes of mindful breathing",
+                        "Focus on body scan meditation for 7 minutes",
+                        "Practice loving-kindness meditation for 10 minutes",
+                        "Try walking meditation for 15 minutes",
+                        "Sit in silence for 10 minutes, observing thoughts",
+                        "Combine breath and body awareness for 12 minutes",
+                        "Reflect on your week and set intentions for continued practice"
+                    ]
+                },
+                journaling: {
+                    title: "7-Day Journaling Challenge",
+                    description: "Unlock self-awareness and creativity through daily writing practice.",
+                    tasks: [
+                        "Write about your day in 3 paragraphs",
+                        "List 5 things you're grateful for today",
+                        "Describe a challenge and possible solutions",
+                        "Write a letter to your future self",
+                        "Reflect on your core values and beliefs",
+                        "Document your dreams and aspirations",
+                        "Review your week and set goals for next week"
+                    ]
+                },
+                reading: {
+                    title: "7-Day Reading Challenge",
+                    description: "Cultivate knowledge and imagination through daily reading practice.",
+                    tasks: [
+                        "Read for 20 minutes in a book of your choice",
+                        "Explore a new genre for 30 minutes",
+                        "Read poetry or short stories for 25 minutes",
+                        "Analyze character development in your current book",
+                        "Read non-fiction for 35 minutes and take notes",
+                        "Try speed reading techniques for 20 minutes",
+                        "Reflect on what you've learned and recommend books"
+                    ]
+                },
+                exercise: {
+                    title: "7-Day Exercise Challenge",
+                    description: "Build strength and endurance through varied daily workouts.",
+                    tasks: [
+                        "20-minute cardio workout (walking, jogging, cycling)",
+                        "Upper body strength training (push-ups, planks, weights)",
+                        "Lower body focus (squats, lunges, leg exercises)",
+                        "Core strengthening routine (crunches, planks, Pilates)",
+                        "Flexibility session (yoga or stretching for 25 mins)",
+                        "Full-body circuit training for 30 minutes",
+                        "Active recovery with light movement or sports"
+                    ]
+                },
+                language: {
+                    title: "7-Day Language Learning Challenge",
+                    description: "Expand your linguistic abilities through daily practice sessions.",
+                    tasks: [
+                        "Learn 10 new vocabulary words with flashcards",
+                        "Listen to a podcast in your target language for 20 mins",
+                        "Practice pronunciation with tongue twisters",
+                        "Write a short paragraph about your day",
+                        "Watch a video with subtitles in your target language",
+                        "Have a conversation with a native speaker online",
+                        "Review everything you've learned and plan next steps"
+                    ]
+                }
+            };
+            
+            // State variables
+            let selectedSkill = 'meditation';
+            let completedDays = [];
+            let customSkillName = '';
+            
+            // Event Listeners
+            skillOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Deselect all options
+                    skillOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Select clicked option
+                    this.classList.add('selected');
+                    
+                    // Update selected skill
+                    const radio = this.querySelector('input[type="radio"]');
+                    selectedSkill = radio.value;
+                    
+                    // Clear custom skill input
+                    customSkillInput.value = '';
+                });
+            });
+            
+            setCustomBtn.addEventListener('click', setCustomSkill);
+            generateBtn.addEventListener('click', generateChallenge);
+            restartBtn.addEventListener('click', restartChallenge);
+            shareBtn.addEventListener('click', shareChallenge);
+            
+            // Functions
+            function setCustomSkill() {
+                const customSkill = customSkillInput.value.trim();
+                
+                if (!customSkill) {
+                    showNotification('Please enter a custom skill!', true);
+                    return;
+                }
+                
+                customSkillName = customSkill;
+                
+                // Deselect all options
+                skillOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Update UI
+                challengeTitle.textContent = `7-Day ${customSkill} Challenge`;
+                challengeDescription.textContent = `Master ${customSkill} through consistent daily practice.`;
+                
+                showNotification(`${customSkill} challenge set! Click Generate to start.`);
+            }
+            
+            function generateChallenge() {
+                // If we have a custom skill, generate generic tasks
+                if (customSkillName) {
+                    generateCustomChallenge();
+                    return;
+                }
+                
+                const challenge = challengeData[selectedSkill];
+                
+                // Update header
+                challengeTitle.textContent = challenge.title;
+                challengeDescription.textContent = challenge.description;
+                
+                // Generate day cards
+                generateDayCards(challenge.tasks);
+                
+                // Reset completion status
+                completedDays = [];
+                updateProgress();
+                
+                // Show challenge container
+                challengeContainer.style.display = 'block';
+                
+                // Scroll to challenge
+                challengeContainer.scrollIntoView({ behavior: 'smooth' });
+                
+                showNotification('Challenge generated successfully!');
+            }
+            
+            function generateCustomChallenge() {
+                // Generate generic tasks for custom skill
+                const tasks = [
+                    `Spend 15 minutes learning about ${customSkillName}`,
+                    `Practice ${customSkillName} for 20 minutes`,
+                    `Research advanced techniques in ${customSkillName}`,
+                    `Apply ${customSkillName} to a real-world situation`,
+                    `Teach someone something about ${customSkillName}`,
+                    `Reflect on your progress with ${customSkillName}`,
+                    `Plan how to continue developing ${customSkillName}`
+                ];
+                
+                // Generate day cards
+                generateDayCards(tasks);
+                
+                // Reset completion status
+                completedDays = [];
+                updateProgress();
+                
+                // Show challenge container
+                challengeContainer.style.display = 'block';
+                
+                // Scroll to challenge
+                challengeContainer.scrollIntoView({ behavior: 'smooth' });
+                
+                showNotification(`Custom ${customSkillName} challenge generated!`);
+            }
+            
+            function generateDayCards(tasks) {
+                weekGrid.innerHTML = '';
+                
+                tasks.forEach((task, index) => {
+                    const dayCard = document.createElement('div');
+                    dayCard.className = 'day-card';
+                    dayCard.dataset.day = index + 1;
+                    
+                    const isCompleted = completedDays.includes(index + 1);
+                    const isToday = index === 0; // First day is "today"
+                    
+                    if (isCompleted) dayCard.classList.add('completed');
+                    if (isToday) dayCard.classList.add('today');
+                    
+                    dayCard.innerHTML = `
+                        <div class="day-header">
+                            <div class="day-number">${index + 1}</div>
+                            <div class="day-status ${isCompleted ? 'status-completed' : 'status-pending'}">
+                                ${isCompleted ? 'Completed' : 'Pending'}
+                            </div>
+                        </div>
+                        <div class="day-task">${task}</div>
+                        <button class="complete-btn ${isCompleted ? 'completed' : ''}" 
+                                data-day="${index + 1}">
+                            ${isCompleted ? 'Completed ✓' : 'Mark Complete'}
+                        </button>
+                    `;
+                    
+                    weekGrid.appendChild(dayCard);
+                });
+                
+                // Add event listeners to complete buttons
+                document.querySelectorAll('.complete-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const day = parseInt(this.dataset.day);
+                        toggleDayCompletion(day);
+                    });
+                });
+            }
+            
+            function toggleDayCompletion(day) {
+                const index = completedDays.indexOf(day);
+                
+                if (index > -1) {
+                    // Remove from completed
+                    completedDays.splice(index, 1);
+                } else {
+                    // Add to completed
+                    completedDays.push(day);
+                }
+                
+                // Update UI
+                updateDayCard(day);
+                updateProgress();
+                
+                showNotification(`Day ${day} ${index > -1 ? 'marked incomplete' : 'completed'}!`);
+            }
+            
+            function updateDayCard(day) {
+                const card = document.querySelector(`.day-card[data-day="${day}"]`);
+                const button = card.querySelector('.complete-btn');
+                const status = card.querySelector('.day-status');
+                
+                const isCompleted = completedDays.includes(day);
+                
+                if (isCompleted) {
+                    card.classList.add('completed');
+                    button.textContent = 'Completed ✓';
+                    button.classList.add('completed');
+                    status.textContent = 'Completed';
+                    status.className = 'day-status status-completed';
+                } else {
+                    card.classList.remove('completed');
+                    button.textContent = 'Mark Complete';
+                    button.classList.remove('completed');
+                    status.textContent = 'Pending';
+                    status.className = 'day-status status-pending';
+                }
+            }
+            
+            function updateProgress() {
+                const progress = Math.round((completedDays.length / 7) * 100);
+                progressPercent.textContent = `${progress}%`;
+                progressFill.style.width = `${progress}%`;
+            }
+            
+            function restartChallenge() {
+                // Reset selections
+                skillOptions.forEach(opt => opt.classList.remove('selected'));
+                document.querySelector('[data-skill="meditation"]').classList.add('selected');
+                document.getElementById('meditation').checked = true;
+                selectedSkill = 'meditation';
+                customSkillInput.value = '';
+                customSkillName = '';
+                
+                // Hide challenge
+                challengeContainer.style.display = 'none';
+                
+                showNotification('Challenge reset! Select a new skill to begin.');
+            }
+            
+            function shareChallenge() {
+                const title = challengeTitle.textContent;
+                const text = `Check out my "${title}"! I'm building micro-skills one day at a time.`;
+                const url = window.location.href;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: title,
+                        text: text,
+                        url: url
+                    }).catch(console.error);
+                } else {
+                    // Fallback for browsers that don't support Web Share API
+                    const shareText = `${text}\n${url}`;
+                    const textarea = document.createElement('textarea');
+                    textarea.value = shareText;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    showNotification('Challenge link copied to clipboard!');
+                }
+            }
+            
+            function showNotification(message, isError = false) {
+                notification.textContent = message;
+                notification.style.background = isError ? '#dc3545' : '#28a745';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Initialize with meditation selected
+            document.querySelector('[data-skill="meditation"]').classList.add('selected');
+        });
+    </script>
+</body>
+</html>
+
+
+Features of the Micro-Skill 7-Day Challenge Generator:
+Skill Selection:
+Predefined skill categories (Meditation, Journaling, Reading, Exercise, Language)
+Option to create custom challenges
+Visual selection interface with icons
+Challenge Generation:
+Automatically generates 7-day plans with specific tasks
+Custom challenges for user-defined skills
+Detailed descriptions for each challenge
+Progress Tracking:
+Visual progress bar showing completion percentage
+Individual day tracking with completion markers
+Ability to mark days as complete/incomplete
+User Experience:
+Bright blue and white theme with modern design
+Responsive layout for all device sizes
+Interactive elements with hover and click feedback
+Smooth animations and transitions
+Additional Features:
+Share functionality for social media or copying links
+Restart option to begin new challenges
+Notification system for user feedback
+Today marker to indicate current day
+To use the tool, simply select a skill category or enter a custom skill, then click "Generate My Challenge". You can track your progress through the week by marking days as complete. The progress bar updates automatically to show your advancement toward completing the challenge.
+
