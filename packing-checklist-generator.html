@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packing Checklist Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f7ff, #ffffff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .tool-container {
+            padding: 30px;
+        }
+
+        .generator-card {
+            background: #f0f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.1);
+        }
+
+        .card-title {
+            color: #007BFF;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            flex: 1;
+            min-width: 120px;
+            background: white;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #e0f2ff;
+        }
+
+        .checkbox-item.selected {
+            background: #007BFF;
+            color: white;
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .generate-btn {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .generate-btn:hover {
+            background: #0069d9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        .checklist-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.1);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .checklist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #007BFF;
+        }
+
+        .checklist-title {
+            color: #007BFF;
+            font-size: 1.8rem;
+        }
+
+        .trip-details {
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .category {
+            margin-bottom: 25px;
+        }
+
+        .category-header {
+            background: #007BFF;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+
+        .category-header i {
+            margin-right: 10px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            transition: all 0.2s ease;
+        }
+
+        .item:hover {
+            background: #e9f7ff;
+            transform: translateY(-2px);
+        }
+
+        .item input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .item label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .print-btn {
+            background: #28a745;
+            color: white;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .reset-btn {
+            background: #ffc107;
+            color: #212529;
+            box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #28a745;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #007BFF;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-suitcase"></i> Packing Checklist Generator</h1>
+            <p>Create customized packing lists for your trips</p>
+        </header>
+        
+        <div class="tool-container">
+            <div class="generator-card">
+                <h2 class="card-title">Create Your Checklist</h2>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" id="destination" class="form-control" placeholder="Where are you going?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tripType">Trip Type</label>
+                        <select id="tripType" class="form-control">
+                            <option value="">Select trip type</option>
+                            <option value="beach">Beach Vacation</option>
+                            <option value="business">Business Trip</option>
+                            <option value="camping">Camping/Hiking</option>
+                            <option value="city">City Break</option>
+                            <option value="winter">Winter Sports</option>
+                            <option value="general">General Travel</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="duration">Duration</label>
+                        <select id="duration" class="form-control">
+                            <option value="">Select duration</option>
+                            <option value="1-3">1-3 days</option>
+                            <option value="4-7">4-7 days</option>
+                            <option value="1-2weeks">1-2 weeks</option>
+                            <option value="2+weeks">2+ weeks</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="travelers">Travelers</label>
+                        <select id="travelers" class="form-control">
+                            <option value="">Select travelers</option>
+                            <option value="solo">Solo Traveler</option>
+                            <option value="couple">Couple</option>
+                            <option value="family">Family</option>
+                            <option value="group">Group</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Categories to Include</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item" data-category="clothing">
+                            <input type="checkbox" id="clothing" checked>
+                            <label for="clothing"><i class="fas fa-tshirt"></i> Clothing</label>
+                        </div>
+                        <div class="checkbox-item" data-category="toiletries">
+                            <input type="checkbox" id="toiletries" checked>
+                            <label for="toiletries"><i class="fas fa-shower"></i> Toiletries</label>
+                        </div>
+                        <div class="checkbox-item" data-category="electronics">
+                            <input type="checkbox" id="electronics" checked>
+                            <label for="electronics"><i class="fas fa-laptop"></i> Electronics</label>
+                        </div>
+                        <div class="checkbox-item" data-category="documents">
+                            <input type="checkbox" id="documents" checked>
+                            <label for="documents"><i class="fas fa-passport"></i> Documents</label>
+                        </div>
+                        <div class="checkbox-item" data-category="health">
+                            <input type="checkbox" id="health">
+                            <label for="health"><i class="fas fa-heartbeat"></i> Health</label>
+                        </div>
+                        <div class="checkbox-item" data-category="misc">
+                            <input type="checkbox" id="misc">
+                            <label for="misc"><i class="fas fa-ellipsis-h"></i> Miscellaneous</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="generateBtn" class="generate-btn">Generate Checklist</button>
+            </div>
+            
+            <div class="checklist-container" id="checklistContainer">
+                <div class="checklist-header">
+                    <h2 class="checklist-title">Your Packing Checklist</h2>
+                    <div class="trip-details" id="tripDetails">Trip to [Destination] - [Trip Type]</div>
+                </div>
+                
+                <div id="categoriesContainer">
+                    <!-- Categories will be inserted here by JavaScript -->
+                </div>
+                
+                <div class="actions">
+                    <button class="action-btn print-btn" id="printBtn">
+                        <i class="fas fa-print"></i> Print Checklist
+                    </button>
+                    <button class="action-btn reset-btn" id="resetBtn">
+                        <i class="fas fa-redo"></i> Create New
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Multi-Tool Website | Packing Checklist Generator</p>
+        </footer>
+    </div>
+    
+    <div class="notification" id="notification">Checklist generated successfully!</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const destination = document.getElementById('destination');
+            const tripType = document.getElementById('tripType');
+            const duration = document.getElementById('duration');
+            const travelers = document.getElementById('travelers');
+            const generateBtn = document.getElementById('generateBtn');
+            const checklistContainer = document.getElementById('checklistContainer');
+            const categoriesContainer = document.getElementById('categoriesContainer');
+            const tripDetails = document.getElementById('tripDetails');
+            const printBtn = document.getElementById('printBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const notification = document.getElementById('notification');
+            
+            // Category selection items
+            const categoryItems = document.querySelectorAll('.checkbox-item');
+            
+            // Sample data for different categories
+            const packingData = {
+                clothing: {
+                    title: "Clothing",
+                    icon: "fas fa-tshirt",
+                    items: [
+                        "Underwear", "Socks", "T-Shirts", "Pants/Jeans", 
+                        "Sleepwear", "Outerwear", "Shoes", "Accessories"
+                    ]
+                },
+                toiletries: {
+                    title: "Toiletries",
+                    icon: "fas fa-shower",
+                    items: [
+                        "Toothbrush", "Toothpaste", "Shampoo", "Soap", 
+                        "Deodorant", "Razor", "Makeup", "Medications"
+                    ]
+                },
+                electronics: {
+                    title: "Electronics",
+                    icon: "fas fa-laptop",
+                    items: [
+                        "Phone Charger", "Laptop/Tablet", "Camera", "Power Bank", 
+                        "Headphones", "Adapters", "E-Reader", "Portable Speaker"
+                    ]
+                },
+                documents: {
+                    title: "Documents",
+                    icon: "fas fa-passport",
+                    items: [
+                        "Passport/ID", "Tickets", "Hotel Reservations", "Travel Insurance", 
+                        "Visas", "Itinerary", "Emergency Contacts", "Credit Cards"
+                    ]
+                },
+                health: {
+                    title: "Health Items",
+                    icon: "fas fa-heartbeat",
+                    items: [
+                        "First Aid Kit", "Prescription Medications", "Sunscreen", "Insect Repellent", 
+                        "Hand Sanitizer", "Pain Relievers", "Bandages", "Allergy Medication"
+                    ]
+                },
+                misc: {
+                    title: "Miscellaneous",
+                    icon: "fas fa-ellipsis-h",
+                    items: [
+                        "Books/Magazines", "Snacks", "Water Bottle", "Umbrella", 
+                        "Travel Pillow", "Earplugs", "Sunglasses", "Reusable Bag"
+                    ]
+                }
+            };
+            
+            // Event Listeners
+            generateBtn.addEventListener('click', generateChecklist);
+            printBtn.addEventListener('click', printChecklist);
+            resetBtn.addEventListener('click', resetGenerator);
+            
+            // Category selection toggle
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                    this.classList.toggle('selected', checkbox.checked);
+                });
+            });
+            
+            // Set initial selections
+            document.querySelectorAll('#clothing, #toiletries, #electronics, #documents').forEach(cb => {
+                cb.parentElement.parentElement.classList.add('selected');
+            });
+            
+            // Functions
+            function generateChecklist() {
+                const dest = destination.value.trim() || 'Your Destination';
+                const type = tripType.options[tripType.selectedIndex].text || 'General Travel';
+                const dur = duration.options[duration.selectedIndex].text || 'Various Days';
+                const trav = travelers.options[travelers.selectedIndex].text || 'Travelers';
+                
+                // Update trip details
+                tripDetails.textContent = `Trip to ${dest} • ${type} • ${dur} • ${trav}`;
+                
+                // Clear previous checklist
+                categoriesContainer.innerHTML = '';
+                
+                // Get selected categories
+                const selectedCategories = Array.from(document.querySelectorAll('.checkbox-item input:checked'))
+                    .map(input => input.id);
+                
+                // Generate categories
+                selectedCategories.forEach(categoryId => {
+                    if (packingData[categoryId]) {
+                        const category = packingData[categoryId];
+                        const categoryElement = document.createElement('div');
+                        categoryElement.className = 'category';
+                        
+                        categoryElement.innerHTML = `
+                            <div class="category-header">
+                                <i class="${category.icon}"></i>
+                                ${category.title}
+                            </div>
+                            <div class="items-grid" id="${categoryId}-items">
+                                ${category.items.map(item => `
+                                    <div class="item">
+                                        <input type="checkbox" id="${categoryId}-${item.replace(/\s+/g, '-').toLowerCase()}">
+                                        <label for="${categoryId}-${item.replace(/\s+/g, '-').toLowerCase()}">${item}</label>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                        
+                        categoriesContainer.appendChild(categoryElement);
+                    }
+                });
+                
+                // Show checklist container
+                checklistContainer.style.display = 'block';
+                
+                // Scroll to checklist
+                checklistContainer.scrollIntoView({ behavior: 'smooth' });
+                
+                showNotification('Checklist generated successfully!');
+            }
+            
+            function printChecklist() {
+                window.print();
+            }
+            
+            function resetGenerator() {
+                // Reset form
+                destination.value = '';
+                tripType.selectedIndex = 0;
+                duration.selectedIndex = 0;
+                travelers.selectedIndex = 0;
+                
+                // Reset category selections to default
+                categoryItems.forEach(item => {
+                    const checkbox = item.querySelector('input[type="checkbox"]');
+                    const categoryId = checkbox.id;
+                    
+                    // Default selections
+                    const isSelected = ['clothing', 'toiletries', 'electronics', 'documents'].includes(categoryId);
+                    checkbox.checked = isSelected;
+                    item.classList.toggle('selected', isSelected);
+                });
+                
+                // Hide checklist
+                checklistContainer.style.display = 'none';
+                
+                showNotification('Generator reset!');
+            }
+            
+            function showNotification(message, isError = false) {
+                notification.textContent = message;
+                notification.style.background = isError ? '#dc3545' : '#28a745';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+Features of the Packing Checklist Generator:
+User-Friendly Interface:
+Bright blue and white theme with modern design
+Responsive layout that works on all devices
+Intuitive form with clear instructions
+Customizable Options:
+Destination input field
+Trip type selection (beach, business, camping, etc.)
+Duration options (days to weeks)
+Traveler type (solo, couple, family, group)
+Category selection (clothing, toiletries, electronics, etc.)
+Comprehensive Checklist Generation:
+Dynamically generates checklists based on user selections
+Organizes items by category with icons
+Checkable items for tracking packed items
+Additional Features:
+Print functionality for physical copies
+Reset option to create new checklists
+Notification system for user feedback
+Smooth animations and transitions
+Responsive Design:
+Adapts to mobile, tablet, and desktop screens
+Grid-based layout for optimal viewing
+Touch-friendly controls
+To use the tool, simply fill out the form with your trip details, select the categories you want included, and click "Generate Checklist". You can then check off items as you pack and print the list when ready.
+
