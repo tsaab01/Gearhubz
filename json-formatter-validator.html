@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Formatter & Validator | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --valid: #10B981;
+            --invalid: #EF4444;
+            --formatted: #3B82F6;
+            --minified: #F59E0B;
+            --stats: #8B5CF6;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .input-section, .output-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .json-input, .json-output {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        .json-input:focus, .json-output:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .format-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .format-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .validate-btn {
+            background: var(--formatted);
+            color: white;
+        }
+
+        .validate-btn:hover {
+            background: #2563EB;
+        }
+
+        .minify-btn {
+            background: var(--minified);
+            color: white;
+        }
+
+        .minify-btn:hover {
+            background: #D97706;
+        }
+
+        .clear-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .clear-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .copy-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .status-section {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .status-valid {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--valid);
+            border: 1px solid var(--valid);
+        }
+
+        .status-invalid {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--invalid);
+            border: 1px solid var(--invalid);
+        }
+
+        .status-message {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .original-value { color: var(--text-primary); }
+        .formatted-value { color: var(--formatted); }
+        .minified-value { color: var(--minified); }
+        .savings-value { color: var(--stats); }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .savings-bar {
+            height: 10px;
+            background: var(--border);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .savings-fill {
+            height: 100%;
+            background: var(--stats);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .savings-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .examples-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .examples-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .example-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .example-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .example-text {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.8rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Format, validate, and minify JSON data. Perfect for developers working with APIs and data structures.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="input-section">
+                <h2 class="section-title"><i class="fas fa-code"></i> JSON Input</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Enter or paste your JSON</label>
+                    <textarea class="json-input" id="input-json" placeholder="Paste your JSON here...">{
+  "name": "John Doe",
+  "age": 30,
+  "email": "john.doe@example.com",
+  "address": {
+    "street": "123 Main St",
+    "city": "New York",
+    "zipcode": "10001"
+  },
+  "hobbies": [
+    "reading",
+    "swimming",
+    "coding"
+  ],
+  "isEmployed": true,
+  "spouse": null
+}</textarea>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn format-btn" id="format-btn">
+                        <i class="fas fa-indent"></i> Format JSON
+                    </button>
+                    <button class="action-btn validate-btn" id="validate-btn">
+                        <i class="fas fa-check-circle"></i> Validate JSON
+                    </button>
+                    <button class="action-btn minify-btn" id="minify-btn">
+                        <i class="fas fa-compress-alt"></i> Minify JSON
+                    </button>
+                    <button class="action-btn clear-btn" id="clear-btn">
+                        <i class="fas fa-eraser"></i> Clear
+                    </button>
+                </div>
+                
+                <div class="status-section" id="status-section">
+                    <div class="status-message">Enter JSON to begin</div>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <h2 class="section-title"><i class="fas fa-file-export"></i> Formatted JSON</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Your formatted JSON will appear here</label>
+                    <textarea class="json-output" id="output-json" readonly></textarea>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn copy-btn" id="copy-btn">
+                        <i class="fas fa-copy"></i> Copy to Clipboard
+                    </button>
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stat-item">
+                        <div class="stat-value original-value" id="original-size">0 KB</div>
+                        <div class="stat-label">Original Size</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value formatted-value" id="formatted-size">0 KB</div>
+                        <div class="stat-label">Formatted Size</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value minified-value" id="minified-size">0 KB</div>
+                        <div class="stat-label">Minified Size</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value savings-value" id="savings-percent">0%</div>
+                        <div class="stat-label">Savings</div>
+                    </div>
+                </div>
+                
+                <div class="savings-bar">
+                    <div class="savings-fill" id="savings-bar"></div>
+                </div>
+                <div class="savings-text" id="savings-text">0 bytes saved</div>
+                
+                <div class="examples-section">
+                    <div class="examples-title">JSON Examples</div>
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <div class="example-label">Valid JSON Object</div>
+                            <div class="example-text">{
+  "id": 1,
+  "name": "Product",
+  "price": 29.99
+}</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-label">Valid JSON Array</div>
+                            <div class="example-text">[
+  "apple",
+  "banana",
+  "orange"
+]</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-label">Minified JSON</div>
+                            <div class="example-text">{"users":[{"id":1,"name":"John","active":true},{"id":2,"name":"Jane","active":false}]}</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-label">Invalid JSON</div>
+                            <div class="example-text">{
+  "name": "John",
+  "age": 30,
+  // Missing closing brace
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool formats, validates, and minifies JSON data. Perfect for developers working with APIs.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const inputJson = document.getElementById('input-json');
+            const outputJson = document.getElementById('output-json');
+            const formatBtn = document.getElementById('format-btn');
+            const validateBtn = document.getElementById('validate-btn');
+            const minifyBtn = document.getElementById('minify-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const statusSection = document.getElementById('status-section');
+            const originalSize = document.getElementById('original-size');
+            const formattedSize = document.getElementById('formatted-size');
+            const minifiedSize = document.getElementById('minified-size');
+            const savingsPercent = document.getElementById('savings-percent');
+            const savingsBar = document.getElementById('savings-bar');
+            const savingsText = document.getElementById('savings-text');
+            
+            // Event Listeners
+            inputJson.addEventListener('input', updateStats);
+            formatBtn.addEventListener('click', formatJSON);
+            validateBtn.addEventListener('click', validateJSON);
+            minifyBtn.addEventListener('click', minifyJSON);
+            clearBtn.addEventListener('click', clearJSON);
+            copyBtn.addEventListener('click', copyToClipboard);
+            
+            // Initialize
+            updateStats();
+            formatJSON();
+            
+            // Functions
+            function formatJSON() {
+                const jsonString = inputJson.value;
+                if (!jsonString.trim()) {
+                    outputJson.value = '';
+                    updateStats();
+                    return;
+                }
+                
+                try {
+                    const jsonObj = JSON.parse(jsonString);
+                    const formatted = JSON.stringify(jsonObj, null, 2);
+                    outputJson.value = formatted;
+                    updateStats();
+                    showStatus('Valid JSON', 'status-valid');
+                } catch (error) {
+                    showStatus(`Invalid JSON: ${error.message}`, 'status-invalid');
+                }
+            }
+            
+            function validateJSON() {
+                const jsonString = inputJson.value;
+                if (!jsonString.trim()) {
+                    showStatus('Empty JSON', 'status-invalid');
+                    return;
+                }
+                
+                try {
+                    JSON.parse(jsonString);
+                    showStatus('Valid JSON', 'status-valid');
+                } catch (error) {
+                    showStatus(`Invalid JSON: ${error.message}`, 'status-invalid');
+                }
+            }
+            
+            function minifyJSON() {
+                const jsonString = inputJson.value;
+                if (!jsonString.trim()) {
+                    outputJson.value = '';
+                    updateStats();
+                    return;
+                }
+                
+                try {
+                    const jsonObj = JSON.parse(jsonString);
+                    const minified = JSON.stringify(jsonObj);
+                    outputJson.value = minified;
+                    updateStats();
+                    showStatus('Valid JSON (Minified)', 'status-valid');
+                } catch (error) {
+                    showStatus(`Invalid JSON: ${error.message}`, 'status-invalid');
+                }
+            }
+            
+            function showStatus(message, className) {
+                statusSection.className = 'status-section ' + className;
+                statusSection.innerHTML = `<div class="status-message">${message}</div>`;
+            }
+            
+            function updateStats() {
+                const original = inputJson.value;
+                const formatted = outputJson.value;
+                
+                // Original size
+                const originalBytes = new Blob([original]).size;
+                originalSize.textContent = formatFileSize(originalBytes);
+                
+                // Formatted size
+                const formattedBytes = new Blob([formatted]).size;
+                formattedSize.textContent = formatFileSize(formattedBytes);
+                
+                // Minified size (we'll calculate this by minifying the original)
+                try {
+                    const jsonObj = JSON.parse(original);
+                    const minified = JSON.stringify(jsonObj);
+                    const minifiedBytes = new Blob([minified]).size;
+                    minifiedSize.textContent = formatFileSize(minifiedBytes);
+                    
+                    // Savings calculation
+                    const savings = originalBytes - minifiedBytes;
+                    const savingsPercentage = originalBytes > 0 ? Math.round((savings / originalBytes) * 100) : 0;
+                    
+                    savingsPercent.textContent = `${savingsPercentage}%`;
+                    savingsBar.style.width = `${Math.min(savingsPercentage, 100)}%`;
+                    savingsText.textContent = `${formatFileSize(savings)} saved`;
+                } catch (error) {
+                    // If JSON is invalid, show zeros
+                    minifiedSize.textContent = '0 Bytes';
+                    savingsPercent.textContent = '0%';
+                    savingsBar.style.width = '0%';
+                    savingsText.textContent = '0 bytes saved';
+                }
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            function clearJSON() {
+                inputJson.value = '';
+                outputJson.value = '';
+                originalSize.textContent = '0 Bytes';
+                formattedSize.textContent = '0 Bytes';
+                minifiedSize.textContent = '0 Bytes';
+                savingsPercent.textContent = '0%';
+                savingsBar.style.width = '0%';
+                savingsText.textContent = '0 bytes saved';
+                showStatus('Enter JSON to begin', '');
+            }
+            
+            function copyToClipboard() {
+                outputJson.select();
+                document.execCommand('copy');
+                
+                // Show feedback
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
