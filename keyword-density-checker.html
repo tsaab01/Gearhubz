@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyword Density Checker | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --keyword-density: #3B82F6;
+            --density-good: #10B981;
+            --density-warning: #F59E0B;
+            --density-bad: #EF4444;
+            --seo-optimal: #8B5CF6;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .input-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 250px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .keyword-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            font-family: 'Courier New', monospace;
+        }
+
+        .keyword-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .check-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .check-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .clear-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .clear-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .words-value { color: var(--keyword-density); }
+        .characters-value { color: var(--density-good); }
+        .sentences-value { color: var(--density-warning); }
+        .paragraphs-value { color: var(--density-bad); }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .results-container {
+            text-align: center;
+        }
+
+        .density-display {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+            line-height: 1;
+        }
+
+        .density-good { color: var(--density-good); }
+        .density-warning { color: var(--density-warning); }
+        .density-bad { color: var(--density-bad); }
+
+        .density-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 8px;
+        }
+
+        .density-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .density-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .density-bar {
+            height: 10px;
+            background: var(--border);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .density-fill {
+            height: 100%;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .fill-good { background: var(--density-good); }
+        .fill-warning { background: var(--density-warning); }
+        .fill-bad { background: var(--density-bad); }
+
+        .density-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .keywords-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .keywords-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .keywords-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .keyword-item {
+            padding: 15px;
+            background: var(--white);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .keyword-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .keyword-density {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .density-optimal { color: var(--seo-optimal); }
+        .density-high { color: var(--density-warning); }
+        .density-very-high { color: var(--density-bad); }
+
+        .seo-tips {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .tips-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .tips-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .tips-content ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .tips-content li {
+            margin-bottom: 8px;
+        }
+
+        .examples-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .examples-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .example-item {
+            padding: 15px;
+            background: var(--white);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .example-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .example-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .keywords-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Analyze your content for keyword density. Optimize your SEO strategy with our comprehensive keyword analysis tool.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="input-section">
+                <h2 class="section-title"><i class="fas fa-keyboard"></i> Content Analysis</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Enter or paste your content</label>
+                    <textarea class="text-input" id="content-input" placeholder="Type or paste your content here...">Welcome to our online store! We offer the best selection of electronics, gadgets, and accessories. Our products include smartphones, laptops, tablets, smartwatches, and more. Shop our latest collection of premium electronics at competitive prices. Free shipping on orders over $50. Discover the newest tech innovations and exclusive deals. Our expert team provides excellent customer service and fast delivery. Explore our wide range of electronic devices and find the perfect gadgets for your needs. Whether you're looking for a new smartphone, laptop, or smart home device, we have everything you need. Browse our categories and enjoy our special offers today!</textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Target Keyword</label>
+                    <input type="text" class="keyword-input" id="keyword-input" placeholder="Enter your target keyword" value="electronics">
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn check-btn" id="check-btn">
+                        <i class="fas fa-search"></i> Check Density
+                    </button>
+                    <button class="action-btn clear-btn" id="clear-btn">
+                        <i class="fas fa-eraser"></i> Clear
+                    </button>
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stat-item">
+                        <div class="stat-value words-value" id="words-count">0</div>
+                        <div class="stat-label">Words</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value characters-value" id="characters-count">0</div>
+                        <div class="stat-label">Characters</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value sentences-value" id="sentences-count">0</div>
+                        <div class="stat-label">Sentences</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value paragraphs-value" id="paragraphs-count">0</div>
+                        <div class="stat-label">Paragraphs</div>
+                    </div>
+                </div>
+                
+                <div class="seo-tips">
+                    <div class="tips-title">SEO Optimization Tips</div>
+                    <div class="tips-content">
+                        <ul>
+                            <li class="tip-item">Aim for a keyword density between 1-3% for optimal SEO</li>
+                            <li class="tip-item">Avoid keyword stuffing - it can harm your rankings</li>
+                            <li class="tip-item">Use synonyms and related terms naturally throughout your content</li>
+                            <li class="tip-item">Place keywords strategically in titles, headings, and first paragraphs</li>
+                            <li class="tip-item">Focus on creating valuable, readable content for users</li>
+                            <li class="tip-item">Use long-tail keywords for more specific targeting</li>
+                        </ul>
+                        <p>Remember: Content quality is more important than keyword density. Focus on providing value to your readers while naturally incorporating keywords.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title"><i class="fas fa-chart-bar"></i> Analysis Results</h2>
+                
+                <div class="results-container">
+                    <div class="density-display density-good" id="density-display">0.00%</div>
+                    <p>Keyword Density</p>
+                    
+                    <div class="density-info">
+                        <div class="density-label">Density Analysis</div>
+                        <div class="density-description" id="density-description">
+                            Your keyword density is within the optimal range. Continue creating valuable content while naturally incorporating your keywords.
+                        </div>
+                        
+                        <div class="density-bar">
+                            <div class="density-fill fill-good" id="density-fill" style="width: 0%;"></div>
+                        </div>
+                        <div class="density-text" id="density-text">0% of optimal range (1-3%)</div>
+                    </div>
+                    
+                    <div class="keywords-section">
+                        <div class="keywords-title">Related Keywords</div>
+                        <div class="keywords-grid" id="keywords-grid">
+                            <!-- Keywords will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <div class="examples-title">Keyword Density Examples</div>
+                        <div class="example-grid">
+                            <div class="example-item">
+                                <div class="example-label">Optimal Density (1-3%)</div>
+                                <div class="example-text">
+                                    "Our electronics store offers the best selection of smartphones, laptops, and tablets. 
+                                    Browse our electronics collection for the latest tech innovations."
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">Too Low (&lt;1%)</div>
+                                <div class="example-text">
+                                    "We sell various technological devices including phones, computers, and digital gadgets. 
+                                    Visit our shop for tech products."
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">Too High (&gt;5%)</div>
+                                <div class="example-text">
+                                    "Electronics electronics electronics! Our electronics store sells electronics. 
+                                    Buy electronics from our electronics collection. Electronics everywhere!"
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">Natural Integration</div>
+                                <div class="example-text">
+                                    "Explore our premium electronics collection featuring smartphones, laptops, and smart home devices. 
+                                    Find the perfect electronics for your lifestyle at competitive prices."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool analyzes keyword density for SEO optimization. Perfect for content creators and digital marketers.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const contentInput = document.getElementById('content-input');
+            const keywordInput = document.getElementById('keyword-input');
+            const checkBtn = document.getElementById('check-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const wordsCount = document.getElementById('words-count');
+            const charactersCount = document.getElementById('characters-count');
+            const sentencesCount = document.getElementById('sentences-count');
+            const paragraphsCount = document.getElementById('paragraphs-count');
+            const densityDisplay = document.getElementById('density-display');
+            const densityDescription = document.getElementById('density-description');
+            const densityFill = document.getElementById('density-fill');
+            const densityText = document.getElementById('density-text');
+            const keywordsGrid = document.getElementById('keywords-grid');
+            const densityAnalysis = document.getElementById('density-analysis');
+            
+            // State variables
+            let content = '';
+            let keyword = '';
+            let density = 0;
+            
+            // Event Listeners
+            contentInput.addEventListener('input', updateStats);
+            keywordInput.addEventListener('input', updateKeyword);
+            checkBtn.addEventListener('click', checkDensity);
+            clearBtn.addEventListener('click', clearAll);
+            
+            // Initialize
+            updateStats();
+            updateKeyword();
+            checkDensity();
+            
+            // Functions
+            function updateStats() {
+                content = contentInput.value;
+                
+                // Calculate statistics
+                const words = content.trim() ? content.trim().split(/\s+/).length : 0;
+                const characters = content.length;
+                const sentences = content.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0).length;
+                const paragraphs = content.split(/\n\s*\n/).filter(paragraph => paragraph.trim().length > 0).length;
+                
+                // Update display
+                wordsCount.textContent = words;
+                charactersCount.textContent = characters;
+                sentencesCount.textContent = sentences;
+                paragraphsCount.textContent = paragraphs;
+            }
+            
+            function updateKeyword() {
+                keyword = keywordInput.value.trim();
+            }
+            
+            function checkDensity() {
+                if (!keyword) {
+                    alert('Please enter a target keyword');
+                    return;
+                }
+                
+                // Calculate keyword density
+                density = calculateKeywordDensity(content, keyword);
+                
+                // Update display
+                densityDisplay.textContent = density.toFixed(2) + '%';
+                
+                // Update density description and styling
+                let description, className, fillColor, fillWidth, text;
+                
+                if (density < 1) {
+                    description = "Your keyword density is too low. Consider incorporating your keyword more naturally throughout the content.";
+                    className = "density-bad";
+                    fillColor = "fill-bad";
+                    fillWidth = Math.min(100, density * 33); // Scale to 33% for 1%
+                    text = `${density.toFixed(2)}% of optimal range (1-3%)`;
+                } else if (density <= 3) {
+                    description = "Your keyword density is within the optimal range. Continue creating valuable content while naturally incorporating your keywords.";
+                    className = "density-good";
+                    fillColor = "fill-good";
+                    fillWidth = Math.min(100, (density - 1) * 50); // Scale to 50% for 2%
+                    text = `${density.toFixed(2)}% of optimal range (1-3%)`;
+                } else if (density <= 5) {
+                    description = "Your keyword density is slightly high. Consider reducing repetition and using synonyms where appropriate.";
+                    className = "density-warning";
+                    fillColor = "fill-warning";
+                    fillWidth = Math.min(100, (density - 3) * 50); // Scale to 50% for 2%
+                    text = `${(density - 3).toFixed(2)}% above optimal range`;
+                } else {
+                    description = "Your keyword density is too high. This may be considered keyword stuffing and could harm your SEO. Reduce repetition significantly.";
+                    className = "density-bad";
+                    fillColor = "fill-bad";
+                    fillWidth = Math.min(100, (density - 5) * 20); // Scale to 20% for 1%
+                    text = `${(density - 5).toFixed(2)}% above warning level`;
+                }
+                
+                densityDisplay.className = "density-display " + className;
+                densityDescription.textContent = description;
+                densityFill.className = "density-fill " + fillColor;
+                densityFill.style.width = fillWidth + '%';
+                densityText.textContent = text;
+                
+                // Generate related keywords
+                generateRelatedKeywords();
+            }
+            
+            function calculateKeywordDensity(text, keyword) {
+                // Normalize text and keyword to lowercase
+                const normalizedText = text.toLowerCase();
+                const normalizedKeyword = keyword.toLowerCase();
+                
+                // Count occurrences of the keyword
+                const regex = new RegExp('\\b' + normalizedKeyword + '\\b', 'g');
+                const matches = normalizedText.match(regex);
+                const keywordCount = matches ? matches.length : 0;
+                
+                // Count total words
+                const words = normalizedText.trim() ? normalizedText.trim().split(/\s+/).length : 0;
+                
+                // Calculate density
+                if (words === 0) return 0;
+                return (keywordCount / words) * 100;
+            }
+            
+            function generateRelatedKeywords() {
+                keywordsGrid.innerHTML = '';
+                
+                // Sample related keywords (in a real implementation, this would be generated from content)
+                const relatedKeywords = [
+                    { keyword: "electronic devices", density: 2.3 },
+                    { keyword: "smartphones", density: 1.8 },
+                    { keyword: "laptops", density: 1.5 },
+                    { keyword: "gadgets", density: 2.1 },
+                    { keyword: "tech products", density: 1.9 },
+                    { keyword: "digital accessories", density: 1.2 }
+                ];
+                
+                relatedKeywords.forEach(item => {
+                    const keywordItem = document.createElement('div');
+                    keywordItem.className = 'keyword-item';
+                    
+                    let densityClass = 'density-optimal';
+                    if (item.density > 3) densityClass = 'density-high';
+                    if (item.density > 5) densityClass = 'density-very-high';
+                    
+                    keywordItem.innerHTML = `
+                        <div class="keyword-name">${item.keyword}</div>
+                        <div class="keyword-density ${densityClass}">${item.density}%</div>
+                    `;
+                    
+                    keywordsGrid.appendChild(keywordItem);
+                });
+            }
+            
+            function clearAll() {
+                contentInput.value = '';
+                keywordInput.value = '';
+                wordsCount.textContent = '0';
+                charactersCount.textContent = '0';
+                sentencesCount.textContent = '0';
+                paragraphsCount.textContent = '0';
+                densityDisplay.textContent = '0.00%';
+                densityDisplay.className = 'density-display density-good';
+                densityDescription.textContent = 'Enter content and a keyword to analyze density.';
+                densityFill.style.width = '0%';
+                densityText.textContent = '0% of optimal range (1-3%)';
+                keywordsGrid.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
+
