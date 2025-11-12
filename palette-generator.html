@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palette Generator | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --primary: #4F46E5;
+            --secondary: #8B5CF6;
+            --accent: #10B981;
+            --complement: #F59E0B;
+            --analogous: #3B82F6;
+            --triadic: #EF4444;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .generator-section, .palette-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .color-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            font-family: 'Courier New', monospace;
+        }
+
+        .color-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .color-picker {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .color-picker::-webkit-color-swatch {
+            border: none;
+            border-radius: 8px;
+        }
+
+        .color-picker::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .palette-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .type-option {
+            padding: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .type-option:hover {
+            border-color: var(--primary-blue);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .type-option.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .generate-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .generate-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .random-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .random-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .palette-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .color-card {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .color-card:hover {
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        .color-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, #ccc 25%, transparent 25%), 
+                linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ccc 75%),
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            z-index: -1;
+        }
+
+        .color-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            font-size: 0.7rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .color-card:hover .color-info {
+            opacity: 1;
+        }
+
+        .export-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .export-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .export-options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            padding: 10px 20px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .export-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .palette-info {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .info-content {
+            line-height: 1.6;
+        }
+
+        .info-content ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .info-content li {
+            margin-bottom: 8px;
+        }
+
+        .examples-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .examples-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .example-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .example-palette {
+            display: flex;
+            height: 40px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .example-color {
+            flex: 1;
+        }
+
+        .example-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .palette-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .example-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .export-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Generate beautiful color palettes from a single base color. Perfect for designers and artists.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="generator-section">
+                <h2 class="section-title"><i class="fas fa-palette"></i> Palette Generator</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Base Color</label>
+                    <input type="text" class="color-input" id="base-color" value="#4F46E5" placeholder="Enter HEX color">
+                    <input type="color" class="color-picker" id="color-picker" value="#4F46E5">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Palette Type</label>
+                    <div class="palette-types">
+                        <div class="type-option active" data-type="monochromatic">
+                            Monochromatic
+                        </div>
+                        <div class="type-option" data-type="complementary">
+                            Complementary
+                        </div>
+                        <div class="type-option" data-type="analogous">
+                            Analogous
+                        </div>
+                        <div class="type-option" data-type="triadic">
+                            Triadic
+                        </div>
+                        <div class="type-option" data-type="tetradic">
+                            Tetradic
+                        </div>
+                        <div class="type-option" data-type="split-complementary">
+                            Split Complementary
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn generate-btn" id="generate-btn">
+                        <i class="fas fa-magic"></i> Generate Palette
+                    </button>
+                    <button class="action-btn random-btn" id="random-btn">
+                        <i class="fas fa-random"></i> Random Color
+                    </button>
+                </div>
+                
+                <div class="palette-info">
+                    <div class="info-title">About Color Palettes</div>
+                    <div class="info-content">
+                        <ul>
+                            <li><strong>Monochromatic:</strong> Variations in lightness and saturation of a single color</li>
+                            <li><strong>Complementary:</strong> Two colors opposite each other on the color wheel</li>
+                            <li><strong>Analogous:</strong> Three colors adjacent to each other on the color wheel</li>
+                            <li><strong>Triadic:</strong> Three colors evenly spaced around the color wheel</li>
+                            <li><strong>Tetradic:</strong> Four colors arranged into two complementary pairs</li>
+                            <li><strong>Split Complementary:</strong> A base color and two adjacent to its complement</li>
+                        </ul>
+                        <p>Each palette type creates a different mood and visual impact. Experiment to find what works for your project!</p>
+                    </div>
+                </div>
+                
+                <div class="examples-section">
+                    <div class="examples-title">Popular Palette Examples</div>
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <div class="example-palette">
+                                <div class="example-color" style="background-color: #4F46E5;"></div>
+                                <div class="example-color" style="background-color: #818CF8;"></div>
+                                <div class="example-color" style="background-color: #C7D2FE;"></div>
+                                <div class="example-color" style="background-color: #E0E7FF;"></div>
+                            </div>
+                            <div class="example-name">Ocean Blues</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-palette">
+                                <div class="example-color" style="background-color: #10B981;"></div>
+                                <div class="example-color" style="background-color: #34D399;"></div>
+                                <div class="example-color" style="background-color: #6EE7B7;"></div>
+                                <div class="example-color" style="background-color: #A7F3D0;"></div>
+                            </div>
+                            <div class="example-name">Forest Greens</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-palette">
+                                <div class="example-color" style="background-color: #F59E0B;"></div>
+                                <div class="example-color" style="background-color: #FBBF24;"></div>
+                                <div class="example-color" style="background-color: #FCD34D;"></div>
+                                <div class="example-color" style="background-color: #FDE68A;"></div>
+                            </div>
+                            <div class="example-name">Sunset Oranges</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="palette-section">
+                <h2 class="section-title"><i class="fas fa-eye-dropper"></i> Generated Palette</h2>
+                
+                <div class="palette-container" id="palette-container">
+                    <!-- Palette colors will be generated here -->
+                </div>
+                
+                <div class="export-section">
+                    <div class="export-title">Export Palette</div>
+                    <div class="export-options">
+                        <button class="export-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy HEX Codes
+                        </button>
+                        <button class="export-btn" id="scss-btn">
+                            <i class="fas fa-file-code"></i> SCSS Variables
+                        </button>
+                        <button class="export-btn" id="css-btn">
+                            <i class="fab fa-css3-alt"></i> CSS Variables
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="palette-info">
+                    <div class="info-title">Using Your Palette</div>
+                    <div class="info-content">
+                        <p>Your generated color palette can be used in various ways:</p>
+                        <ul>
+                            <li>Copy HEX codes for use in design software</li>
+                            <li>Export as SCSS or CSS variables for web development</li>
+                            <li>Apply to UI components for consistent branding</li>
+                            <li>Use as a starting point for more complex color schemes</li>
+                        </ul>
+                        <p>Remember to test your palette for accessibility contrast ratios!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool generates color palettes. Perfect for designers and artists.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const baseColorInput = document.getElementById('base-color');
+            const colorPicker = document.getElementById('color-picker');
+            const typeOptions = document.querySelectorAll('.type-option');
+            const generateBtn = document.getElementById('generate-btn');
+            const randomBtn = document.getElementById('random-btn');
+            const paletteContainer = document.getElementById('palette-container');
+            const copyBtn = document.getElementById('copy-btn');
+            const scssBtn = document.getElementById('scss-btn');
+            const cssBtn = document.getElementById('css-btn');
+            
+            // State variables
+            let baseColor = '#4F46E5';
+            let paletteType = 'monochromatic';
+            let currentPalette = [];
+            
+            // Event Listeners
+            baseColorInput.addEventListener('input', function() {
+                baseColor = this.value;
+                colorPicker.value = baseColor;
+                generatePalette();
+            });
+            
+            colorPicker.addEventListener('input', function() {
+                baseColor = this.value;
+                baseColorInput.value = baseColor;
+                generatePalette();
+            });
+            
+            typeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    typeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    paletteType = this.dataset.type;
+                    generatePalette();
+                });
+            });
+            
+            generateBtn.addEventListener('click', generatePalette);
+            randomBtn.addEventListener('click', generateRandomColor);
+            copyBtn.addEventListener('click', copyHexCodes);
+            scssBtn.addEventListener('click', exportScss);
+            cssBtn.addEventListener('click', exportCss);
+            
+            // Initialize
+            generatePalette();
+            
+            // Functions
+            function generatePalette() {
+                currentPalette = [];
+                
+                switch(paletteType) {
+                    case 'monochromatic':
+                        currentPalette = generateMonochromaticPalette(baseColor);
+                        break;
+                    case 'complementary':
+                        currentPalette = generateComplementaryPalette(baseColor);
+                        break;
+                    case 'analogous':
+                        currentPalette = generateAnalogousPalette(baseColor);
+                        break;
+                    case 'triadic':
+                        currentPalette = generateTriadicPalette(baseColor);
+                        break;
+                    case 'tetradic':
+                        currentPalette = generateTetradicPalette(baseColor);
+                        break;
+                    case 'split-complementary':
+                        currentPalette = generateSplitComplementaryPalette(baseColor);
+                        break;
+                    default:
+                        currentPalette = generateMonochromaticPalette(baseColor);
+                }
+                
+                renderPalette();
+            }
+            
+            function generateMonochromaticPalette(base) {
+                const colors = [];
+                const hsl = hexToHsl(base);
+                
+                // Generate 5 shades/tints
+                for (let i = 0; i < 5; i++) {
+                    const lightness = Math.max(10, Math.min(90, 20 + i * 20));
+                    colors.push(hslToHex(hsl.h, hsl.s, lightness));
+                }
+                
+                return colors;
+            }
+            
+            function generateComplementaryPalette(base) {
+                const colors = [base];
+                const hsl = hexToHsl(base);
+                const complementaryHsl = {
+                    h: (hsl.h + 180) % 360,
+                    s: hsl.s,
+                    l: hsl.l
+                };
+                colors.push(hslToHex(complementaryHsl.h, complementaryHsl.s, complementaryHsl.l));
+                
+                // Add tints/shades of both
+                const baseHsl = {...hsl};
+                const compHsl = {...complementaryHsl};
+                
+                for (let i = 0; i < 4; i++) {
+                    if (i % 2 === 0) {
+                        const lightness = Math.max(10, Math.min(90, baseHsl.l + (i - 1) * 15));
+                        colors.push(hslToHex(baseHsl.h, baseHsl.s, lightness));
+                    } else {
+                        const lightness = Math.max(10, Math.min(90, compHsl.l + (i - 2) * 15));
+                        colors.push(hslToHex(compHsl.h, compHsl.s, lightness));
+                    }
+                }
+                
+                return colors;
+            }
+            
+            function generateAnalogousPalette(base) {
+                const colors = [];
+                const hsl = hexToHsl(base);
+                
+                // Generate 5 analogous colors
+                for (let i = 0; i < 5; i++) {
+                    const hue = (hsl.h + (i * 30 - 60) + 360) % 360;
+                    colors.push(hslToHex(hue, hsl.s, hsl.l));
+                }
+                
+                return colors;
+            }
+            
+            function generateTriadicPalette(base) {
+                const colors = [base];
+                const hsl = hexToHsl(base);
+                
+                // Generate two triadic colors
+                const triadic1Hsl = {
+                    h: (hsl.h + 120) % 360,
+                    s: hsl.s,
+                    l: hsl.l
+                };
+                const triadic2Hsl = {
+                    h: (hsl.h + 240) % 360,
+                    s: hsl.s,
+                    l: hsl.l
+                };
+                
+                colors.push(hslToHex(triadic1Hsl.h, triadic1Hsl.s, triadic1Hsl.l));
+                colors.push(hslToHex(triadic2Hsl.h, triadic2Hsl.s, triadic2Hsl.l));
+                
+                // Add tints/shades
+                for (let i = 0; i < 2; i++) {
+                    const lightness = Math.max(10, Math.min(90, hsl.l + (i === 0 ? 20 : -20)));
+                    colors.push(hslToHex(hsl.h, hsl.s, lightness));
+                }
+                
+                return colors;
+            }
+            
+            function generateTetradicPalette(base) {
+                const colors = [base];
+                const hsl = hexToHsl(base);
+                
+                // Generate three tetradic colors
+                const tetradic1Hsl = {
+                    h: (hsl.h + 90) % 360,
+                    s: hsl.s,
+                    l: hsl.l
+                };
+                const tetradic2Hsl = {
+                    h: (hsl.h + 180) % 360,
+                    s: hsl.s,
+                    l: hsl.l
+                };
+                const tetradic3Hsl = {
+                    h: (hsl.h + 270) % 360,
+                    s: hsl.s,
+                    l: hsl.l
+                };
+                
+                colors.push(hslToHex(tetradic1Hsl.h, tetradic1Hsl.s, tetradic1Hsl.l));
+                colors.push(hslToHex(tetradic2Hsl.h, tetradic2Hsl.s, tetradic2Hsl.l));
+                colors.push(hslToHex(tetradic3Hsl.h, tetradic3Hsl.s, tetradic3Hsl.l));
+                
+                return colors;
+            }
+            
+            function generateSplitComplementaryPalette(base) {
+                const colors = [base];
+                const hsl = hexToHsl(base);
+                
+                // Generate two split complementary colors
+                const split1Hsl = {
+                    h: (hsl.h + 150) % 360,
+                    s: hsl.s,
+                    l: hsl.l
+                };
+                const split2Hsl = {
+                    h: (hsl.h + 210) % 360,
+                    s: hsl.s,
+                    l: hsl.l
+                };
+                
+                colors.push(hslToHex(split1Hsl.h, split1Hsl.s, split1Hsl.l));
+                colors.push(hslToHex(split2Hsl.h, split2Hsl.s, split2Hsl.l));
+                
+                // Add tints/shades
+                for (let i = 0; i < 2; i++) {
+                    const lightness = Math.max(10, Math.min(90, hsl.l + (i === 0 ? 20 : -20)));
+                    colors.push(hslToHex(hsl.h, hsl.s, lightness));
+                }
+                
+                return colors;
+            }
+            
+            function renderPalette() {
+                paletteContainer.innerHTML = '';
+                
+                currentPalette.forEach((color, index) => {
+                    const colorCard = document.createElement('div');
+                    colorCard.className = 'color-card';
+                    colorCard.style.backgroundColor = color;
+                    colorCard.innerHTML = `
+                        <div class="color-info">${color.toUpperCase()}</div>
+                    `;
+                    
+                    colorCard.addEventListener('click', function() {
+                        copyToClipboard(color);
+                        showNotification(`Copied ${color.toUpperCase()} to clipboard!`);
+                    });
+                    
+                    paletteContainer.appendChild(colorCard);
+                });
+            }
+            
+            function generateRandomColor() {
+                baseColor = getRandomColor();
+                baseColorInput.value = baseColor;
+                colorPicker.value = baseColor;
+                generatePalette();
+            }
+            
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+            
+            function copyHexCodes() {
+                const hexCodes = currentPalette.join('\n');
+                copyToClipboard(hexCodes);
+                showNotification('Copied all HEX codes to clipboard!');
+            }
+            
+            function exportScss() {
+                let scss = '// Generated Color Palette\n';
+                currentPalette.forEach((color, index) => {
+                    scss += `$color-${index + 1}: ${color};\n`;
+                });
+                copyToClipboard(scss);
+                showNotification('Copied SCSS variables to clipboard!');
+            }
+            
+            function exportCss() {
+                let css = '/* Generated Color Palette */\n:root {\n';
+                currentPalette.forEach((color, index) => {
+                    css += `  --color-${index + 1}: ${color};\n`;
+                });
+                css += '}';
+                copyToClipboard(css);
+                showNotification('Copied CSS variables to clipboard!');
+            }
+            
+            function copyToClipboard(text) {
+                navigator.clipboard.writeText(text);
+            }
+            
+            function showNotification(message) {
+                // In a real implementation, you would show a toast notification
+                // For this demo, we'll use an alert
+                alert(message);
+            }
+            
+            // Utility functions
+            function hexToHsl(hex) {
+                // Convert hex to RGB
+                const r = parseInt(hex.slice(1, 3), 16) / 255;
+                const g = parseInt(hex.slice(3, 5), 16) / 255;
+                const b = parseInt(hex.slice(5, 7), 16) / 255;
+                
+                // Find min and max values
+                const max = Math.max(r, g, b);
+                const min = Math.min(r, g, b);
+                let h, s, l = (max + min) / 2;
+                
+                if (max === min) {
+                    h = s = 0; // achromatic
+                } else {
+                    const d = max - min;
+                    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                    
+                    switch (max) {
+                        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                        case g: h = (b - r) / d + 2; break;
+                        case b: h = (r - g) / d + 4; break;
+                    }
+                    
+                    h /= 6;
+                }
+                
+                return {
+                    h: Math.round(h * 360),
+                    s: Math.round(s * 100),
+                    l: Math.round(l * 100)
+                };
+            }
+            
+            function hslToHex(h, s, l) {
+                h /= 360;
+                s /= 100;
+                l /= 100;
+                
+                let r, g, b;
+                
+                if (s === 0) {
+                    r = g = b = l; // achromatic
+                } else {
+                    const hue2rgb = (p, q, t) => {
+                        if (t < 0) t += 1;
+                        if (t > 1) t -= 1;
+                        if (t < 1/6) return p + (q - p) * 6 * t;
+                        if (t < 1/2) return q;
+                        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                        return p;
+                    };
+                    
+                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                    const p = 2 * l - q;
+                    
+                    r = hue2rgb(p, q, h + 1/3);
+                    g = hue2rgb(p, q, h);
+                    b = hue2rgb(p, q, h - 1/3);
+                }
+                
+                const toHex = (c) => {
+                    const hex = Math.round(c * 255).toString(16);
+                    return hex.length === 1 ? '0' + hex : hex;
+                };
+                
+                return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+            }
+        });
+    </script>
+</body>
+</html>
