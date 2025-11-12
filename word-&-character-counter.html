@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word & Character Counter | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --characters: #3B82F6;
+            --words: #10B981;
+            --sentences: #F59E0B;
+            --paragraphs: #8B5CF6;
+            --reading-time: #EF4444;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .input-section, .stats-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            resize: vertical;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .clear-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .clear-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .copy-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .characters-icon { color: var(--characters); }
+        .words-icon { color: var(--words); }
+        .sentences-icon { color: var(--sentences); }
+        .paragraphs-icon { color: var(--paragraphs); }
+        .reading-time-icon { color: var(--reading-time); }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .characters-value { color: var(--characters); }
+        .words-value { color: var(--words); }
+        .sentences-value { color: var(--sentences); }
+        .paragraphs-value { color: var(--paragraphs); }
+        .reading-time-value { color: var(--reading-time); }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .progress-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .progress-item {
+            margin-bottom: 15px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: var(--border);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        .characters-fill { background: var(--characters); width: 75%; }
+        .words-fill { background: var(--words); width: 60%; }
+        .sentences-fill { background: var(--sentences); width: 40%; }
+        .paragraphs-fill { background: var(--paragraphs); width: 30%; }
+
+        .limits-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .limits-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .limit-inputs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .limit-field {
+            flex: 1;
+        }
+
+        .limit-field input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        .limit-field input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .limit-status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .limit-ok { background: rgba(16, 185, 129, 0.2); color: var(--words); }
+        .limit-warning { background: rgba(245, 158, 11, 0.2); color: var(--sentences); }
+        .limit-exceeded { background: rgba(239, 68, 68, 0.2); color: var(--reading-time); }
+
+        .tips-section {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .tips-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .tips-list {
+            padding-left: 20px;
+        }
+
+        .tip-item {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .limit-inputs {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Count words, characters, sentences, and paragraphs in real-time. Perfect for writers, students, and content creators.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="input-section">
+                <h2 class="section-title"><i class="fas fa-keyboard"></i> Text Input</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Enter or paste your text here</label>
+                    <textarea class="text-input" id="input-text" placeholder="Type or paste your text here...">Welcome to Tools Hub! This is a sample text to demonstrate the word and character counter tool. You can type or paste any text here and see real-time statistics. 
+
+The tool counts characters (with and without spaces), words, sentences, and paragraphs. It also calculates estimated reading time. Try adding more text to see how the statistics change!
+
+This is the second paragraph of the sample text. Notice how the paragraph count updates automatically. The tool is designed to be helpful for writers, students, and content creators who need to track their text statistics.</textarea>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn clear-btn" id="clear-btn">
+                        <i class="fas fa-eraser"></i> Clear Text
+                    </button>
+                    <button class="action-btn copy-btn" id="copy-btn">
+                        <i class="fas fa-copy"></i> Copy Text
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-section">
+                <h2 class="section-title"><i class="fas fa-chart-bar"></i> Text Statistics</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon characters-icon">
+                            <i class="fas fa-font"></i>
+                        </div>
+                        <div class="stat-value characters-value" id="character-count">0</div>
+                        <div class="stat-label">Characters</div>
+                        <div class="stat-value" id="character-no-spaces" style="font-size: 1.2rem;">0</div>
+                        <div class="stat-label">Without Spaces</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon words-icon">
+                            <i class="fas fa-file-word"></i>
+                        </div>
+                        <div class="stat-value words-value" id="word-count">0</div>
+                        <div class="stat-label">Words</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon sentences-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="stat-value sentences-value" id="sentence-count">0</div>
+                        <div class="stat-label">Sentences</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon paragraphs-icon">
+                            <i class="fas fa-paragraph"></i>
+                        </div>
+                        <div class="stat-value paragraphs-value" id="paragraph-count">0</div>
+                        <div class="stat-label">Paragraphs</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card" style="margin-top: 20px;">
+                    <div class="stat-icon reading-time-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value reading-time-value" id="reading-time">0 min</div>
+                    <div class="stat-label">Reading Time</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-title">Text Composition</div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Characters</span>
+                            <span id="char-percent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill characters-fill"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Words</span>
+                            <span id="word-percent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill words-fill"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Sentences</span>
+                            <span id="sentence-percent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill sentences-fill"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Paragraphs</span>
+                            <span id="paragraph-percent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill paragraphs-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="limits-section">
+                    <div class="limits-title">Set Text Limits</div>
+                    
+                    <div class="limit-inputs">
+                        <div class="limit-field">
+                            <input type="number" id="word-limit" min="1" placeholder="Word limit" value="500">
+                        </div>
+                        <div class="limit-field">
+                            <input type="number" id="char-limit" min="1" placeholder="Character limit" value="2500">
+                        </div>
+                    </div>
+                    
+                    <div class="limit-status" id="limit-status">
+                        Within limits
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tips-section">
+            <div class="tips-title">Writing Tips</div>
+            <ul class="tips-list">
+                <li class="tip-item">Average reading speed is 200-250 words per minute</li>
+                <li class="tip-item">SEO best practices suggest 300-500 words for blog posts</li>
+                <li class="tip-item">Social media platforms have character limits (Twitter: 280, Facebook: 63,206)</li>
+                <li class="tip-item">Academic papers typically require 1500-3000 words</li>
+                <li class="tip-item">Short paragraphs (2-3 sentences) improve readability</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool provides real-time text statistics. Perfect for writers, students, and content creators.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const inputText = document.getElementById('input-text');
+            const clearBtn = document.getElementById('clear-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const characterCount = document.getElementById('character-count');
+            const characterNoSpaces = document.getElementById('character-no-spaces');
+            const wordCount = document.getElementById('word-count');
+            const sentenceCount = document.getElementById('sentence-count');
+            const paragraphCount = document.getElementById('paragraph-count');
+            const readingTime = document.getElementById('reading-time');
+            const charPercent = document.getElementById('char-percent');
+            const wordPercent = document.getElementById('word-percent');
+            const sentencePercent = document.getElementById('sentence-percent');
+            const paragraphPercent = document.getElementById('paragraph-percent');
+            const wordLimit = document.getElementById('word-limit');
+            const charLimit = document.getElementById('char-limit');
+            const limitStatus = document.getElementById('limit-status');
+            
+            // Event Listeners
+            inputText.addEventListener('input', updateStats);
+            clearBtn.addEventListener('click', clearText);
+            copyBtn.addEventListener('click', copyText);
+            wordLimit.addEventListener('input', checkLimits);
+            charLimit.addEventListener('input', checkLimits);
+            
+            // Initialize
+            updateStats();
+            
+            // Functions
+            function updateStats() {
+                const text = inputText.value;
+                
+                // Character counts
+                const charCount = text.length;
+                const charNoSpaces = text.replace(/\s/g, '').length;
+                
+                // Word count
+                const words = text.trim() ? text.trim().split(/\s+/) : [];
+                const wordCountValue = words.length;
+                
+                // Sentence count
+                const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
+                const sentenceCountValue = sentences.length;
+                
+                // Paragraph count
+                const paragraphs = text.split(/\n\s*\n/).filter(paragraph => paragraph.trim().length > 0);
+                const paragraphCountValue = paragraphs.length;
+                
+                // Reading time (200 words per minute)
+                const readingMinutes = Math.ceil(wordCountValue / 200);
+                const readingTimeValue = readingMinutes > 0 ? `${readingMinutes} min` : '0 min';
+                
+                // Update display
+                characterCount.textContent = charCount;
+                characterNoSpaces.textContent = charNoSpaces;
+                wordCount.textContent = wordCountValue;
+                sentenceCount.textContent = sentenceCountValue;
+                paragraphCount.textContent = paragraphCountValue;
+                readingTime.textContent = readingTimeValue;
+                
+                // Update progress percentages (relative to sample text)
+                const maxChars = 1000;
+                const maxWords = 200;
+                const maxSentences = 20;
+                const maxParagraphs = 10;
+                
+                charPercent.textContent = `${Math.min(100, Math.round((charCount / maxChars) * 100))}%`;
+                wordPercent.textContent = `${Math.min(100, Math.round((wordCountValue / maxWords) * 100))}%`;
+                sentencePercent.textContent = `${Math.min(100, Math.round((sentenceCountValue / maxSentences) * 100))}%`;
+                paragraphPercent.textContent = `${Math.min(100, Math.round((paragraphCountValue / maxParagraphs) * 100))}%`;
+                
+                // Check limits
+                checkLimits();
+            }
+            
+            function clearText() {
+                inputText.value = '';
+                updateStats();
+            }
+            
+            function copyText() {
+                inputText.select();
+                document.execCommand('copy');
+                
+                // Show feedback
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }
+            
+            function checkLimits() {
+                const words = parseInt(wordCount.textContent);
+                const chars = parseInt(characterCount.textContent);
+                const wordLimitValue = parseInt(wordLimit.value) || 500;
+                const charLimitValue = parseInt(charLimit.value) || 2500;
+                
+                let status = 'Within limits';
+                let className = 'limit-ok';
+                
+                if (words > wordLimitValue || chars > charLimitValue) {
+                    status = 'Limit exceeded!';
+                    className = 'limit-exceeded';
+                } else if (words > wordLimitValue * 0.9 || chars > charLimitValue * 0.9) {
+                    status = 'Approaching limit';
+                    className = 'limit-warning';
+                }
+                
+                limitStatus.textContent = status;
+                limitStatus.className = 'limit-status ' + className;
+            }
+        });
+    </script>
+</body>
+</html>
