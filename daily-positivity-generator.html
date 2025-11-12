@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Positivity Generator | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --positivity-green: #10B981;
+            --affirmation-blue: #3B82F6;
+            --quote-purple: #8B5CF6;
+            --inspiration-orange: #F59E0B;
+            --motivation-red: #EF4444;
+            --joy-yellow: #FBBF24;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .generator-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .positivity-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .type-option {
+            padding: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .type-option:hover {
+            border-color: var(--primary-blue);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .type-option.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .type-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .affirmation-option { color: var(--affirmation-blue); }
+        .quote-option { color: var(--quote-purple); }
+        .inspiration-option { color: var(--inspiration-orange); }
+        .motivation-option { color: var(--motivation-red); }
+        .joy-option { color: var(--joy-yellow); }
+
+        .active.affirmation-option { background: var(--affirmation-blue); }
+        .active.quote-option { background: var(--quote-purple); }
+        .active.inspiration-option { background: var(--inspiration-orange); }
+        .active.motivation-option { background: var(--motivation-red); }
+        .active.joy-option { background: var(--joy-yellow); }
+
+        .mood-selector {
+            margin-bottom: 25px;
+        }
+
+        .mood-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mood-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .mood-option {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mood-option:hover {
+            border-color: var(--primary-blue);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .mood-option.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .mood-icon {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .generate-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .generate-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .favorite-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .favorite-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .share-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .share-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .results-container {
+            text-align: center;
+        }
+
+        .positivity-display {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 25px 0;
+            line-height: 1.6;
+            color: var(--text-primary);
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .author-display {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .affirmation-tag { background: rgba(59, 130, 246, 0.2); color: var(--affirmation-blue); }
+        .quote-tag { background: rgba(139, 92, 246, 0.2); color: var(--quote-purple); }
+        .inspiration-tag { background: rgba(245, 158, 11, 0.2); color: var(--inspiration-orange); }
+        .motivation-tag { background: rgba(239, 68, 68, 0.2); color: var(--motivation-red); }
+        .joy-tag { background: rgba(251, 191, 36, 0.2); color: var(--joy-yellow); }
+
+        .favorites-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .favorites-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .favorites-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .favorite-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 15px;
+            text-align: left;
+            position: relative;
+        }
+
+        .favorite-text {
+            font-weight: 500;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .favorite-author {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .remove-favorite {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-favorite:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--motivation-red);
+        }
+
+        .daily-tip {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .tip-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .tip-content {
+            line-height: 1.6;
+        }
+
+        .tip-content ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .tip-content li {
+            margin-bottom: 8px;
+        }
+
+        .examples-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .examples-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .example-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .example-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .example-text {
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .positivity-types {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .mood-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .favorites-list {
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Generate daily positivity to brighten your day. Perfect for motivation, inspiration, and mental wellness.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="generator-section">
+                <h2 class="section-title"><i class="fas fa-sun"></i> Positivity Generator</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Positivity Type</label>
+                    <div class="positivity-types">
+                        <div class="type-option affirmation-option active" data-type="affirmation">
+                            <div class="type-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>Affirmations</div>
+                        </div>
+                        <div class="type-option quote-option" data-type="quote">
+                            <div class="type-icon">
+                                <i class="fas fa-quote-right"></i>
+                            </div>
+                            <div>Inspirational Quotes</div>
+                        </div>
+                        <div class="type-option inspiration-option" data-type="inspiration">
+                            <div class="type-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div>Inspiration</div>
+                        </div>
+                        <div class="type-option motivation-option" data-type="motivation">
+                            <div class="type-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div>Motivation</div>
+                        </div>
+                        <div class="type-option joy-option" data-type="joy">
+                            <div class="type-icon">
+                                <i class="fas fa-smile-beam"></i>
+                            </div>
+                            <div>Joy & Happiness</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mood-selector">
+                    <div class="mood-title">
+                        <i class="fas fa-meh"></i> Your Mood Today
+                    </div>
+                    <div class="mood-options">
+                        <div class="mood-option active" data-mood="any">
+                            <div class="mood-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div>Any Mood</div>
+                        </div>
+                        <div class="mood-option" data-mood="happy">
+                            <div class="mood-icon">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div>Happy</div>
+                        </div>
+                        <div class="mood-option" data-mood="sad">
+                            <div class="mood-icon">
+                                <i class="fas fa-frown"></i>
+                            </div>
+                            <div>Sad</div>
+                        </div>
+                        <div class="mood-option" data-mood="stressed">
+                            <div class="mood-icon">
+                                <i class="fas fa-tired"></i>
+                            </div>
+                            <div>Stressed</div>
+                        </div>
+                        <div class="mood-option" data-mood="motivated">
+                            <div class="mood-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div>Motivated</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn generate-btn" id="generate-btn">
+                        <i class="fas fa-sync-alt"></i> Generate Positivity
+                    </button>
+                    <button class="action-btn favorite-btn" id="favorite-btn">
+                        <i class="fas fa-heart"></i> Add to Favorites
+                    </button>
+                    <button class="action-btn share-btn" id="share-btn">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+                
+                <div class="daily-tip">
+                    <div class="tip-title">Daily Positivity Tips</div>
+                    <div class="tip-content">
+                        <ul>
+                            <li class="tip-item">Start your day with a positive affirmation to set the tone</li>
+                            <li class="tip-item">Read inspirational quotes when you need motivation</li>
+                            <li class="tip-item">Practice gratitude by reflecting on things you're thankful for</li>
+                            <li class="tip-item">Surround yourself with positive people and influences</li>
+                            <li class="tip-item">Take breaks to appreciate small moments of joy</li>
+                            <li class="tip-item">End your day by acknowledging one thing you accomplished</li>
+                        </ul>
+                        <p>Consistency is key to developing a positive mindset. Even a few minutes of positivity practice each day can make a significant difference in your overall well-being.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title"><i class="fas fa-heart"></i> Your Positivity</h2>
+                
+                <div class="results-container">
+                    <div class="positivity-display" id="positivity-display">
+                        "Believe you can and you're halfway there." - Theodore Roosevelt
+                    </div>
+                    
+                    <div class="author-display" id="author-display">
+                        - Theodore Roosevelt
+                    </div>
+                    
+                    <div class="category-tag affirmation-tag" id="category-tag">
+                        Affirmation
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn generate-btn" id="another-btn">
+                            <i class="fas fa-sync-alt"></i> Another One
+                        </button>
+                        <button class="action-btn favorite-btn" id="favorite-btn-2">
+                            <i class="fas fa-heart"></i> Add to Favorites
+                        </button>
+                        <button class="action-btn share-btn" id="share-btn-2">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                    
+                    <div class="favorites-section">
+                        <div class="favorites-title">Your Favorite Positivity</div>
+                        <div class="favorites-list" id="favorites-list">
+                            <!-- Favorites will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <div class="examples-title">Positivity Examples</div>
+                        <div class="example-grid">
+                            <div class="example-item">
+                                <div class="example-label">
+                                    <i class="fas fa-check-circle affirmation-option"></i> Affirmation
+                                </div>
+                                <div class="example-text">
+                                    "I am capable of achieving anything I set my mind to."
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">
+                                    <i class="fas fa-quote-right quote-option"></i> Inspirational Quote
+                                </div>
+                                <div class="example-text">
+                                    "The only way to do great work is to love what you do." - Steve Jobs
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">
+                                    <i class="fas fa-lightbulb inspiration-option"></i> Inspiration
+                                </div>
+                                <div class="example-text">
+                                    "Every challenge you face today is building the strength you'll need tomorrow."
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">
+                                    <i class="fas fa-fire motivation-option"></i> Motivation
+                                </div>
+                                <div class="example-text">
+                                    "Your potential is endless. Go do what you were created to do."
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">
+                                    <i class="fas fa-smile-beam joy-option"></i> Joy & Happiness
+                                </div>
+                                <div class="example-text">
+                                    "Happiness is not something ready-made. It comes from your own actions."
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">
+                                    <i class="fas fa-meh mood-option"></i> Mood-Based
+                                </div>
+                                <div class="example-text">
+                                    "Even on the cloudiest days, the sun is still shining above the clouds."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool generates positivity messages. Perfect for mental wellness and motivation.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const typeOptions = document.querySelectorAll('.type-option');
+            const moodOptions = document.querySelectorAll('.mood-option');
+            const generateBtn = document.getElementById('generate-btn');
+            const anotherBtn = document.getElementById('another-btn');
+            const favoriteBtn = document.getElementById('favorite-btn');
+            const favoriteBtn2 = document.getElementById('favorite-btn-2');
+            const shareBtn = document.getElementById('share-btn');
+            const shareBtn2 = document.getElementById('share-btn-2');
+            const positivityDisplay = document.getElementById('positivity-display');
+            const authorDisplay = document.getElementById('author-display');
+            const categoryTag = document.getElementById('category-tag');
+            const favoritesList = document.getElementById('favorites-list');
+            
+            // State variables
+            let currentType = 'affirmation';
+            let currentMood = 'any';
+            let favorites = [];
+            let currentQuote = '';
+            let currentAuthor = '';
+            
+            // Positivity database
+            const positivityData = {
+                affirmation: [
+                    { text: "I am worthy of love and respect.", author: "" },
+                    { text: "I choose to focus on what I can control.", author: "" },
+                    { text: "I am capable of achieving anything I set my mind to.", author: "" },
+                    { text: "I deserve happiness and fulfillment.", author: "" },
+                    { text: "I am resilient and can overcome any challenge.", author: "" },
+                    { text: "I attract positive energy and opportunities.", author: "" },
+                    { text: "I am confident in my abilities.", author: "" },
+                    { text: "I choose to see the good in every situation.", author: "" },
+                    { text: "I am grateful for all the blessings in my life.", author: "" },
+                    { text: "I am becoming the best version of myself.", author: "" }
+                ],
+                quote: [
+                    { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+                    { text: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
+                    { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+                    { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
+                    { text: "Success is not final, failure is not fatal: It is the courage to continue that counts.", author: "Winston Churchill" },
+                    { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+                    { text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis" },
+                    { text: "The only impossible journey is the one you never begin.", author: "Tony Robbins" },
+                    { text: "What you get by achieving your goals is not as important as what you become by achieving your goals.", author: "Zig Ziglar" },
+                    { text: "The best way to predict the future is to create it.", author: "Peter Drucker" }
+                ],
+                inspiration: [
+                    { text: "Every challenge you face today is building the strength you'll need tomorrow.", author: "" },
+                    { text: "Your potential is endless. Go do what you were created to do.", author: "" },
+                    { text: "Small steps in the right direction can turn into the biggest achievements.", author: "" },
+                    { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb" },
+                    { text: "You don't have to be great to start, but you have to start to be great.", author: "" },
+                    { text: "The harder you work for something, the greater you'll feel when you achieve it.", author: "" },
+                    { text: "Dream it. Wish it. Do it.", author: "" },
+                    { text: "Success doesn't just find you. You have to go out and get it.", author: "" },
+                    { text: "The key to success is to focus on goals, not obstacles.", author: "" },
+                    { text: "Your limitation—it's only your imagination.", author: "" }
+                ],
+                motivation: [
+                    { text: "Push yourself, because no one else is going to do it for you.", author: "" },
+                    { text: "Great things never come from comfort zones.", author: "" },
+                    { text: "Dream it. Believe it. Build it.", author: "" },
+                    { text: "The harder you work for something, the greater you'll feel when you achieve it.", author: "" },
+                    { text: "Don't stop when you're tired. Stop when you're done.", author: "" },
+                    { text: "Wake up with determination. Go to bed with satisfaction.", author: "" },
+                    { text: "Little things make big days.", author: "" },
+                    { text: "It's going to be hard, but hard does not mean impossible.", author: "" },
+                    { text: "Don't wait for opportunity. Create it.", author: "" },
+                    { text: "Sometimes we're tested not to show our weaknesses, but to discover our strengths.", author: "" }
+                ],
+                joy: [
+                    { text: "Happiness is not something ready-made. It comes from your own actions.", author: "Dalai Lama" },
+                    { text: "The joy of life is in what happens to us, not what we earn or achieve.", author: "" },
+                    { text: "Every day may not be good, but there is something good in every day.", author: "" },
+                    { text: "Happiness is when what you think, what you say, and what you do are in harmony.", author: "Mahatma Gandhi" },
+                    { text: "Count your age by friends, not years. Count your life by smiles, not tears.", author: "John Lennon" },
+                    { text: "The happiest people don't have the best of everything, they make the best of everything.", author: "" },
+                    { text: "Happiness is not a destination; it is a method of life.", author: "Burton Hills" },
+                    { text: "Joy does not simply happen to us. We have to choose joy and keep choosing it every day.", author: "Henri J.M. Nouwen" },
+                    { text: "Happiness is a warm puppy.", author: "Charles M. Schulz" },
+                    { text: "The most wasted of days is one without laughter.", author: "E.E. Cummings" }
+                ]
+            };
+            
+            // Mood-based modifications
+            const moodModifications = {
+                happy: [
+                    "Keep spreading that joy!",
+                    "Your happiness is contagious!",
+                    "Celebrate your good mood!",
+                    "Share your positivity with others!",
+                    "Enjoy this wonderful feeling!"
+                ],
+                sad: [
+                    "This too shall pass.",
+                    "Better days are coming.",
+                    "Your feelings are valid and temporary.",
+                    "You are stronger than you know.",
+                    "Reach out to someone who cares."
+                ],
+                stressed: [
+                    "Take a deep breath and relax.",
+                    "One step at a time.",
+                    "You've handled tough situations before.",
+                    "This stress will pass soon.",
+                    "Self-care is not selfish, it's necessary."
+                ],
+                motivated: [
+                    "Channel that energy into action!",
+                    "You're unstoppable today!",
+                    "Turn motivation into momentum.",
+                    "Make today count!",
+                    "Your drive is inspiring!"
+                ]
+            };
+            
+            // Event Listeners
+            typeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    typeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentType = this.dataset.type;
+                    generatePositivity();
+                });
+            });
+            
+            moodOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    moodOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMood = this.dataset.mood;
+                    generatePositivity();
+                });
+            });
+            
+            generateBtn.addEventListener('click', generatePositivity);
+            anotherBtn.addEventListener('click', generatePositivity);
+            favoriteBtn.addEventListener('click', addToFavorites);
+            favoriteBtn2.addEventListener('click', addToFavorites);
+            shareBtn.addEventListener('click', sharePositivity);
+            shareBtn2.addEventListener('click', sharePositivity);
+            
+            // Initialize
+            generatePositivity();
+            renderFavorites();
+            
+            // Functions
+            function generatePositivity() {
+                // Get quotes for current type
+                const quotes = positivityData[currentType];
+                
+                // Select a random quote
+                const randomIndex = Math.floor(Math.random() * quotes.length);
+                const quote = quotes[randomIndex];
+                
+                // Store current quote
+                currentQuote = quote.text;
+                currentAuthor = quote.author;
+                
+                // Apply mood modification if needed
+                let modifiedQuote = currentQuote;
+                if (currentMood !== 'any' && moodModifications[currentMood]) {
+                    const moodMods = moodModifications[currentMood];
+                    const randomMod = moodMods[Math.floor(Math.random() * moodMods.length)];
+                    modifiedQuote = `${currentQuote} ${randomMod}`;
+                }
+                
+                // Update display
+                positivityDisplay.textContent = `"${modifiedQuote}"`;
+                authorDisplay.textContent = currentAuthor ? `- ${currentAuthor}` : '';
+                
+                // Update category tag
+                const categoryNames = {
+                    'affirmation': 'Affirmation',
+                    'quote': 'Inspirational Quote',
+                    'inspiration': 'Inspiration',
+                    'motivation': 'Motivation',
+                    'joy': 'Joy & Happiness'
+                };
+                
+                categoryTag.textContent = categoryNames[currentType] || 'Positivity';
+                categoryTag.className = 'category-tag ' + currentType + '-tag';
+            }
+            
+            function addToFavorites() {
+                // Check if already favorited
+                const isAlreadyFavorited = favorites.some(fav => 
+                    fav.text === currentQuote && fav.author === currentAuthor
+                );
+                
+                if (!isAlreadyFavorited) {
+                    favorites.push({
+                        text: currentQuote,
+                        author: currentAuthor,
+                        type: currentType,
+                        date: new Date().toLocaleDateString()
+                    });
+                    
+                    renderFavorites();
+                    saveFavorites();
+                    
+                    // Show feedback
+                    const originalText = favoriteBtn.innerHTML;
+                    favoriteBtn.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    setTimeout(() => {
+                        favoriteBtn.innerHTML = originalText;
+                    }, 2000);
+                }
+            }
+            
+            function removeFromFavorites(index) {
+                favorites.splice(index, 1);
+                renderFavorites();
+                saveFavorites();
+            }
+            
+            function renderFavorites() {
+                favoritesList.innerHTML = '';
+                
+                if (favorites.length === 0) {
+                    favoritesList.innerHTML = '<div class="favorite-item" style="text-align: center; color: var(--text-muted);">No favorites yet. Click "Add to Favorites" to save positivity.</div>';
+                    return;
+                }
+                
+                favorites.forEach((fav, index) => {
+                    const favoriteItem = document.createElement('div');
+                    favoriteItem.className = 'favorite-item';
+                    favoriteItem.innerHTML = `
+                        <div class="favorite-text">"${fav.text}"</div>
+                        ${fav.author ? `<div class="favorite-author">- ${fav.author}</div>` : ''}
+                        <button class="remove-favorite" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    favoritesList.appendChild(favoriteItem);
+                    
+                    // Add event listener to remove button
+                    const removeBtn = favoriteItem.querySelector('.remove-favorite');
+                    removeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const index = parseInt(this.dataset.index);
+                        removeFromFavorites(index);
+                    });
+                });
+            }
+            
+            function saveFavorites() {
+                localStorage.setItem('positivityFavorites', JSON.stringify(favorites));
+            }
+            
+            function loadFavorites() {
+                const savedFavorites = localStorage.getItem('positivityFavorites');
+                if (savedFavorites) {
+                    favorites = JSON.parse(savedFavorites);
+                    renderFavorites();
+                }
+            }
+            
+            function sharePositivity() {
+                // In a real implementation, this would share the positivity
+                // For this demo, we'll show a message
+                alert(`In a real implementation, this would share: "${currentQuote}" ${currentAuthor ? `- ${currentAuthor}` : ''}`);
+            }
+            
+            // Initialize favorites from localStorage
+            loadFavorites();
+        });
+    </script>
+</body>
+</html>
+
