@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Picker from Image | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --dominant: #3B82F6;
+            --palette: #10B981;
+            --extracted: #F59E0B;
+            --selected: #8B5CF6;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .upload-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: var(--card-bg);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-blue);
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .browse-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .browse-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .image-preview {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .placeholder-text {
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+        .controls-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .controls-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: var(--border);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            cursor: pointer;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .extract-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .extract-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .clear-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .clear-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .dominant-colors {
+            margin-bottom: 25px;
+        }
+
+        .dominant-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .colors-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .color-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .color-item:hover {
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        .color-item.selected {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px var(--selected);
+            z-index: 2;
+        }
+
+        .color-value {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .color-item:hover .color-value {
+            opacity: 1;
+        }
+
+        .palette-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .palette-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .palette-colors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .palette-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .palette-color:hover {
+            transform: scale(1.1);
+        }
+
+        .selected-color-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .selected-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .selected-color-display {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .selected-color-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .selected-color-info {
+            flex: 1;
+        }
+
+        .color-info-item {
+            margin-bottom: 10px;
+        }
+
+        .color-info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .color-info-value {
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+        }
+
+        .copy-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .dominant-value { color: var(--dominant); }
+        .palette-value { color: var(--palette); }
+        .extracted-value { color: var(--extracted); }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .info-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .info-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .info-content ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .info-content li {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .colors-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .selected-color-display {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Extract colors from images and create beautiful color palettes. Perfect for designers and artists.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="upload-section">
+                <h2 class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload Image</h2>
+                
+                <div class="upload-area" id="drop-area">
+                    <div class="upload-icon">
+                        <i class="fas fa-file-image"></i>
+                    </div>
+                    <p class="upload-text">Drag & drop your image here</p>
+                    <p class="upload-text">or</p>
+                    <button class="browse-btn">Browse Files</button>
+                    <input type="file" id="file-input" accept="image/*">
+                </div>
+                
+                <div class="image-preview">
+                    <img class="preview-image" id="preview-image" alt="Preview">
+                    <p class="placeholder-text" id="placeholder-text">Your uploaded image will appear here</p>
+                </div>
+                
+                <div class="controls-section">
+                    <div class="controls-title">Extraction Settings</div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Color Count</span>
+                            <span id="color-count-value">8</span>
+                        </div>
+                        <input type="range" min="3" max="20" value="8" class="slider" id="color-count-slider">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Quality</span>
+                            <span id="quality-value">Medium</span>
+                        </div>
+                        <input type="range" min="1" max="3" value="2" class="slider" id="quality-slider">
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn extract-btn" id="extract-btn" disabled>
+                        <i class="fas fa-palette"></i> Extract Colors
+                    </button>
+                    <button class="action-btn clear-btn" id="clear-btn">
+                        <i class="fas fa-eraser"></i> Clear
+                    </button>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title"><i class="fas fa-eye-dropper"></i> Color Results</h2>
+                
+                <div class="results-container">
+                    <div class="dominant-colors">
+                        <div class="dominant-title">
+                            <i class="fas fa-star"></i> Dominant Colors
+                        </div>
+                        <div class="colors-grid" id="dominant-colors-grid">
+                            <!-- Dominant colors will be inserted here -->
+                        </div>
+                    </div>
+                    
+                    <div class="palette-section">
+                        <div class="palette-title">
+                            <i class="fas fa-paint-brush"></i> Color Palette
+                        </div>
+                        <div class="palette-colors" id="palette-colors">
+                            <!-- Palette colors will be inserted here -->
+                        </div>
+                    </div>
+                    
+                    <div class="selected-color-section">
+                        <div class="selected-title">
+                            <i class="fas fa-check-circle"></i> Selected Color
+                        </div>
+                        <div class="selected-color-display">
+                            <div class="selected-color-preview" id="selected-color-preview" style="background-color: #4F46E5;"></div>
+                            <div class="selected-color-info">
+                                <div class="color-info-item">
+                                    <div class="color-info-label">HEX</div>
+                                    <div class="color-info-value" id="selected-hex">#4F46E5</div>
+                                </div>
+                                <div class="color-info-item">
+                                    <div class="color-info-label">RGB</div>
+                                    <div class="color-info-value" id="selected-rgb">rgb(79, 70, 229)</div>
+                                </div>
+                                <div class="color-info-item">
+                                    <div class="color-info-label">HSL</div>
+                                    <div class="color-info-value" id="selected-hsl">hsl(243, 75%, 59%)</div>
+                                </div>
+                                <button class="copy-btn" id="copy-hex-btn">
+                                    <i class="fas fa-copy"></i> Copy HEX
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-section">
+                        <div class="stat-item">
+                            <div class="stat-value dominant-value" id="dominant-count">0</div>
+                            <div class="stat-label">Dominant Colors</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value palette-value" id="palette-count">0</div>
+                            <div class="stat-label">Palette Colors</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value extracted-value" id="extracted-count">0</div>
+                            <div class="stat-label">Total Extracted</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <div class="info-title">About Color Extraction</div>
+                        <div class="info-content">
+                            <p>Color extraction from images is a powerful technique used by designers and artists:</p>
+                            <ul>
+                                <li>Create cohesive color palettes from photographs</li>
+                                <li>Match brand colors to visual assets</li>
+                                <li>Generate inspiration from nature or artwork</li>
+                                <li>Ensure accessibility by analyzing color contrast</li>
+                            </ul>
+                            <p>The tool identifies dominant colors and creates harmonious palettes based on color theory principles.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool extracts colors from images. Perfect for designers and artists.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const dropArea = document.getElementById('drop-area');
+            const fileInput = document.getElementById('file-input');
+            const browseBtn = document.querySelector('.browse-btn');
+            const previewImage = document.getElementById('preview-image');
+            const placeholderText = document.getElementById('placeholder-text');
+            const colorCountSlider = document.getElementById('color-count-slider');
+            const colorCountValue = document.getElementById('color-count-value');
+            const qualitySlider = document.getElementById('quality-slider');
+            const qualityValue = document.getElementById('quality-value');
+            const extractBtn = document.getElementById('extract-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const dominantColorsGrid = document.getElementById('dominant-colors-grid');
+            const paletteColors = document.getElementById('palette-colors');
+            const selectedColorPreview = document.getElementById('selected-color-preview');
+            const selectedHex = document.getElementById('selected-hex');
+            const selectedRgb = document.getElementById('selected-rgb');
+            const selectedHsl = document.getElementById('selected-hsl');
+            const copyHexBtn = document.getElementById('copy-hex-btn');
+            const dominantCount = document.getElementById('dominant-count');
+            const paletteCount = document.getElementById('palette-count');
+            const extractedCount = document.getElementById('extracted-count');
+            
+            // State variables
+            let selectedColor = '#4F46E5';
+            let dominantColors = [];
+            let paletteColorsList = [];
+            
+            // Event Listeners
+            browseBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#4F46E5';
+                dropArea.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+            });
+            
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.style.borderColor = '#E5E7EB';
+                dropArea.style.backgroundColor = '#F9FAFB';
+            });
+            
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#E5E7EB';
+                dropArea.style.backgroundColor = '#F9FAFB';
+                
+                if (e.dataTransfer.files.length) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            colorCountSlider.addEventListener('input', function() {
+                colorCountValue.textContent = this.value;
+            });
+            
+            qualitySlider.addEventListener('input', function() {
+                const qualityLabels = ['Low', 'Medium', 'High'];
+                qualityValue.textContent = qualityLabels[this.value - 1];
+            });
+            
+            extractBtn.addEventListener('click', extractColors);
+            clearBtn.addEventListener('click', clearAll);
+            copyHexBtn.addEventListener('click', copySelectedColor);
+            
+            // Initialize
+            updateSelectedColorDisplay();
+            
+            // Functions
+            function handleFileSelect(e) {
+                if (e.target.files.length) {
+                    handleFiles(e.target.files);
+                }
+            }
+            
+            function handleFiles(files) {
+                const file = files[0];
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file (JPEG, PNG, etc.)');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    placeholderText.style.display = 'none';
+                    extractBtn.disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            function extractColors() {
+                // In a real implementation, this would process the image
+                // For this demo, we'll generate sample colors
+                
+                const colorCount = parseInt(colorCountSlider.value);
+                
+                // Generate dominant colors
+                dominantColors = [];
+                for (let i = 0; i < Math.min(10, colorCount); i++) {
+                    dominantColors.push(generateRandomColor());
+                }
+                
+                // Generate palette colors
+                paletteColorsList = [];
+                for (let i = 0; i < colorCount; i++) {
+                    paletteColorsList.push(generateRandomColor());
+                }
+                
+                // Update display
+                renderDominantColors();
+                renderPaletteColors();
+                
+                // Update stats
+                dominantCount.textContent = dominantColors.length;
+                paletteCount.textContent = paletteColorsList.length;
+                extractedCount.textContent = dominantColors.length + paletteColorsList.length;
+                
+                // Select first dominant color
+                if (dominantColors.length > 0) {
+                    selectedColor = dominantColors[0];
+                    updateSelectedColorDisplay();
+                }
+            }
+            
+            function generateRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+            
+            function renderDominantColors() {
+                dominantColorsGrid.innerHTML = '';
+                
+                dominantColors.forEach((color, index) => {
+                    const colorItem = document.createElement('div');
+                    colorItem.className = 'color-item';
+                    colorItem.style.backgroundColor = color;
+                    colorItem.innerHTML = `<div class="color-value">${color}</div>`;
+                    
+                    colorItem.addEventListener('click', () => {
+                        document.querySelectorAll('.color-item').forEach(item => {
+                            item.classList.remove('selected');
+                        });
+                        colorItem.classList.add('selected');
+                        selectedColor = color;
+                        updateSelectedColorDisplay();
+                    });
+                    
+                    dominantColorsGrid.appendChild(colorItem);
+                });
+            }
+            
+            function renderPaletteColors() {
+                paletteColors.innerHTML = '';
+                
+                paletteColorsList.forEach(color => {
+                    const paletteColor = document.createElement('div');
+                    paletteColor.className = 'palette-color';
+                    paletteColor.style.backgroundColor = color;
+                    paletteColor.title = color;
+                    
+                    paletteColor.addEventListener('click', () => {
+                        selectedColor = color;
+                        updateSelectedColorDisplay();
+                    });
+                    
+                    paletteColors.appendChild(paletteColor);
+                });
+            }
+            
+            function updateSelectedColorDisplay() {
+                selectedColorPreview.style.backgroundColor = selectedColor;
+                selectedHex.textContent = selectedColor;
+                selectedRgb.textContent = hexToRgb(selectedColor);
+                selectedHsl.textContent = hexToHsl(selectedColor);
+            }
+            
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? 
+                    `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})` 
+                    : null;
+            }
+            
+            function hexToHsl(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                if (!result) return null;
+                
+                let r = parseInt(result[1], 16) / 255;
+                let g = parseInt(result[2], 16) / 255;
+                let b = parseInt(result[3], 16) / 255;
+                
+                let max = Math.max(r, g, b);
+                let min = Math.min(r, g, b);
+                let h, s, l = (max + min) / 2;
+                
+                if (max === min) {
+                    h = s = 0; // achromatic
+                } else {
+                    let d = max - min;
+                    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                    
+                    switch (max) {
+                        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                        case g: h = (b - r) / d + 2; break;
+                        case b: h = (r - g) / d + 4; break;
+                    }
+                    
+                    h /= 6;
+                }
+                
+                h = Math.round(h * 360);
+                s = Math.round(s * 100);
+                l = Math.round(l * 100);
+                
+                return `hsl(${h}, ${s}%, ${l}%)`;
+            }
+            
+            function copySelectedColor() {
+                navigator.clipboard.writeText(selectedHex.textContent).then(() => {
+                    // Show feedback
+                    const originalText = copyHexBtn.innerHTML;
+                    copyHexBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyHexBtn.innerHTML = originalText;
+                    }, 2000);
+                });
+            }
+            
+            function clearAll() {
+                fileInput.value = '';
+                previewImage.style.display = 'none';
+                previewImage.src = '';
+                placeholderText.style.display = 'block';
+                extractBtn.disabled = true;
+                dominantColorsGrid.innerHTML = '';
+                paletteColors.innerHTML = '';
+                dominantCount.textContent = '0';
+                paletteCount.textContent = '0';
+                extractedCount.textContent = '0';
+            }
+        });
+    </script>
+</body>
+</html>
