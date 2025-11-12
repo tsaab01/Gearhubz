@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Blindness Simulator | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --normal-vision: #3B82F6;
+            --protanopia: #EF4444;
+            --deuteranopia: #10B981;
+            --tritanopia: #F59E0B;
+            --achromatopsia: #8B5CF6;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .simulator-section, .visualization-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .upload-section {
+            margin-bottom: 25px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: var(--card-bg);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-blue);
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .browse-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .browse-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .image-preview {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .simulation-controls {
+            margin: 25px 0;
+        }
+
+        .simulation-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .type-option {
+            padding: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .type-option:hover {
+            border-color: var(--primary-blue);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .type-option.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .type-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .protanopia-icon { color: var(--protanopia); }
+        .deuteranopia-icon { color: var(--deuteranopia); }
+        .tritanopia-icon { color: var(--tritanopia); }
+        .achromatopsia-icon { color: var(--achromatopsia); }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .simulate-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .simulate-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .reset-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .reset-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .visualization-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .vision-view {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .view-header {
+            padding: 12px 15px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .view-icon {
+            font-size: 1.2rem;
+        }
+
+        .normal-icon { color: var(--normal-vision); }
+        .protanopia-icon { color: var(--protanopia); }
+        .deuteranopia-icon { color: var(--deuteranopia); }
+        .tritanopia-icon { color: var(--tritanopia); }
+        .achromatopsia-icon { color: var(--achromatopsia); }
+
+        .view-content {
+            padding: 20px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+        }
+
+        .simulation-image {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 8px;
+        }
+
+        .info-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .info-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .info-content ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .info-content li {
+            margin-bottom: 8px;
+        }
+
+        .types-section {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .types-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .type-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .type-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .type-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .simulation-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .types-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Simulate how your designs appear to users with different types of color vision deficiency. Perfect for creating accessible interfaces.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="simulator-section">
+                <h2 class="section-title"><i class="fas fa-eye"></i> Simulation Setup</h2>
+                
+                <div class="upload-section">
+                    <div class="upload-area" id="drop-area">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p class="upload-text">Drag & drop your image here</p>
+                        <p class="upload-text">or</p>
+                        <button class="browse-btn">Browse Files</button>
+                        <input type="file" id="file-input" accept="image/*">
+                    </div>
+                    
+                    <div class="image-preview">
+                        <img class="preview-image" id="preview-image" alt="Preview">
+                    </div>
+                </div>
+                
+                <div class="simulation-controls">
+                    <div class="input-label">Color Vision Types</div>
+                    <div class="simulation-types">
+                        <div class="type-option active" data-type="normal">
+                            <div class="type-icon normal-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div>Normal Vision</div>
+                        </div>
+                        <div class="type-option" data-type="protanopia">
+                            <div class="type-icon protanopia-icon">
+                                <i class="fas fa-low-vision"></i>
+                            </div>
+                            <div>Protanopia</div>
+                            <div style="font-size: 0.8rem; margin-top: 5px;">Red-blind</div>
+                        </div>
+                        <div class="type-option" data-type="deuteranopia">
+                            <div class="type-icon deuteranopia-icon">
+                                <i class="fas fa-low-vision"></i>
+                            </div>
+                            <div>Deuteranopia</div>
+                            <div style="font-size: 0.8rem; margin-top: 5px;">Green-blind</div>
+                        </div>
+                        <div class="type-option" data-type="tritanopia">
+                            <div class="type-icon tritanopia-icon">
+                                <i class="fas fa-low-vision"></i>
+                            </div>
+                            <div>Tritanopia</div>
+                            <div style="font-size: 0.8rem; margin-top: 5px;">Blue-blind</div>
+                        </div>
+                        <div class="type-option" data-type="protanomaly">
+                            <div class="type-icon protanopia-icon">
+                                <i class="fas fa-low-vision"></i>
+                            </div>
+                            <div>Protanomaly</div>
+                            <div style="font-size: 0.8rem; margin-top: 5px;">Red-weak</div>
+                        </div>
+                        <div class="type-option" data-type="deuteranomaly">
+                            <div class="type-icon deuteranopia-icon">
+                                <i class="fas fa-low-vision"></i>
+                            </div>
+                            <div>Deuteranomaly</div>
+                            <div style="font-size: 0.8rem; margin-top: 5px;">Green-weak</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn simulate-btn" id="simulate-btn">
+                        <i class="fas fa-sync-alt"></i> Simulate Vision
+                    </button>
+                    <button class="action-btn reset-btn" id="reset-btn">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-title">About Color Vision Deficiency</div>
+                    <div class="info-content">
+                        <p>Color vision deficiency affects approximately 8% of men and 0.5% of women worldwide. The most common types include:</p>
+                        <ul>
+                            <li><strong>Protanopia:</strong> Complete absence of red cone photopigments</li>
+                            <li><strong>Deuteranopia:</strong> Complete absence of green cone photopigments</li>
+                            <li><strong>Tritanopia:</strong> Complete absence of blue cone photopigments</li>
+                            <li><strong>Achromatopsia:</strong> Complete color blindness (very rare)</li>
+                        </ul>
+                        <p>Using this simulator helps ensure your designs are accessible to all users.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="visualization-section">
+                <h2 class="section-title"><i class="fas fa-eye-dropper"></i> Vision Simulation</h2>
+                
+                <div class="visualization-container">
+                    <div class="vision-view">
+                        <div class="view-header">
+                            <div class="view-icon normal-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div>Normal Vision</div>
+                        </div>
+                        <div class="view-content">
+                            <div class="simulation-image-container">
+                                <img class="simulation-image" id="normal-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%234F46E5'/%3E%3Ccircle cx='150' cy='100' r='60' fill='%2310B981'/%3E%3Ccircle cx='150' cy='100' r='30' fill='%23F59E0B'/%3E%3C/svg%3E" alt="Normal vision">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="vision-view">
+                        <div class="view-header">
+                            <div class="view-icon protanopia-icon">
+                                <i class="fas fa-low-vision"></i>
+                            </div>
+                            <div>Protanopia (Red-blind)</div>
+                        </div>
+                        <div class="view-content">
+                            <div class="simulation-image-container">
+                                <img class="simulation-image" id="protanopia-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%237F7F7F'/%3E%3Ccircle cx='150' cy='100' r='60' fill='%237F7F7F'/%3E%3Ccircle cx='150' cy='100' r='30' fill='%23F59E0B'/%3E%3C/svg%3E" alt="Protanopia vision">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="vision-view">
+                        <div class="view-header">
+                            <div class="view-icon deuteranopia-icon">
+                                <i class="fas fa-low-vision"></i>
+                            </div>
+                            <div>Deuteranopia (Green-blind)</div>
+                        </div>
+                        <div class="view-content">
+                            <div class="simulation-image-container">
+                                <img class="simulation-image" id="deuteranopia-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%234F46E5'/%3E%3Ccircle cx='150' cy='100' r='60' fill='%237F7F7F'/%3E%3Ccircle cx='150' cy='100' r='30' fill='%23F59E0B'/%3E%3C/svg%3E" alt="Deuteranopia vision">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="types-section">
+                    <div class="types-title">Color Vision Deficiency Types</div>
+                    <div class="types-grid">
+                        <div class="type-item">
+                            <div class="type-name">
+                                <i class="fas fa-low-vision protanopia-icon"></i>
+                                <span>Protanopia</span>
+                            </div>
+                            <div class="type-desc">Complete absence of red perception. Reds appear dark.</div>
+                        </div>
+                        <div class="type-item">
+                            <div class="type-name">
+                                <i class="fas fa-low-vision deuteranopia-icon"></i>
+                                <span>Deuteranopia</span>
+                            </div>
+                            <div class="type-desc">Complete absence of green perception. Greens appear beige.</div>
+                        </div>
+                        <div class="type-item">
+                            <div class="type-name">
+                                <i class="fas fa-low-vision tritanopia-icon"></i>
+                                <span>Tritanopia</span>
+                            </div>
+                            <div class="type-desc">Complete absence of blue perception. Blues appear greenish.</div>
+                        </div>
+                        <div class="type-item">
+                            <div class="type-name">
+                                <i class="fas fa-low-vision achromatopsia-icon"></i>
+                                <span>Achromatopsia</span>
+                            </div>
+                            <div class="type-desc">Complete color blindness. Everything appears in grayscale.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool simulates color vision deficiency. Perfect for creating accessible designs.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const dropArea = document.getElementById('drop-area');
+            const fileInput = document.getElementById('file-input');
+            const browseBtn = document.querySelector('.browse-btn');
+            const previewImage = document.getElementById('preview-image');
+            const typeOptions = document.querySelectorAll('.type-option');
+            const simulateBtn = document.getElementById('simulate-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const normalImage = document.getElementById('normal-image');
+            const protanopiaImage = document.getElementById('protanopia-image');
+            const deuteranopiaImage = document.getElementById('deuteranopia-image');
+            
+            // State variables
+            let uploadedImage = null;
+            let simulationType = 'normal';
+            
+            // Event Listeners
+            browseBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#4F46E5';
+                dropArea.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+            });
+            
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.style.borderColor = '#E5E7EB';
+                dropArea.style.backgroundColor = '#F9FAFB';
+            });
+            
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#E5E7EB';
+                dropArea.style.backgroundColor = '#F9FAFB';
+                
+                if (e.dataTransfer.files.length) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            typeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    typeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    simulationType = this.dataset.type;
+                });
+            });
+            
+            simulateBtn.addEventListener('click', simulateVision);
+            resetBtn.addEventListener('click', resetSimulation);
+            
+            // Functions
+            function handleFileSelect(e) {
+                if (e.target.files.length) {
+                    handleFiles(e.target.files);
+                }
+            }
+            
+            function handleFiles(files) {
+                const file = files[0];
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file (JPEG, PNG, etc.)');
+                    return;
+                }
+                
+                uploadedImage = file;
+                displayImagePreview(file);
+            }
+            
+            function displayImagePreview(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    
+                    // Update simulation images
+                    normalImage.src = e.target.result;
+                    protanopiaImage.src = e.target.result;
+                    deuteranopiaImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            function simulateVision() {
+                if (!uploadedImage && !previewImage.src) {
+                    alert('Please upload an image first.');
+                    return;
+                }
+                
+                // In a real implementation, this would apply the selected simulation
+                // For this demo, we'll just show a message
+                alert(`Simulating ${simulationType} vision. In a real implementation, this would apply the color transformation to your image.`);
+            }
+            
+            function resetSimulation() {
+                fileInput.value = '';
+                previewImage.style.display = 'none';
+                uploadedImage = null;
+                
+                // Reset to sample images
+                normalImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%234F46E5'/%3E%3Ccircle cx='150' cy='100' r='60' fill='%2310B981'/%3E%3Ccircle cx='150' cy='100' r='30' fill='%23F59E0B'/%3E%3C/svg%3E";
+                protanopiaImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%237F7F7F'/%3E%3Ccircle cx='150' cy='100' r='60' fill='%237F7F7F'/%3E%3Ccircle cx='150' cy='100' r='30' fill='%23F59E0B'/%3E%3C/svg%3E";
+                deuteranopiaImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%234F46E5'/%3E%3Ccircle cx='150' cy='100' r='60' fill='%237F7F7F'/%3E%3Ccircle cx='150' cy='100' r='30' fill='%23F59E0B'/%3E%3C/svg%3E";
+                
+                // Reset simulation type to normal
+                typeOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.dataset.type === 'normal') {
+                        option.classList.add('active');
+                    }
+                });
+                simulationType = 'normal';
+            }
+        });
+    </script>
+</body>
+</html>
+
