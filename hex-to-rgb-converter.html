@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEX to RGB Converter | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --hex-color: #3B82F6;
+            --rgb-color: #10B981;
+            --preview-bg: #F3F4F6;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .converter-section, .preview-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .color-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            font-family: 'Courier New', monospace;
+        }
+
+        .color-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .conversion-direction {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0;
+        }
+
+        .direction-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .direction-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .conversion-icon {
+            font-size: 1.5rem;
+            margin: 0 15px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+        }
+
+        .rgb-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .rgb-input-group {
+            text-align: center;
+        }
+
+        .rgb-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .rgb-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .rgb-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .convert-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .convert-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .clear-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .clear-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .color-preview {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .preview-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .preview-item {
+            flex: 1;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, #ccc 25%, transparent 25%), 
+                linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ccc 75%),
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            z-index: -1;
+        }
+
+        .hex-preview {
+            background-color: #4F46E5;
+        }
+
+        .rgb-preview {
+            background-color: rgb(79, 70, 229);
+        }
+
+        .preview-label {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .preview-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .examples-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .examples-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .example-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .example-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .example-color::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, #ccc 25%, transparent 25%), 
+                linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ccc 75%),
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+            z-index: -1;
+        }
+
+        .example-hex {
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .example-rgb {
+            color: var(--text-secondary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+        }
+
+        .info-section {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .info-content {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .info-content ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .info-content li {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .rgb-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .example-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Convert between HEX and RGB color formats instantly. Perfect for designers and developers.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="converter-section">
+                <h2 class="section-title"><i class="fas fa-exchange-alt"></i> Color Converter</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">HEX Color</label>
+                    <input type="text" class="color-input" id="hex-input" placeholder="#4F46E5" value="#4F46E5">
+                </div>
+                
+                <div class="conversion-direction">
+                    <button class="direction-btn" id="direction-btn">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">RGB Values</label>
+                    <div class="rgb-inputs">
+                        <div class="rgb-input-group">
+                            <input type="number" class="rgb-input" id="red-input" min="0" max="255" value="79">
+                            <div class="rgb-label">Red</div>
+                        </div>
+                        <div class="rgb-input-group">
+                            <input type="number" class="rgb-input" id="green-input" min="0" max="255" value="70">
+                            <div class="rgb-label">Green</div>
+                        </div>
+                        <div class="rgb-input-group">
+                            <input type="number" class="rgb-input" id="blue-input" min="0" max="255" value="229">
+                            <div class="rgb-label">Blue</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn convert-btn" id="convert-btn">
+                        <i class="fas fa-sync-alt"></i> Convert
+                    </button>
+                    <button class="action-btn clear-btn" id="clear-btn">
+                        <i class="fas fa-eraser"></i> Clear
+                    </button>
+                </div>
+                
+                <div class="examples-section">
+                    <div class="examples-title">Common Color Examples</div>
+                    <div class="example-grid">
+                        <div class="example-item" data-hex="#FF0000">
+                            <div class="example-color" style="background-color: #FF0000;"></div>
+                            <div class="example-hex">#FF0000</div>
+                            <div class="example-rgb">rgb(255,0,0)</div>
+                        </div>
+                        <div class="example-item" data-hex="#00FF00">
+                            <div class="example-color" style="background-color: #00FF00;"></div>
+                            <div class="example-hex">#00FF00</div>
+                            <div class="example-rgb">rgb(0,255,0)</div>
+                        </div>
+                        <div class="example-item" data-hex="#0000FF">
+                            <div class="example-color" style="background-color: #0000FF;"></div>
+                            <div class="example-hex">#0000FF</div>
+                            <div class="example-rgb">rgb(0,0,255)</div>
+                        </div>
+                        <div class="example-item" data-hex="#FFFF00">
+                            <div class="example-color" style="background-color: #FFFF00;"></div>
+                            <div class="example-hex">#FFFF00</div>
+                            <div class="example-rgb">rgb(255,255,0)</div>
+                        </div>
+                        <div class="example-item" data-hex="#00FFFF">
+                            <div class="example-color" style="background-color: #00FFFF;"></div>
+                            <div class="example-hex">#00FFFF</div>
+                            <div class="example-rgb">rgb(0,255,255)</div>
+                        </div>
+                        <div class="example-item" data-hex="#FF00FF">
+                            <div class="example-color" style="background-color: #FF00FF;"></div>
+                            <div class="example-hex">#FF00FF</div>
+                            <div class="example-rgb">rgb(255,0,255)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-title">About HEX and RGB</div>
+                    <div class="info-content">
+                        <ul>
+                            <li><strong>HEX</strong>: Six-digit hexadecimal format (#RRGGBB) used in web design</li>
+                            <li><strong>RGB</strong>: Red, Green, Blue values (0-255) representing color intensity</li>
+                            <li>Both represent the same colors, just in different formats</li>
+                            <li>HEX is more compact, RGB is more intuitive for calculations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h2 class="section-title"><i class="fas fa-eye"></i> Color Preview</h2>
+                
+                <div class="color-preview">
+                    <div class="preview-container">
+                        <div class="preview-item hex-preview" id="hex-preview" style="background-color: #4F46E5;">
+                            <div class="preview-label">HEX Color</div>
+                            <div class="preview-value" id="hex-value">#4F46E5</div>
+                        </div>
+                        
+                        <div class="preview-item rgb-preview" id="rgb-preview" style="background-color: rgb(79, 70, 229);">
+                            <div class="preview-label">RGB Color</div>
+                            <div class="preview-value" id="rgb-value">rgb(79, 70, 229)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool converts between HEX and RGB color formats. Perfect for designers and developers.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const hexInput = document.getElementById('hex-input');
+            const redInput = document.getElementById('red-input');
+            const greenInput = document.getElementById('green-input');
+            const blueInput = document.getElementById('blue-input');
+            const convertBtn = document.getElementById('convert-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const directionBtn = document.getElementById('direction-btn');
+            const hexPreview = document.getElementById('hex-preview');
+            const rgbPreview = document.getElementById('rgb-preview');
+            const hexValue = document.getElementById('hex-value');
+            const rgbValue = document.getElementById('rgb-value');
+            const exampleItems = document.querySelectorAll('.example-item');
+            
+            // State variables
+            let isHexToRgb = true;
+            
+            // Event Listeners
+            hexInput.addEventListener('input', convertHexToRgb);
+            redInput.addEventListener('input', convertRgbToHex);
+            greenInput.addEventListener('input', convertRgbToHex);
+            blueInput.addEventListener('input', convertRgbToHex);
+            convertBtn.addEventListener('click', manualConvert);
+            clearBtn.addEventListener('click', clearInputs);
+            directionBtn.addEventListener('click', toggleDirection);
+            
+            // Add event listeners to example items
+            exampleItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const hex = this.dataset.hex;
+                    hexInput.value = hex;
+                    convertHexToRgb();
+                });
+            });
+            
+            // Initialize
+            convertHexToRgb();
+            
+            // Functions
+            function convertHexToRgb() {
+                const hex = hexInput.value.trim();
+                
+                // Validate HEX format
+                if (!/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)) {
+                    // Invalid HEX, don't update RGB
+                    return;
+                }
+                
+                // Convert HEX to RGB
+                const rgb = hexToRgb(hex);
+                redInput.value = rgb.r;
+                greenInput.value = rgb.g;
+                blueInput.value = rgb.b;
+                
+                // Update previews
+                updatePreviews();
+            }
+            
+            function convertRgbToHex() {
+                // Get RGB values
+                const r = parseInt(redInput.value) || 0;
+                const g = parseInt(greenInput.value) || 0;
+                const b = parseInt(blueInput.value) || 0;
+                
+                // Validate RGB values
+                if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+                    // Invalid RGB, don't update HEX
+                    return;
+                }
+                
+                // Convert RGB to HEX
+                const hex = rgbToHex(r, g, b);
+                hexInput.value = hex;
+                
+                // Update previews
+                updatePreviews();
+            }
+            
+            function manualConvert() {
+                if (isHexToRgb) {
+                    convertHexToRgb();
+                } else {
+                    convertRgbToHex();
+                }
+            }
+            
+            function toggleDirection() {
+                isHexToRgb = !isHexToRgb;
+                directionBtn.innerHTML = isHexToRgb ? 
+                    '<i class="fas fa-arrow-right"></i>' : 
+                    '<i class="fas fa-arrow-left"></i>';
+            }
+            
+            function clearInputs() {
+                hexInput.value = '';
+                redInput.value = '';
+                greenInput.value = '';
+                blueInput.value = '';
+                hexValue.textContent = '';
+                rgbValue.textContent = '';
+                hexPreview.style.backgroundColor = '';
+                rgbPreview.style.backgroundColor = '';
+            }
+            
+            function updatePreviews() {
+                const hex = hexInput.value;
+                const r = parseInt(redInput.value) || 0;
+                const g = parseInt(greenInput.value) || 0;
+                const b = parseInt(blueInput.value) || 0;
+                
+                // Update preview values
+                hexValue.textContent = hex;
+                rgbValue.textContent = `rgb(${r}, ${g}, ${b})`;
+                
+                // Update preview backgrounds
+                hexPreview.style.backgroundColor = hex;
+                rgbPreview.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            }
+            
+            // Utility functions
+            function hexToRgb(hex) {
+                // Expand shorthand hex (e.g., #03F) to full form (e.g., #0033FF)
+                if (hex.length === 4) {
+                    hex = '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+                }
+                
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                } : { r: 0, g: 0, b: 0 };
+            }
+            
+            function rgbToHex(r, g, b) {
+                return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+            }
+        });
+    </script>
+</body>
+</html>
