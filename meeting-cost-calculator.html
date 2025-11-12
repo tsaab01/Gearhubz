@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Cost Calculator | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --cost-red: #EF4444;
+            --time-blue: #3B82F6;
+            --attendees-green: #10B981;
+            --savings-purple: #8B5CF6;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .calculator-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .attendees-inputs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            flex: 1;
+        }
+
+        .input-field input, .input-field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .input-field input:focus, .input-field select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .input-field .unit {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .salary-levels {
+            margin-top: 10px;
+        }
+
+        .level-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .level-label {
+            width: 120px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .level-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin: 0 10px;
+        }
+
+        .level-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .level-count {
+            width: 60px;
+            text-align: center;
+        }
+
+        .slider-container {
+            margin-top: 10px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: var(--border);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            cursor: pointer;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .calculate-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            text-align: center;
+        }
+
+        .cost-display {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+            line-height: 1;
+            color: var(--cost-red);
+        }
+
+        .cost-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .breakdown-item {
+            text-align: center;
+            min-width: 120px;
+            padding: 15px;
+            border-radius: 8px;
+            background: var(--card-bg);
+        }
+
+        .breakdown-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .breakdown-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .time-blue-value { color: var(--time-blue); }
+        .attendees-green-value { color: var(--attendees-green); }
+        .cost-red-value { color: var(--cost-red); }
+
+        .breakdown-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .cost-chart {
+            height: 200px;
+            margin: 30px 0;
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 40%;
+            transition: height 0.5s ease;
+        }
+
+        .chart-hourly {
+            left: 10%;
+            background: var(--time-blue);
+        }
+
+        .chart-total {
+            right: 10%;
+            background: var(--cost-red);
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .chart-label {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .label-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 5px;
+        }
+
+        .hourly-color { background: var(--time-blue); }
+        .total-color { background: var(--cost-red); }
+
+        .savings-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .savings-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .savings-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .savings-item {
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .savings-icon {
+            font-size: 2rem;
+            color: var(--savings-purple);
+            margin-bottom: 10px;
+        }
+
+        .savings-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--savings-purple);
+        }
+
+        .savings-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .tips-section {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .tips-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .tips-list {
+            padding-left: 20px;
+        }
+
+        .tip-item {
+            margin-bottom: 8px;
+        }
+
+        .error-message {
+            color: #EF4444;
+            text-align: center;
+            padding: 15px;
+            background: #FEF2F2;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .attendees-inputs {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .cost-breakdown {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .savings-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Calculate the true cost of your meetings and discover ways to optimize your time and resources.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="calculator-section">
+                <h2 class="section-title"><i class="fas fa-users"></i> Meeting Details</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Meeting Duration</label>
+                    <div class="attendees-inputs">
+                        <div class="input-field">
+                            <input type="number" id="hours" min="0" max="24" value="1" placeholder="Hours">
+                            <div class="unit">Hours</div>
+                        </div>
+                        <div class="input-field">
+                            <input type="number" id="minutes" min="0" max="59" value="30" placeholder="Minutes">
+                            <div class="unit">Minutes</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" min="0" max="1440" value="90" class="slider" id="duration-slider">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Attendees</label>
+                    <div class="salary-levels">
+                        <div class="level-group">
+                            <div class="level-label">Entry Level</div>
+                            <input type="number" class="level-input" id="entry-salary" min="0" value="400000" placeholder="Salary">
+                            <div class="unit">₹/yr</div>
+                            <input type="number" class="level-count" id="entry-count" min="0" value="2" placeholder="Count">
+                        </div>
+                        <div class="level-group">
+                            <div class="level-label">Mid Level</div>
+                            <input type="number" class="level-input" id="mid-salary" min="0" value="800000" placeholder="Salary">
+                            <div class="unit">₹/yr</div>
+                            <input type="number" class="level-count" id="mid-count" min="0" value="3" placeholder="Count">
+                        </div>
+                        <div class="level-group">
+                            <div class="level-label">Senior Level</div>
+                            <input type="number" class="level-input" id="senior-salary" min="0" value="1500000" placeholder="Salary">
+                            <div class="unit">₹/yr</div>
+                            <input type="number" class="level-count" id="senior-count" min="0" value="1" placeholder="Count">
+                        </div>
+                        <div class="level-group">
+                            <div class="level-label">Executive</div>
+                            <input type="number" class="level-input" id="exec-salary" min="0" value="3000000" placeholder="Salary">
+                            <div class="unit">₹/yr</div>
+                            <input type="number" class="level-count" id="exec-count" min="0" value="1" placeholder="Count">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Additional Costs</label>
+                    <div class="attendees-inputs">
+                        <div class="input-field">
+                            <input type="number" id="travel-cost" min="0" value="0" placeholder="Travel">
+                            <div class="unit">₹</div>
+                        </div>
+                        <div class="input-field">
+                            <input type="number" id="facility-cost" min="0" value="0" placeholder="Facilities">
+                            <div class="unit">₹</div>
+                        </div>
+                        <div class="input-field">
+                            <input type="number" id="other-cost" min="0" value="0" placeholder="Other">
+                            <div class="unit">₹</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" id="calculate-btn">Calculate Meeting Cost</button>
+                
+                <div class="error-message" id="error-message">
+                    Please enter valid meeting details.
+                </div>
+                
+                <div class="tips-section">
+                    <div class="tips-title">Meeting Optimization Tips</div>
+                    <ul class="tips-list">
+                        <li class="tip-item">Set clear agendas and objectives before meetings</li>
+                        <li class="tip-item">Invite only essential participants</li>
+                        <li class="tip-item">Limit meeting duration to necessary time</li>
+                        <li class="tip-item">Follow up with action items after meetings</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title"><i class="fas fa-rupee-sign"></i> Cost Analysis</h2>
+                
+                <div class="results-container">
+                    <div class="cost-display" id="total-cost">₹0</div>
+                    <p>Total Meeting Cost</p>
+                    
+                    <div class="cost-breakdown">
+                        <div class="breakdown-item">
+                            <div class="breakdown-icon">
+                                <i class="fas fa-clock time-blue-value"></i>
+                            </div>
+                            <div class="breakdown-value time-blue-value" id="meeting-time">1h 30m</div>
+                            <div class="breakdown-label">Duration</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-icon">
+                                <i class="fas fa-users attendees-green-value"></i>
+                            </div>
+                            <div class="breakdown-value attendees-green-value" id="attendee-count">7</div>
+                            <div class="breakdown-label">Attendees</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-icon">
+                                <i class="fas fa-rupee-sign cost-red-value"></i>
+                            </div>
+                            <div class="breakdown-value cost-red-value" id="hourly-cost">₹0</div>
+                            <div class="breakdown-label">Hourly Cost</div>
+                        </div>
+                    </div>
+                    
+                    <div class="cost-chart">
+                        <div class="chart-bar chart-hourly" id="hourly-bar" style="height: 0%;"></div>
+                        <div class="chart-bar chart-total" id="total-bar" style="height: 0%;"></div>
+                        <div class="chart-labels">
+                            <div class="chart-label">
+                                <div class="label-color hourly-color"></div>
+                                <span>Hourly Rate</span>
+                            </div>
+                            <div class="chart-label">
+                                <div class="label-color total-color"></div>
+                                <span>Total Cost</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="savings-section">
+                        <div class="savings-title">Potential Savings</div>
+                        <div class="savings-content">
+                            <div class="savings-item">
+                                <div class="savings-icon">
+                                    <i class="fas fa-cut"></i>
+                                </div>
+                                <div class="savings-value" id="reduce-time-savings">₹0</div>
+                                <div class="savings-label">30m Less</div>
+                            </div>
+                            <div class="savings-item">
+                                <div class="savings-icon">
+                                    <i class="fas fa-user-minus"></i>
+                                </div>
+                                <div class="savings-value" id="reduce-attendees-savings">₹0</div>
+                                <div class="savings-label">2 Fewer</div>
+                            </div>
+                            <div class="savings-item">
+                                <div class="savings-icon">
+                                    <i class="fas fa-ban"></i>
+                                </div>
+                                <div class="savings-value" id="eliminate-meeting-savings">₹0</div>
+                                <div class="savings-label">Eliminate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This calculator provides estimates only. Actual costs may vary based on specific organizational factors.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const hoursInput = document.getElementById('hours');
+            const minutesInput = document.getElementById('minutes');
+            const durationSlider = document.getElementById('duration-slider');
+            const entrySalary = document.getElementById('entry-salary');
+            const midSalary = document.getElementById('mid-salary');
+            const seniorSalary = document.getElementById('senior-salary');
+            const execSalary = document.getElementById('exec-salary');
+            const entryCount = document.getElementById('entry-count');
+            const midCount = document.getElementById('mid-count');
+            const seniorCount = document.getElementById('senior-count');
+            const execCount = document.getElementById('exec-count');
+            const travelCost = document.getElementById('travel-cost');
+            const facilityCost = document.getElementById('facility-cost');
+            const otherCost = document.getElementById('other-cost');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const errorMessage = document.getElementById('error-message');
+            const totalCost = document.getElementById('total-cost');
+            const meetingTime = document.getElementById('meeting-time');
+            const attendeeCount = document.getElementById('attendee-count');
+            const hourlyCost = document.getElementById('hourly-cost');
+            const hourlyBar = document.getElementById('hourly-bar');
+            const totalBar = document.getElementById('total-bar');
+            const reduceTimeSavings = document.getElementById('reduce-time-savings');
+            const reduceAttendeesSavings = document.getElementById('reduce-attendees-savings');
+            const eliminateMeetingSavings = document.getElementById('eliminate-meeting-savings');
+            
+            // Event Listeners
+            durationSlider.addEventListener('input', function() {
+                const totalMinutes = parseInt(this.value);
+                const hrs = Math.floor(totalMinutes / 60);
+                const mins = totalMinutes % 60;
+                hoursInput.value = hrs;
+                minutesInput.value = mins;
+                calculateCost();
+            });
+            
+            hoursInput.addEventListener('input', updateDurationSlider);
+            minutesInput.addEventListener('input', updateDurationSlider);
+            
+            // Salary and count inputs
+            const inputs = [
+                entrySalary, midSalary, seniorSalary, execSalary,
+                entryCount, midCount, seniorCount, execCount,
+                travelCost, facilityCost, otherCost
+            ];
+            
+            inputs.forEach(input => {
+                input.addEventListener('input', calculateCost);
+            });
+            
+            calculateBtn.addEventListener('click', calculateCost);
+            
+            // Initialize
+            updateDurationSlider();
+            calculateCost();
+            
+            // Functions
+            function updateDurationSlider() {
+                const hrs = parseInt(hoursInput.value) || 0;
+                const mins = parseInt(minutesInput.value) || 0;
+                const totalMinutes = hrs * 60 + mins;
+                durationSlider.value = Math.min(totalMinutes, 1440); // Max 24 hours
+                calculateCost();
+            }
+            
+            function calculateCost() {
+                // Hide error message
+                errorMessage.style.display = 'none';
+                
+                // Get input values
+                const hours = parseInt(hoursInput.value) || 0;
+                const minutes = parseInt(minutesInput.value) || 0;
+                const entrySal = parseFloat(entrySalary.value) || 0;
+                const midSal = parseFloat(midSalary.value) || 0;
+                const seniorSal = parseFloat(seniorSalary.value) || 0;
+                const execSal = parseFloat(execSalary.value) || 0;
+                const entryCnt = parseInt(entryCount.value) || 0;
+                const midCnt = parseInt(midCount.value) || 0;
+                const seniorCnt = parseInt(seniorCount.value) || 0;
+                const execCnt = parseInt(execCount.value) || 0;
+                const travel = parseFloat(travelCost.value) || 0;
+                const facility = parseFloat(facilityCost.value) || 0;
+                const other = parseFloat(otherCost.value) || 0;
+                
+                // Validate inputs
+                if (hours < 0 || minutes < 0 || minutes > 59) {
+                    showError();
+                    return;
+                }
+                
+                // Calculate total time in hours
+                const totalTime = hours + (minutes / 60);
+                
+                // Calculate labor costs
+                const entryLabor = (entrySal / 2080) * totalTime * entryCnt; // 2080 working hours/year
+                const midLabor = (midSal / 2080) * totalTime * midCnt;
+                const seniorLabor = (seniorSal / 2080) * totalTime * seniorCnt;
+                const execLabor = (execSal / 2080) * totalTime * execCnt;
+                
+                const totalLabor = entryLabor + midLabor + seniorLabor + execLabor;
+                
+                // Calculate additional costs
+                const additionalCosts = travel + facility + other;
+                
+                // Calculate total cost
+                const totalMeetingCost = totalLabor + additionalCosts;
+                
+                // Calculate hourly cost
+                const hourlyMeetingCost = totalTime > 0 ? totalMeetingCost / totalTime : 0;
+                
+                // Calculate attendee count
+                const totalAttendees = entryCnt + midCnt + seniorCnt + execCnt;
+                
+                // Update display
+                totalCost.textContent = formatCurrency(totalMeetingCost);
+                meetingTime.textContent = formatTime(hours, minutes);
+                attendeeCount.textContent = totalAttendees;
+                hourlyCost.textContent = formatCurrency(hourlyMeetingCost);
+                
+                // Update chart
+                const maxCost = Math.max(totalMeetingCost, hourlyMeetingCost * 10);
+                const hourlyHeight = maxCost > 0 ? (hourlyMeetingCost / maxCost) * 100 : 0;
+                const totalHeight = maxCost > 0 ? (totalMeetingCost / maxCost) * 100 : 0;
+                
+                hourlyBar.style.height = hourlyHeight + '%';
+                totalBar.style.height = totalHeight + '%';
+                
+                // Calculate savings
+                // 30 minutes less
+                const reducedTime = Math.max(0, totalTime - 0.5);
+                const reducedTimeCost = (totalLabor / totalTime) * reducedTime + additionalCosts;
+                const timeSavings = totalMeetingCost - reducedTimeCost;
+                
+                // 2 fewer attendees (remove entry level)
+                const reducedAttendees = Math.max(0, entryCnt - 2);
+                const reducedEntryLabor = (entrySal / 2080) * totalTime * reducedAttendees;
+                const reducedLabor = reducedEntryLabor + midLabor + seniorLabor + execLabor;
+                const reducedAttendeesCost = reducedLabor + additionalCosts;
+                const attendeesSavings = totalMeetingCost - reducedAttendeesCost;
+                
+                // Eliminate meeting
+                const eliminateSavings = totalMeetingCost;
+                
+                // Update savings display
+                reduceTimeSavings.textContent = formatCurrency(timeSavings);
+                reduceAttendeesSavings.textContent = formatCurrency(attendeesSavings);
+                eliminateMeetingSavings.textContent = formatCurrency(eliminateSavings);
+            }
+            
+            function formatCurrency(amount) {
+                // Format as Indian currency (₹)
+                return '₹' + amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+            
+            function formatTime(hours, minutes) {
+                if (hours === 0) return minutes + 'm';
+                if (minutes === 0) return hours + 'h';
+                return hours + 'h ' + minutes + 'm';
+            }
+            
+            function showError() {
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+
