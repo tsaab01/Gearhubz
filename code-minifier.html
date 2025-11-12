@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Minifier | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --html: #EF4444;
+            --css: #3B82F6;
+            --js: #F59E0B;
+            --minified: #10B981;
+            --savings: #8B5CF6;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .input-section, .output-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .code-input, .code-output {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-input:focus, .code-output:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .language-selector {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .lang-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-option:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .lang-option.active {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .html-lang { color: var(--html); }
+        .css-lang { color: var(--css); }
+        .js-lang { color: var(--js); }
+
+        .active.html-lang { background: var(--html); }
+        .active.css-lang { background: var(--css); }
+        .active.js-lang { background: var(--js); }
+
+        .options-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 8px;
+        }
+
+        .options-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .option-item input {
+            margin-right: 10px;
+        }
+
+        .option-item label {
+            color: var(--text-secondary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .minify-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .minify-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .clear-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .clear-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .copy-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .original-value { color: var(--text-primary); }
+        .minified-value { color: var(--minified); }
+        .savings-value { color: var(--savings); }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .savings-bar {
+            height: 10px;
+            background: var(--border);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .savings-fill {
+            height: 100%;
+            background: var(--savings);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .savings-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .examples-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .examples-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .example-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .example-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .example-text {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.8rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Minify HTML, CSS, and JavaScript code to reduce file sizes and improve website performance.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="input-section">
+                <h2 class="section-title"><i class="fas fa-code"></i> Code to Minify</h2>
+                
+                <div class="language-selector">
+                    <div class="lang-option html-lang active" data-lang="html">
+                        <i class="fab fa-html5"></i> HTML
+                    </div>
+                    <div class="lang-option css-lang" data-lang="css">
+                        <i class="fab fa-css3-alt"></i> CSS
+                    </div>
+                    <div class="lang-option js-lang" data-lang="js">
+                        <i class="fab fa-js"></i> JavaScript
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Enter your code</label>
+                    <textarea class="code-input" id="input-code" placeholder="Paste your HTML, CSS, or JavaScript code here..."><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Page</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4F46E5;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        .button:hover {
+            background: #4338CA;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Our Website</h1>
+        
+        <p>
+            This is a sample paragraph to demonstrate HTML minification. 
+            Notice the extra spaces and line breaks that will be removed 
+            during the minification process.
+        </p>
+        
+        <p>
+            Minification helps reduce file sizes, which improves loading 
+            times and overall website performance.
+        </p>
+        
+        <a href="#" class="button">Learn More</a>
+    </div>
+    
+    <script>
+        // Sample JavaScript to demonstrate minification
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded successfully!');
+            
+            const button = document.querySelector('.button');
+            
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                alert('Button clicked!');
+            });
+            
+            // This is a comment that will be removed
+            const message = "Hello, World!";
+            console.log(message);
+        });
+    </script>
+</body>
+</html></textarea>
+                </div>
+                
+                <div class="options-section">
+                    <div class="options-title">Minification Options</div>
+                    <div class="option-item">
+                        <input type="checkbox" id="remove-comments" checked>
+                        <label for="remove-comments">Remove Comments</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="remove-whitespace" checked>
+                        <label for="remove-whitespace">Remove Extra Whitespace</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="shorten-vars">
+                        <label for="shorten-vars">Shorten Variable Names (JS only)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="optimize-css" checked>
+                        <label for="optimize-css">Optimize CSS (merge rules, etc.)</label>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn minify-btn" id="minify-btn">
+                        <i class="fas fa-compress-alt"></i> Minify Code
+                    </button>
+                    <button class="action-btn clear-btn" id="clear-btn">
+                        <i class="fas fa-eraser"></i> Clear
+                    </button>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <h2 class="section-title"><i class="fas fa-file-export"></i> Minified Code</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Your minified code will appear here</label>
+                    <textarea class="code-output" id="output-code" readonly></textarea>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn copy-btn" id="copy-btn">
+                        <i class="fas fa-copy"></i> Copy to Clipboard
+                    </button>
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stat-item">
+                        <div class="stat-value original-value" id="original-size">0 KB</div>
+                        <div class="stat-label">Original Size</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value minified-value" id="minified-size">0 KB</div>
+                        <div class="stat-label">Minified Size</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value savings-value" id="savings-percent">0%</div>
+                        <div class="stat-label">Savings</div>
+                    </div>
+                </div>
+                
+                <div class="savings-bar">
+                    <div class="savings-fill" id="savings-bar"></div>
+                </div>
+                <div class="savings-text" id="savings-text">0 bytes saved</div>
+                
+                <div class="examples-section">
+                    <div class="examples-title">Minification Examples</div>
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <div class="example-label">Before Minification</div>
+                            <div class="example-text">.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    
+    /* Center content */
+    text-align: center;
+}</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-label">After Minification</div>
+                            <div class="example-text">.container{max-width:800px;margin:0 auto;padding:20px;text-align:center}</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-label">Before Minification</div>
+                            <div class="example-text">function calculateTotal(items) {
+    // Calculate the total price
+    let total = 0;
+    
+    for (let i = 0; i < items.length; i++) {
+        total += items[i].price;
+    }
+    
+    return total;
+}</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-label">After Minification</div>
+                            <div class="example-text">function calculateTotal(items){let total=0;for(let i=0;i<items.length;i++){total+=items[i].price}return total}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool minifies code to reduce file sizes. Perfect for improving website performance.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const inputCode = document.getElementById('input-code');
+            const outputCode = document.getElementById('output-code');
+            const langOptions = document.querySelectorAll('.lang-option');
+            const minifyBtn = document.getElementById('minify-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const removeComments = document.getElementById('remove-comments');
+            const removeWhitespace = document.getElementById('remove-whitespace');
+            const shortenVars = document.getElementById('shorten-vars');
+            const optimizeCss = document.getElementById('optimize-css');
+            const originalSize = document.getElementById('original-size');
+            const minifiedSize = document.getElementById('minified-size');
+            const savingsPercent = document.getElementById('savings-percent');
+            const savingsBar = document.getElementById('savings-bar');
+            const savingsText = document.getElementById('savings-text');
+            
+            // State variables
+            let currentLanguage = 'html';
+            
+            // Event Listeners
+            langOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    langOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentLanguage = this.dataset.lang;
+                });
+            });
+            
+            inputCode.addEventListener('input', updateStats);
+            minifyBtn.addEventListener('click', minifyCode);
+            clearBtn.addEventListener('click', clearCode);
+            copyBtn.addEventListener('click', copyToClipboard);
+            removeComments.addEventListener('change', minifyCode);
+            removeWhitespace.addEventListener('change', minifyCode);
+            shortenVars.addEventListener('change', minifyCode);
+            optimizeCss.addEventListener('change', minifyCode);
+            
+            // Initialize
+            updateStats();
+            minifyCode();
+            
+            // Functions
+            function minifyCode() {
+                const code = inputCode.value;
+                let minifiedCode = '';
+                
+                // Update original size
+                const originalBytes = new Blob([code]).size;
+                originalSize.textContent = formatFileSize(originalBytes);
+                
+                // Process based on language
+                switch(currentLanguage) {
+                    case 'html':
+                        minifiedCode = minifyHTML(code);
+                        break;
+                    case 'css':
+                        minifiedCode = minifyCSS(code);
+                        break;
+                    case 'js':
+                        minifiedCode = minifyJS(code);
+                        break;
+                    default:
+                        minifiedCode = code;
+                }
+                
+                // Update output
+                outputCode.value = minifiedCode;
+                
+                // Update statistics
+                const minifiedBytes = new Blob([minifiedCode]).size;
+                minifiedSize.textContent = formatFileSize(minifiedBytes);
+                
+                const savings = originalBytes - minifiedBytes;
+                const savingsPercentage = originalBytes > 0 ? Math.round((savings / originalBytes) * 100) : 0;
+                
+                savingsPercent.textContent = `${savingsPercentage}%`;
+                savingsBar.style.width = `${Math.min(savingsPercentage, 100)}%`;
+                savingsText.textContent = `${formatFileSize(savings)} saved`;
+            }
+            
+            function minifyHTML(code) {
+                let result = code;
+                
+                // Remove comments
+                if (removeComments.checked) {
+                    result = result.replace(/<!--[\s\S]*?-->/g, '');
+                }
+                
+                // Remove extra whitespace
+                if (removeWhitespace.checked) {
+                    result = result.replace(/\s+/g, ' ');
+                    result = result.replace(/>\s+</g, '><');
+                    result = result.trim();
+                }
+                
+                return result;
+            }
+            
+            function minifyCSS(code) {
+                let result = code;
+                
+                // Remove comments
+                if (removeComments.checked) {
+                    result = result.replace(/\/\*[\s\S]*?\*\//g, '');
+                }
+                
+                // Remove extra whitespace
+                if (removeWhitespace.checked) {
+                    result = result.replace(/\s+/g, ' ');
+                    result = result.replace(/\s*([{}:;,])\s*/g, '$1');
+                    result = result.replace(/;}/g, '}');
+                    result = result.trim();
+                }
+                
+                // Optimize CSS
+                if (optimizeCss.checked) {
+                    // This is a simplified example - real CSS minifiers do much more
+                    result = result.replace(/(0(px|em|rem|%|pt|pc|in|mm|cm|ex|ch|vw|vh|vmin|vmax))/gi, '0');
+                }
+                
+                return result;
+            }
+            
+            function minifyJS(code) {
+                let result = code;
+                
+                // Remove comments
+                if (removeComments.checked) {
+                    result = result.replace(/\/\/.*$/gm, '');
+                    result = result.replace(/\/\*[\s\S]*?\*\//g, '');
+                }
+                
+                // Remove extra whitespace
+                if (removeWhitespace.checked) {
+                    result = result.replace(/\s+/g, ' ');
+                    result = result.replace(/\s*([{}();,:])\s*/g, '$1');
+                    result = result.trim();
+                }
+                
+                // Shorten variable names (simplified)
+                if (shortenVars.checked) {
+                    // This is a very basic implementation
+                    // Real JS minifiers use more sophisticated techniques
+                    const varRegex = /\b(var|let|const)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)\b/g;
+                    let varCount = 0;
+                    const varMap = {};
+                    
+                    result = result.replace(varRegex, (match, declaration, varName) => {
+                        if (!varMap[varName]) {
+                            varMap[varName] = `v${++varCount}`;
+                        }
+                        return `${declaration} ${varMap[varName]}`;
+                    });
+                    
+                    // Replace variable usages
+                    for (const [original, shortened] of Object.entries(varMap)) {
+                        result = result.replace(new RegExp(`\\b${original}\\b`, 'g'), shortened);
+                    }
+                }
+                
+                return result;
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            function updateStats() {
+                const code = inputCode.value;
+                const bytes = new Blob([code]).size;
+                originalSize.textContent = formatFileSize(bytes);
+            }
+            
+            function clearCode() {
+                inputCode.value = '';
+                outputCode.value = '';
+                originalSize.textContent = '0 Bytes';
+                minifiedSize.textContent = '0 Bytes';
+                savingsPercent.textContent = '0%';
+                savingsBar.style.width = '0%';
+                savingsText.textContent = '0 bytes saved';
+            }
+            
+            function copyToClipboard() {
+                outputCode.select();
+                document.execCommand('copy');
+                
+                // Show feedback
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
