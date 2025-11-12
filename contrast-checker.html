@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrast Checker | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --foreground: #1F2937;
+            --background: #F9FAFB;
+            --pass: #10B981;
+            --fail: #EF4444;
+            --aa-pass: #3B82F6;
+            --aaa-pass: #8B5CF6;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .checker-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .color-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .color-group {
+            text-align: center;
+        }
+
+        .color-label {
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .color-picker-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .color-preview {
+            width: 100%;
+            height: 80px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, #ccc 25%, transparent 25%), 
+                linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ccc 75%),
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            z-index: -1;
+        }
+
+        .color-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+
+        .color-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .contrast-preview {
+            height: 150px;
+            border-radius: 10px;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contrast-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, #ccc 25%, transparent 25%), 
+                linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ccc 75%),
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            z-index: -1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .check-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .check-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .swap-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .swap-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .random-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .random-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .results-container {
+            text-align: center;
+        }
+
+        .contrast-ratio {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+            line-height: 1;
+        }
+
+        .ratio-pass { color: var(--pass); }
+        .ratio-fail { color: var(--fail); }
+
+        .accessibility-results {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .result-item {
+            text-align: center;
+        }
+
+        .result-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .aa-large-value { color: var(--aa-pass); }
+        .aa-normal-value { color: var(--aa-pass); }
+        .aaa-large-value { color: var(--aaa-pass); }
+        .aaa-normal-value { color: var(--aaa-pass); }
+
+        .result-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .pass-icon { color: var(--pass); }
+        .fail-icon { color: var(--fail); }
+        .warning-icon { color: var(--warning); }
+
+        .standards-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .standards-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .standard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .standard-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .standard-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .standard-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .recommendations {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .rec-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .rec-list {
+            padding-left: 20px;
+        }
+
+        .rec-item {
+            margin-bottom: 8px;
+        }
+
+        .examples-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .examples-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .example-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .example-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .example-colors {
+            display: flex;
+            height: 40px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .example-bg {
+            flex: 1;
+        }
+
+        .example-fg {
+            flex: 1;
+        }
+
+        .example-ratio {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .color-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .accessibility-results {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .standard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .example-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Check color contrast ratios to ensure your designs meet accessibility standards. Perfect for designers and developers.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="checker-section">
+                <h2 class="section-title"><i class="fas fa-adjust"></i> Color Selection</h2>
+                
+                <div class="color-inputs">
+                    <div class="color-group">
+                        <div class="color-label">Foreground Color</div>
+                        <div class="color-picker-container">
+                            <div class="color-preview" id="fg-preview" style="background-color: #1F2937;"></div>
+                            <input type="text" class="color-input" id="fg-input" value="#1F2937" placeholder="#1F2937">
+                        </div>
+                    </div>
+                    
+                    <div class="color-group">
+                        <div class="color-label">Background Color</div>
+                        <div class="color-picker-container">
+                            <div class="color-preview" id="bg-preview" style="background-color: #F9FAFB;"></div>
+                            <input type="text" class="color-input" id="bg-input" value="#F9FAFB" placeholder="#F9FAFB">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contrast-preview" id="contrast-preview" style="background-color: #F9FAFB; color: #1F2937;">
+                    Aa
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn check-btn" id="check-btn">
+                        <i class="fas fa-check-circle"></i> Check Contrast
+                    </button>
+                    <button class="action-btn swap-btn" id="swap-btn">
+                        <i class="fas fa-exchange-alt"></i> Swap Colors
+                    </button>
+                    <button class="action-btn random-btn" id="random-btn">
+                        <i class="fas fa-random"></i> Random
+                    </button>
+                </div>
+                
+                <div class="standards-section">
+                    <div class="standards-title">WCAG Standards</div>
+                    <div class="standard-grid">
+                        <div class="standard-item">
+                            <div class="standard-name">AA Large</div>
+                            <div class="standard-desc">3:1 for large text (18pt+)</div>
+                        </div>
+                        <div class="standard-item">
+                            <div class="standard-name">AA Normal</div>
+                            <div class="standard-desc">4.5:1 for normal text</div>
+                        </div>
+                        <div class="standard-item">
+                            <div class="standard-name">AAA Large</div>
+                            <div class="standard-desc">4.5:1 for large text</div>
+                        </div>
+                        <div class="standard-item">
+                            <div class="standard-name">AAA Normal</div>
+                            <div class="standard-desc">7:1 for normal text</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recommendations">
+                    <div class="rec-title">Accessibility Tips</div>
+                    <ul class="rec-list">
+                        <li class="rec-item">Use sufficient contrast ratios to ensure readability for all users</li>
+                        <li class="rec-item">Test your designs with color blindness simulators</li>
+                        <li class="rec-item">Consider luminance when selecting color combinations</li>
+                        <li class="rec-item">Always provide alternatives for non-text content</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title"><i class="fas fa-chart-bar"></i> Contrast Results</h2>
+                
+                <div class="results-container">
+                    <div class="contrast-ratio ratio-fail" id="contrast-ratio">0.00</div>
+                    <p>Contrast Ratio</p>
+                    
+                    <div class="accessibility-results">
+                        <div class="result-item">
+                            <div class="result-icon pass-icon" id="aa-large-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="result-value aa-large-value" id="aa-large-value">AA Large</div>
+                            <div class="result-label">3:1</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon fail-icon" id="aa-normal-icon">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="result-value aa-normal-value" id="aa-normal-value">AA Normal</div>
+                            <div class="result-label">4.5:1</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon fail-icon" id="aaa-large-icon">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="result-value aaa-large-value" id="aaa-large-value">AAA Large</div>
+                            <div class="result-label">4.5:1</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon fail-icon" id="aaa-normal-icon">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="result-value aaa-normal-value" id="aaa-normal-value">AAA Normal</div>
+                            <div class="result-label">7:1</div>
+                        </div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <div class="examples-title">Contrast Examples</div>
+                        <div class="example-grid">
+                            <div class="example-item">
+                                <div class="example-label">Good Contrast</div>
+                                <div class="example-colors">
+                                    <div class="example-bg" style="background-color: #FFFFFF;"></div>
+                                    <div class="example-fg" style="background-color: #000000;"></div>
+                                </div>
+                                <div class="example-ratio">21:1</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">Minimum AA</div>
+                                <div class="example-colors">
+                                    <div class="example-bg" style="background-color: #F0F0F0;"></div>
+                                    <div class="example-fg" style="background-color: #595959;"></div>
+                                </div>
+                                <div class="example-ratio">4.5:1</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">Poor Contrast</div>
+                                <div class="example-colors">
+                                    <div class="example-bg" style="background-color: #CCCCCC;"></div>
+                                    <div class="example-fg" style="background-color: #999999;"></div>
+                                </div>
+                                <div class="example-ratio">2.1:1</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">AAA Normal</div>
+                                <div class="example-colors">
+                                    <div class="example-bg" style="background-color: #F5F5F5;"></div>
+                                    <div class="example-fg" style="background-color: #333333;"></div>
+                                </div>
+                                <div class="example-ratio">7:1</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">AA Large</div>
+                                <div class="example-colors">
+                                    <div class="example-bg" style="background-color: #EEEEEE;"></div>
+                                    <div class="example-fg" style="background-color: #666666;"></div>
+                                </div>
+                                <div class="example-ratio">3:1</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">Borderline</div>
+                                <div class="example-colors">
+                                    <div class="example-bg" style="background-color: #DDDDDD;"></div>
+                                    <div class="example-fg" style="background-color: #777777;"></div>
+                                </div>
+                                <div class="example-ratio">4:1</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool checks color contrast ratios. Perfect for ensuring accessible designs.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const fgInput = document.getElementById('fg-input');
+            const bgInput = document.getElementById('bg-input');
+            const fgPreview = document.getElementById('fg-preview');
+            const bgPreview = document.getElementById('bg-preview');
+            const contrastPreview = document.getElementById('contrast-preview');
+            const checkBtn = document.getElementById('check-btn');
+            const swapBtn = document.getElementById('swap-btn');
+            const randomBtn = document.getElementById('random-btn');
+            const contrastRatio = document.getElementById('contrast-ratio');
+            const aaLargeIcon = document.getElementById('aa-large-icon');
+            const aaNormalIcon = document.getElementById('aa-normal-icon');
+            const aaaLargeIcon = document.getElementById('aaa-large-icon');
+            const aaaNormalIcon = document.getElementById('aaa-normal-icon');
+            const aaLargeValue = document.getElementById('aa-large-value');
+            const aaNormalValue = document.getElementById('aa-normal-value');
+            const aaaLargeValue = document.getElementById('aaa-large-value');
+            const aaaNormalValue = document.getElementById('aaa-normal-value');
+            
+            // State variables
+            let foregroundColor = '#1F2937';
+            let backgroundColor = '#F9FAFB';
+            
+            // Event Listeners
+            fgInput.addEventListener('input', function() {
+                foregroundColor = this.value;
+                fgPreview.style.backgroundColor = foregroundColor;
+                updateContrastPreview();
+            });
+            
+            bgInput.addEventListener('input', function() {
+                backgroundColor = this.value;
+                bgPreview.style.backgroundColor = backgroundColor;
+                updateContrastPreview();
+            });
+            
+            checkBtn.addEventListener('click', checkContrast);
+            swapBtn.addEventListener('click', swapColors);
+            randomBtn.addEventListener('click', generateRandomColors);
+            
+            // Initialize
+            updateContrastPreview();
+            checkContrast();
+            
+            // Functions
+            function updateContrastPreview() {
+                contrastPreview.style.backgroundColor = backgroundColor;
+                contrastPreview.style.color = foregroundColor;
+            }
+            
+            function checkContrast() {
+                // Calculate contrast ratio
+                const ratio = calculateContrastRatio(foregroundColor, backgroundColor);
+                contrastRatio.textContent = ratio.toFixed(2);
+                
+                // Update ratio color based on value
+                if (ratio >= 4.5) {
+                    contrastRatio.className = 'contrast-ratio ratio-pass';
+                } else {
+                    contrastRatio.className = 'contrast-ratio ratio-fail';
+                }
+                
+                // Update accessibility results
+                updateAccessibilityResults(ratio);
+            }
+            
+            function updateAccessibilityResults(ratio) {
+                // AA Large (3:1)
+                if (ratio >= 3) {
+                    aaLargeIcon.innerHTML = '<i class="fas fa-check-circle pass-icon"></i>';
+                    aaLargeValue.textContent = 'Pass';
+                } else {
+                    aaLargeIcon.innerHTML = '<i class="fas fa-times-circle fail-icon"></i>';
+                    aaLargeValue.textContent = 'Fail';
+                }
+                
+                // AA Normal (4.5:1)
+                if (ratio >= 4.5) {
+                    aaNormalIcon.innerHTML = '<i class="fas fa-check-circle pass-icon"></i>';
+                    aaNormalValue.textContent = 'Pass';
+                } else {
+                    aaNormalIcon.innerHTML = '<i class="fas fa-times-circle fail-icon"></i>';
+                    aaNormalValue.textContent = 'Fail';
+                }
+                
+                // AAA Large (4.5:1)
+                if (ratio >= 4.5) {
+                    aaaLargeIcon.innerHTML = '<i class="fas fa-check-circle pass-icon"></i>';
+                    aaaLargeValue.textContent = 'Pass';
+                } else {
+                    aaaLargeIcon.innerHTML = '<i class="fas fa-times-circle fail-icon"></i>';
+                    aaaLargeValue.textContent = 'Fail';
+                }
+                
+                // AAA Normal (7:1)
+                if (ratio >= 7) {
+                    aaaNormalIcon.innerHTML = '<i class="fas fa-check-circle pass-icon"></i>';
+                    aaaNormalValue.textContent = 'Pass';
+                } else {
+                    aaaNormalIcon.innerHTML = '<i class="fas fa-times-circle fail-icon"></i>';
+                    aaaNormalValue.textContent = 'Fail';
+                }
+            }
+            
+            function calculateContrastRatio(color1, color2) {
+                // Convert hex to RGB
+                const rgb1 = hexToRgb(color1);
+                const rgb2 = hexToRgb(color2);
+                
+                // Calculate relative luminance
+                const lum1 = getRelativeLuminance(rgb1);
+                const lum2 = getRelativeLuminance(rgb2);
+                
+                // Calculate contrast ratio
+                const lighter = Math.max(lum1, lum2);
+                const darker = Math.min(lum1, lum2);
+                return (lighter + 0.05) / (darker + 0.05);
+            }
+            
+            function hexToRgb(hex) {
+                // Expand shorthand hex (e.g., #03F) to full form (e.g., #0033FF)
+                const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+                hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+                    return r + r + g + g + b + b;
+                });
+                
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                } : { r: 0, g: 0, b: 0 };
+            }
+            
+            function getRelativeLuminance(rgb) {
+                // Convert RGB to sRGB
+                const RsRGB = rgb.r / 255;
+                const GsRGB = rgb.g / 255;
+                const BsRGB = rgb.b / 255;
+                
+                // Calculate luminance components
+                const R = RsRGB <= 0.03928 ? RsRGB / 12.92 : Math.pow((RsRGB + 0.055) / 1.055, 2.4);
+                const G = GsRGB <= 0.03928 ? GsRGB / 12.92 : Math.pow((GsRGB + 0.055) / 1.055, 2.4);
+                const B = BsRGB <= 0.03928 ? BsRGB / 12.92 : Math.pow((BsRGB + 0.055) / 1.055, 2.4);
+                
+                // Calculate relative luminance
+                return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+            }
+            
+            function swapColors() {
+                // Swap foreground and background colors
+                const temp = foregroundColor;
+                foregroundColor = backgroundColor;
+                backgroundColor = temp;
+                
+                // Update inputs and previews
+                fgInput.value = foregroundColor;
+                bgInput.value = backgroundColor;
+                fgPreview.style.backgroundColor = foregroundColor;
+                bgPreview.style.backgroundColor = backgroundColor;
+                
+                updateContrastPreview();
+                checkContrast();
+            }
+            
+            function generateRandomColors() {
+                // Generate two random colors
+                foregroundColor = getRandomColor();
+                backgroundColor = getRandomColor();
+                
+                // Update inputs and previews
+                fgInput.value = foregroundColor;
+                bgInput.value = backgroundColor;
+                fgPreview.style.backgroundColor = foregroundColor;
+                bgPreview.style.backgroundColor = backgroundColor;
+                
+                updateContrastPreview();
+                checkContrast();
+            }
+            
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+        });
+    </script>
+</body>
+</html>
