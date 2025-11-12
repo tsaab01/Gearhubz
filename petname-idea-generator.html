@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Name Idea Generator | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --pet-blue: #3B82F6;
+            --pet-green: #10B981;
+            --pet-orange: #F59E0B;
+            --pet-red: #EF4444;
+            --pet-purple: #8B5CF6;
+            --pet-pink: #EC4899;
+            --pet-teal: #06B6D4;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .generator-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .pet-type {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .type-option {
+            padding: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .type-option:hover {
+            border-color: var(--primary-blue);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .type-option.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .type-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .dog-type { color: var(--pet-blue); }
+        .cat-type { color: var(--pet-green); }
+        .bird-type { color: var(--pet-orange); }
+        .fish-type { color: var(--pet-red); }
+        .rabbit-type { color: var(--pet-purple); }
+        .hamster-type { color: var(--pet-pink); }
+        .other-type { color: var(--pet-teal); }
+
+        .active.dog-type { background: var(--pet-blue); }
+        .active.cat-type { background: var(--pet-green); }
+        .active.bird-type { background: var(--pet-orange); }
+        .active.fish-type { background: var(--pet-red); }
+        .active.rabbit-type { background: var(--pet-purple); }
+        .active.hamster-type { background: var(--pet-pink); }
+        .active.other-type { background: var(--pet-teal); }
+
+        .pet-characteristics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .characteristic-option {
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .characteristic-option:hover {
+            border-color: var(--primary-blue);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .characteristic-option.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .characteristic-icon {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .active.characteristic-option .characteristic-icon {
+            color: white;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            flex: 1;
+        }
+
+        .input-field input, .input-field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--card-bg);
+        }
+
+        .input-field input:focus, .input-field select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .input-field .unit {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .generate-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .generate-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .clear-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .clear-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .results-container {
+            text-align: center;
+        }
+
+        .names-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+        }
+
+        .name-card {
+            padding: 15px 25px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 120px;
+        }
+
+        .name-card:hover {
+            border-color: var(--primary-blue);
+            background: rgba(79, 70, 229, 0.05);
+            transform: translateY(-3px);
+        }
+
+        .name-card.favorite {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .name-card.favorite:hover {
+            background: var(--hover-blue);
+        }
+
+        .name-card .favorite-icon {
+            color: gold;
+            margin-left: 5px;
+        }
+
+        .favorites-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .favorites-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .favorites-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .favorite-item {
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .remove-favorite {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .remove-favorite:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--pet-red);
+        }
+
+        .pet-info {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .info-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .info-content ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .info-content li {
+            margin-bottom: 8px;
+        }
+
+        .examples-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .examples-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .example-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .example-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .example-names {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .example-name {
+            padding: 5px 12px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .pet-type {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .pet-characteristics {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .names-display {
+                justify-content: center;
+            }
+            
+            .name-card {
+                min-width: 100px;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Find the perfect name for your pet. Generate creative ideas based on your pet's type, characteristics, and personality.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="generator-section">
+                <h2 class="section-title"><i class="fas fa-paw"></i> Pet Name Generator</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Pet Type</label>
+                    <div class="pet-type">
+                        <div class="type-option dog-type active" data-type="dog">
+                            <div class="type-icon">
+                                <i class="fas fa-dog"></i>
+                            </div>
+                            <div>Dog</div>
+                        </div>
+                        <div class="type-option cat-type" data-type="cat">
+                            <div class="type-icon">
+                                <i class="fas fa-cat"></i>
+                            </div>
+                            <div>Cat</div>
+                        </div>
+                        <div class="type-option bird-type" data-type="bird">
+                            <div class="type-icon">
+                                <i class="fas fa-dove"></i>
+                            </div>
+                            <div>Bird</div>
+                        </div>
+                        <div class="type-option fish-type" data-type="fish">
+                            <div class="type-icon">
+                                <i class="fas fa-fish"></i>
+                            </div>
+                            <div>Fish</div>
+                        </div>
+                        <div class="type-option rabbit-type" data-type="rabbit">
+                            <div class="type-icon">
+                                <i class="fas fa-paw"></i>
+                            </div>
+                            <div>Rabbit</div>
+                        </div>
+                        <div class="type-option hamster-type" data-type="hamster">
+                            <div class="type-icon">
+                                <i class="fas fa-paw"></i>
+                            </div>
+                            <div>Hamster</div>
+                        </div>
+                        <div class="type-option other-type" data-type="other">
+                            <div class="type-icon">
+                                <i class="fas fa-paw"></i>
+                            </div>
+                            <div>Other</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Pet Characteristics</label>
+                    <div class="pet-characteristics">
+                        <div class="characteristic-option active" data-characteristic="playful">
+                            <div class="characteristic-icon">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div>Playful</div>
+                        </div>
+                        <div class="characteristic-option" data-characteristic="loyal">
+                            <div class="characteristic-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div>Loyal</div>
+                        </div>
+                        <div class="characteristic-option" data-characteristic="energetic">
+                            <div class="characteristic-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div>Energetic</div>
+                        </div>
+                        <div class="characteristic-option" data-characteristic="calm">
+                            <div class="characteristic-icon">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <div>Calm</div>
+                        </div>
+                        <div class="characteristic-option" data-characteristic="intelligent">
+                            <div class="characteristic-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div>Intelligent</div>
+                        </div>
+                        <div class="characteristic-option" data-characteristic="friendly">
+                            <div class="characteristic-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <div>Friendly</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Pet Details</label>
+                    <div class="input-row">
+                        <div class="input-field">
+                            <input type="text" id="pet-name" placeholder="Pet's current name (optional)">
+                        </div>
+                        <div class="input-field">
+                            <select id="gender">
+                                <option value="any">Any Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-field">
+                            <input type="text" id="breed" placeholder="Breed (optional)">
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="color" placeholder="Color (optional)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn generate-btn" id="generate-btn">
+                        <i class="fas fa-magic"></i> Generate Names
+                    </button>
+                    <button class="action-btn clear-btn" id="clear-btn">
+                        <i class="fas fa-eraser"></i> Clear
+                    </button>
+                </div>
+                
+                <div class="pet-info">
+                    <div class="info-title">Choosing the Perfect Pet Name</div>
+                    <div class="info-content">
+                        <p>Selecting a name for your pet is an important decision. Here are some tips:</p>
+                        <ul>
+                            <li class="info-item">Choose a name that's easy to say and remember</li>
+                            <li class="info-item">Avoid names that sound like commands</li>
+                            <li class="info-item">Consider your pet's personality and appearance</li>
+                            <li class="info-item">Pick a name that won't embarrass you in public</li>
+                            <li class="info-item">Short names (1-2 syllables) work best for training</li>
+                            <li class="info-item">Make sure family members approve of the name</li>
+                        </ul>
+                        <p>A good pet name should reflect your pet's unique personality and create a strong bond between you and your companion.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title"><i class="fas fa-list"></i> Name Suggestions</h2>
+                
+                <div class="results-container">
+                    <div class="names-display" id="names-display">
+                        <!-- Names will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="favorites-section">
+                        <div class="favorites-title">Favorite Names</div>
+                        <div class="favorites-list" id="favorites-list">
+                            <!-- Favorites will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <div class="examples-title">Popular Pet Names</div>
+                        <div class="example-grid">
+                            <div class="example-item">
+                                <div class="example-label">Dog Names</div>
+                                <div class="example-names">
+                                    <div class="example-name">Max</div>
+                                    <div class="example-name">Bella</div>
+                                    <div class="example-name">Charlie</div>
+                                    <div class="example-name">Lucy</div>
+                                    <div class="example-name">Cooper</div>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">Cat Names</div>
+                                <div class="example-names">
+                                    <div class="example-name">Luna</div>
+                                    <div class="example-name">Oliver</div>
+                                    <div class="example-name">Milo</div>
+                                    <div class="example-name">Bella</div>
+                                    <div class="example-name">Leo</div>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">Bird Names</div>
+                                <div class="example-names">
+                                    <div class="example-name">Kiwi</div>
+                                    <div class="example-name">Sky</div>
+                                    <div class="example-name">Phoenix</div>
+                                    <div class="example-name">Feather</div>
+                                    <div class="example-name">Sunny</div>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">Fish Names</div>
+                                <div class="example-names">
+                                    <div class="example-name">Bubbles</div>
+                                    <div class="example-name">Nemo</div>
+                                    <div class="example-name">Splash</div>
+                                    <div class="example-name">Finley</div>
+                                    <div class="example-name">Coral</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pet-info">
+                        <div class="info-title">Name Inspiration Tips</div>
+                        <div class="info-content">
+                            <p>Need more ideas? Try these approaches:</p>
+                            <ul>
+                                <li class="info-item">Use names from your favorite movies, books, or TV shows</li>
+                                <li class="info-item">Choose names inspired by food (Cookie, Peanut, Olive)</li>
+                                <li class="info-item">Pick names based on your pet's color or markings</li>
+                                <li class="info-item">Consider names from different cultures and languages</li>
+                                <li class="info-item">Use names that reflect your pet's breed or origin</li>
+                                <li class="info-item">Think about names that honor someone special</li>
+                            </ul>
+                            <p>The perfect name should feel right when you say it. Take your time and enjoy the process!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool generates pet name ideas. Perfect for new pet owners and animal lovers.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const typeOptions = document.querySelectorAll('.type-option');
+            const characteristicOptions = document.querySelectorAll('.characteristic-option');
+            const petNameInput = document.getElementById('pet-name');
+            const genderSelect = document.getElementById('gender');
+            const breedInput = document.getElementById('breed');
+            const colorInput = document.getElementById('color');
+            const generateBtn = document.getElementById('generate-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const namesDisplay = document.getElementById('names-display');
+            const favoritesList = document.getElementById('favorites-list');
+            
+            // State variables
+            let petType = 'dog';
+            let petCharacteristics = ['playful'];
+            let favorites = [];
+            
+            // Event Listeners
+            typeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    typeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    petType = this.dataset.type;
+                });
+            });
+            
+            characteristicOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    
+                    const characteristic = this.dataset.characteristic;
+                    if (this.classList.contains('active')) {
+                        if (!petCharacteristics.includes(characteristic)) {
+                            petCharacteristics.push(characteristic);
+                        }
+                    } else {
+                        petCharacteristics = petCharacteristics.filter(c => c !== characteristic);
+                    }
+                    
+                    // Ensure at least one characteristic is selected
+                    if (petCharacteristics.length === 0) {
+                        this.classList.add('active');
+                        petCharacteristics.push(characteristic);
+                    }
+                });
+            });
+            
+            generateBtn.addEventListener('click', generateNames);
+            clearBtn.addEventListener('click', clearGenerator);
+            
+            // Initialize
+            generateNames();
+            
+            // Functions
+            function generateNames() {
+                // Clear previous names
+                namesDisplay.innerHTML = '';
+                
+                // Get input values
+                const petName = petNameInput.value.trim();
+                const gender = genderSelect.value;
+                const breed = breedInput.value.trim();
+                const color = colorInput.value.trim();
+                
+                // Generate names based on pet type and characteristics
+                const names = generatePetNames(petType, petCharacteristics, petName, gender, breed, color);
+                
+                // Display names
+                names.forEach(name => {
+                    const nameCard = document.createElement('div');
+                    nameCard.className = 'name-card';
+                    nameCard.textContent = name;
+                    nameCard.dataset.name = name;
+                    
+                    // Add click event to toggle favorite
+                    nameCard.addEventListener('click', function() {
+                        toggleFavorite(name);
+                        this.classList.toggle('favorite');
+                    });
+                    
+                    namesDisplay.appendChild(nameCard);
+                });
+                
+                // Add favorites to display
+                renderFavorites();
+            }
+            
+            function generatePetNames(type, characteristics, petName, gender, breed, color) {
+                // Base name lists for each pet type
+                const baseNames = {
+                    dog: ['Buddy', 'Max', 'Charlie', 'Cooper', 'Rocky', 'Duke', 'Bear', 'Tucker', 'Oliver', 'Zeus', 
+                          'Boomer', 'Archie', 'Leo', 'Oscar', 'Milo', 'Louie', 'Murphy', 'Winston', 'Finn', 'Chance'],
+                    cat: ['Whiskers', 'Luna', 'Oliver', 'Simba', 'Milo', 'Bella', 'Leo', 'Loki', 'Nala', 'Tiger',
+                          'Shadow', 'Lucy', 'Garfield', 'Chloe', 'Smokey', 'Tigger', 'Princess', 'Sophie', 'Max', 'Patches'],
+                    bird: ['Kiwi', 'Sky', 'Phoenix', 'Feather', 'Sunny', 'Robin', 'Blue', 'Sage', 'Pepper', 'Coco',
+                           'Rio', 'Skyler', 'Angel', 'Bubbles', 'Sunny', 'Twister', 'Storm', 'Cloud', 'Flame', 'Rainbow'],
+                    fish: ['Bubbles', 'Nemo', 'Splash', 'Finley', 'Coral', 'Marina', 'Blu', 'Dory', 'Goldie', 'Shimmer',
+                           'Aqua', 'Azure', 'Neptune', 'Pearl', 'Sebastian', 'Splash', 'Tsunami', 'Wave', 'Zippy', 'Zoom'],
+                    rabbit: ['Thumper', 'Snowball', 'Cotton', 'Bunny', 'Fluffy', 'Nibbles', 'Hops', 'Clover', 'Peanut', 'Oreo',
+                             'Marshmallow', 'Coco', 'Mocha', 'Daisy', 'Lily', 'Poppy', 'Willow', 'Hazel', 'Ruby', 'Pumpkin'],
+                    hamster: ['Nibbles', 'Peanut', 'Honey', 'Coco', 'Marshmallow', 'Oreo', 'Mocha', 'Cinnamon', 'Gizmo', 'Squeaky',
+                              'Fluffy', 'Patches', 'Sprinkles', 'Twinkle', 'Whiskers', 'Biscuit', 'Cookie', 'Pudding', 'Sprout', 'Tootsie'],
+                    other: ['Buddy', 'Max', 'Charlie', 'Rocky', 'Luna', 'Oliver', 'Milo', 'Bella', 'Leo', 'Lucy',
+                            'Shadow', 'Tiger', 'Sunny', 'Coco', 'Pepper', 'Angel', 'Princess', 'King', 'Queen', 'Star']
+                };
+                
+                // Characteristic-based modifiers
+                const modifiers = {
+                    playful: ['Playful', 'Joy', 'Spark', 'Bounce', 'Fun', 'Giggles', 'Happy', 'Jolly', 'Cheer', 'Bliss'],
+                    loyal: ['Faith', 'True', 'Devoted', 'Loyal', 'Steady', 'Trusty', 'Reliable', 'Honest', 'Faithful', 'Dedicated'],
+                    energetic: ['Spark', 'Energy', 'Power', 'Boost', 'Charge', 'Volt', 'Flash', 'Lightning', 'Thunder', 'Fire'],
+                    calm: ['Peace', 'Serene', 'Tranquil', 'Calm', 'Zen', 'Still', 'Quiet', 'Gentle', 'Soft', 'Smooth'],
+                    intelligent: ['Smart', 'Brain', 'Genius', 'Wise', 'Clever', 'Bright', 'Sharp', 'Brilliant', 'Intellect', 'Mind'],
+                    friendly: ['Friend', 'Pal', 'Buddy', 'Mate', 'Companion', 'Chum', 'Amigo', 'Partner', 'Sidekick', 'Matey']
+                };
+                
+                // Gender-specific names
+                const maleNames = ['King', 'Prince', 'Duke', 'Lord', 'Sir', 'Master', 'Champion', 'Hero', 'Warrior', 'Chief'];
+                const femaleNames = ['Queen', 'Princess', 'Lady', 'Miss', 'Madam', 'Duchess', 'Mistress', 'Heroine', 'Goddess', 'Empress'];
+                
+                // Breed and color-based names
+                const breedNames = {
+                    german_shepherd: ['Shep', 'Gus', 'Ace', 'Rex', 'Wolf'],
+                    siamese: ['Siam', 'Thai', 'Asia', 'Oriental', 'Exotic'],
+                    parrot: ['Polly', 'Captain', 'Squawk', 'Crackers', 'Talker'],
+                    goldfish: ['Goldie', 'Shimmer', 'Glitter', 'Sparkle', 'Sunshine']
+                };
+                
+                const colorNames = {
+                    black: ['Onyx', 'Ebony', 'Obsidian', 'Coal', 'Shadow'],
+                    white: ['Snow', 'Pearl', 'Ivory', 'Cloud', 'Ghost'],
+                    brown: ['Cocoa', 'Chocolate', 'Bronze', 'Copper', 'Rust'],
+                    red: ['Ruby', 'Crimson', 'Scarlet', 'Cherry', 'Rose'],
+                    blue: ['Azure', 'Sapphire', 'Indigo', 'Cobalt', 'Ocean']
+                };
+                
+                // Generate names
+                let names = [];
+                
+                // Add base names for pet type
+                names = [...baseNames[type]];
+                
+                // Add characteristic-based names
+                characteristics.forEach(char => {
+                    if (modifiers[char]) {
+                        names.push(...modifiers[char]);
+                    }
+                });
+                
+                // Add gender-specific names if specified
+                if (gender === 'male') {
+                    names.push(...maleNames);
+                } else if (gender === 'female') {
+                    names.push(...femaleNames);
+                }
+                
+                // Add breed-specific names if applicable
+                if (breed) {
+                    const breedKey = breed.toLowerCase().replace(/\s+/g, '_');
+                    if (breedNames[breedKey]) {
+                        names.push(...breedNames[breedKey]);
+                    }
+                }
+                
+                // Add color-specific names if applicable
+                if (color) {
+                    const colorKey = color.toLowerCase();
+                    if (colorNames[colorKey]) {
+                        names.push(...colorNames[colorKey]);
+                    }
+                }
+                
+                // Add pet name if provided
+                if (petName) {
+                    names.push(petName);
+                }
+                
+                // Remove duplicates and limit to 20 names
+                names = [...new Set(names)].slice(0, 20);
+                
+                // Shuffle the names array
+                for (let i = names.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [names[i], names[j]] = [names[j], names[i]];
+                }
+                
+                return names;
+            }
+            
+            function toggleFavorite(name) {
+                if (favorites.includes(name)) {
+                    favorites = favorites.filter(fav => fav !== name);
+                } else {
+                    favorites.push(name);
+                }
+                renderFavorites();
+            }
+            
+            function renderFavorites() {
+                favoritesList.innerHTML = '';
+                
+                if (favorites.length === 0) {
+                    favoritesList.innerHTML = '<div class="favorite-item" style="color: var(--text-muted);">No favorites yet. Click on names to add to favorites.</div>';
+                    return;
+                }
+                
+                favorites.forEach(name => {
+                    const favoriteItem = document.createElement('div');
+                    favoriteItem.className = 'favorite-item';
+                    favoriteItem.innerHTML = `
+                        <span>${name}</span>
+                        <button class="remove-favorite" data-name="${name}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    // Add event listener to remove button
+                    const removeBtn = favoriteItem.querySelector('.remove-favorite');
+                    removeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const nameToRemove = this.dataset.name;
+                        favorites = favorites.filter(fav => fav !== nameToRemove);
+                        renderFavorites();
+                        
+                        // Remove favorite class from name cards
+                        document.querySelectorAll('.name-card').forEach(card => {
+                            if (card.dataset.name === nameToRemove) {
+                                card.classList.remove('favorite');
+                            }
+                        });
+                    });
+                    
+                    favoritesList.appendChild(favoriteItem);
+                });
+            }
+            
+            function clearGenerator() {
+                petNameInput.value = '';
+                breedInput.value = '';
+                colorInput.value = '';
+                genderSelect.value = 'any';
+                
+                // Reset characteristics to default (playful)
+                characteristicOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.dataset.characteristic === 'playful') {
+                        option.classList.add('active');
+                    }
+                });
+                petCharacteristics = ['playful'];
+                
+                // Reset favorites
+                favorites = [];
+                renderFavorites();
+                
+                // Regenerate names
+                generateNames();
+            }
+        });
+    </script>
+</body>
+</html>
+
