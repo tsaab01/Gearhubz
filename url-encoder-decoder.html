@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Encoder/Decoder | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --encode: #10B981;
+            --decode: #3B82F6;
+            --url: #F59E0B;
+            --stats: #8B5CF6;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .input-section, .output-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .url-input, .url-output {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        .url-input:focus, .url-output:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .mode-toggle {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .mode-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-option:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .mode-option.active {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .encode-mode { color: var(--encode); }
+        .decode-mode { color: var(--decode); }
+
+        .active.encode-mode { background: var(--encode); }
+        .active.decode-mode { background: var(--decode); }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .encode-btn {
+            background: var(--encode);
+            color: white;
+        }
+
+        .encode-btn:hover {
+            background: #059669;
+        }
+
+        .decode-btn {
+            background: var(--decode);
+            color: white;
+        }
+
+        .decode-btn:hover {
+            background: #2563EB;
+        }
+
+        .clear-btn {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .clear-btn:hover {
+            background: #D1D5DB;
+        }
+
+        .copy-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .original-value { color: var(--url); }
+        .processed-value { color: var(--stats); }
+        .difference-value { color: var(--encode); }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .difference-bar {
+            height: 10px;
+            background: var(--border);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .difference-fill {
+            height: 100%;
+            background: var(--stats);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .difference-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .info-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .info-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .info-content ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .info-content li {
+            margin-bottom: 8px;
+        }
+
+        .examples-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .examples-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .example-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .example-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .example-text {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.8rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Encode and decode URLs to safely transmit data over the internet. Perfect for web developers and marketers.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="input-section">
+                <h2 class="section-title"><i class="fas fa-link"></i> Input URL</h2>
+                
+                <div class="mode-toggle">
+                    <div class="mode-option encode-mode active" data-mode="encode">
+                        <i class="fas fa-lock"></i> Encode URL
+                    </div>
+                    <div class="mode-option decode-mode" data-mode="decode">
+                        <i class="fas fa-unlock"></i> Decode URL
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Enter or paste your URL</label>
+                    <textarea class="url-input" id="input-url" placeholder="Type or paste your URL here...">https://www.example.com/search?q=hello world&category=tech news&type=article</textarea>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn encode-btn" id="process-btn">
+                        <i class="fas fa-lock"></i> Encode URL
+                    </button>
+                    <button class="action-btn clear-btn" id="clear-btn">
+                        <i class="fas fa-eraser"></i> Clear
+                    </button>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <h2 class="section-title"><i class="fas fa-file-export"></i> Processed URL</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Your processed URL will appear here</label>
+                    <textarea class="url-output" id="output-url" readonly></textarea>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn copy-btn" id="copy-btn">
+                        <i class="fas fa-copy"></i> Copy to Clipboard
+                    </button>
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stat-item">
+                        <div class="stat-value original-value" id="original-length">0</div>
+                        <div class="stat-label">Original Length</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value processed-value" id="processed-length">0</div>
+                        <div class="stat-label">Processed Length</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value difference-value" id="length-difference">0</div>
+                        <div class="stat-label">Difference</div>
+                    </div>
+                </div>
+                
+                <div class="difference-bar">
+                    <div class="difference-fill" id="difference-bar"></div>
+                </div>
+                <div class="difference-text" id="difference-text">0 characters difference</div>
+                
+                <div class="info-section">
+                    <div class="info-title">About URL Encoding</div>
+                    <div class="info-content">
+                        <p>URL encoding converts characters into a format that can be transmitted over the internet. It replaces unsafe ASCII characters with a "%" followed by two hexadecimal digits.</p>
+                        <ul>
+                            <li>Encodes special characters like spaces, ampersands, and non-ASCII characters</li>
+                            <li>Required for URLs to be properly interpreted by web servers</li>
+                            <li>Spaces become "%20" and "&" becomes "%26"</li>
+                            <li>Used in query strings, form data, and API requests</li>
+                        </ul>
+                        <p><strong>Note:</strong> URL encoding increases the length of URLs with many special characters.</p>
+                    </div>
+                </div>
+                
+                <div class="examples-section">
+                    <div class="examples-title">URL Encoding Examples</div>
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <div class="example-label">Original URL</div>
+                            <div class="example-text">https://example.com/search?q=hello world&type=news</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-label">Encoded URL</div>
+                            <div class="example-text">https://example.com/search?q=hello%20world&type=news</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-label">Special Characters</div>
+                            <div class="example-text">Hello World! @#$%^&*()</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-label">Encoded Version</div>
+                            <div class="example-text">Hello%20World!%20%40%23%24%25%5E%26*()</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This tool encodes and decodes URLs. Perfect for web developers and marketers.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const inputUrl = document.getElementById('input-url');
+            const outputUrl = document.getElementById('output-url');
+            const modeOptions = document.querySelectorAll('.mode-option');
+            const processBtn = document.getElementById('process-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const originalLength = document.getElementById('original-length');
+            const processedLength = document.getElementById('processed-length');
+            const lengthDifference = document.getElementById('length-difference');
+            const differenceBar = document.getElementById('difference-bar');
+            const differenceText = document.getElementById('difference-text');
+            
+            // State variables
+            let currentMode = 'encode';
+            
+            // Event Listeners
+            modeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    modeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMode = this.dataset.mode;
+                    
+                    // Update button text
+                    if (currentMode === 'encode') {
+                        processBtn.innerHTML = '<i class="fas fa-lock"></i> Encode URL';
+                        processBtn.className = 'action-btn encode-btn';
+                        inputUrl.placeholder = 'Type or paste your URL here...';
+                    } else {
+                        processBtn.innerHTML = '<i class="fas fa-unlock"></i> Decode URL';
+                        processBtn.className = 'action-btn decode-btn';
+                        inputUrl.placeholder = 'Paste your encoded URL here...';
+                    }
+                });
+            });
+            
+            inputUrl.addEventListener('input', updateStats);
+            processBtn.addEventListener('click', processUrl);
+            clearBtn.addEventListener('click', clearUrl);
+            copyBtn.addEventListener('click', copyToClipboard);
+            
+            // Initialize
+            updateStats();
+            processUrl();
+            
+            // Functions
+            function processUrl() {
+                const url = inputUrl.value;
+                
+                // Update original length
+                originalLength.textContent = url.length;
+                
+                let processedUrl = '';
+                
+                if (currentMode === 'encode') {
+                    try {
+                        processedUrl = encodeURIComponent(url);
+                    } catch (e) {
+                        processedUrl = "Error: Invalid URL for encoding";
+                    }
+                } else {
+                    try {
+                        processedUrl = decodeURIComponent(url);
+                    } catch (e) {
+                        processedUrl = "Error: Invalid encoded URL";
+                    }
+                }
+                
+                // Update output
+                outputUrl.value = processedUrl;
+                
+                // Update statistics
+                processedLength.textContent = processedUrl.length;
+                
+                // Calculate difference
+                const diff = processedUrl.length - url.length;
+                lengthDifference.textContent = diff >= 0 ? `+${diff}` : diff;
+                lengthDifference.style.color = diff >= 0 ? '#EF4444' : '#10B981';
+                
+                // Update difference bar
+                const maxLen = Math.max(url.length, processedUrl.length);
+                const diffPercent = maxLen > 0 ? Math.min(100, Math.abs(diff) / maxLen * 100) : 0;
+                differenceBar.style.width = `${diffPercent}%`;
+                differenceBar.style.background = diff >= 0 ? '#EF4444' : '#10B981';
+                
+                // Update difference text
+                differenceText.textContent = `${diff >= 0 ? '+' : ''}${diff} characters difference`;
+            }
+            
+            function updateStats() {
+                const url = inputUrl.value;
+                originalLength.textContent = url.length;
+            }
+            
+            function clearUrl() {
+                inputUrl.value = '';
+                outputUrl.value = '';
+                originalLength.textContent = '0';
+                processedLength.textContent = '0';
+                lengthDifference.textContent = '0';
+                differenceBar.style.width = '0%';
+                differenceText.textContent = '0 characters difference';
+            }
+            
+            function copyToClipboard() {
+                outputUrl.select();
+                document.execCommand('copy');
+                
+                // Show feedback
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
