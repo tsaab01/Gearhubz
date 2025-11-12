@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelance Hourly Rate Calculator | Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4F46E5;
+            --hover-blue: #4338CA;
+            --bg-blue-tint: #EEF2FF;
+            --white: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --purple-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+            --rate-green: #10B981;
+            --income-blue: #3B82F6;
+            --expenses-red: #EF4444;
+            --profit-purple: #8B5CF6;
+        }
+
+        body {
+            background-color: var(--bg-blue-tint);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--purple-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .calculator-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .freelancer-type {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .type-btn {
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .type-btn:hover {
+            border-color: var(--primary-blue);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .type-btn.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .type-icon {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            flex: 1;
+        }
+
+        .input-field input, .input-field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .input-field input:focus, .input-field select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .input-field .unit {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .slider-container {
+            margin-top: 10px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: var(--border);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            cursor: pointer;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .calculate-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            text-align: center;
+        }
+
+        .rate-display {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+            line-height: 1;
+            color: var(--rate-green);
+        }
+
+        .rate-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .breakdown-item {
+            text-align: center;
+            min-width: 120px;
+            padding: 15px;
+            border-radius: 8px;
+            background: var(--card-bg);
+        }
+
+        .breakdown-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .breakdown-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .rate-green-value { color: var(--rate-green); }
+        .income-blue-value { color: var(--income-blue); }
+        .expenses-red-value { color: var(--expenses-red); }
+        .profit-purple-value { color: var(--profit-purple); }
+
+        .breakdown-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .rate-chart {
+            height: 200px;
+            margin: 30px 0;
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 20%;
+            transition: height 0.5s ease;
+        }
+
+        .chart-expenses {
+            left: 10%;
+            background: var(--expenses-red);
+        }
+
+        .chart-income {
+            left: 40%;
+            background: var(--income-blue);
+        }
+
+        .chart-rate {
+            left: 70%;
+            background: var(--rate-green);
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .chart-label {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .label-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 5px;
+        }
+
+        .expenses-color { background: var(--expenses-red); }
+        .income-color { background: var(--income-blue); }
+        .rate-color { background: var(--rate-green); }
+
+        .financial-details {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .financial-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .financial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .financial-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .financial-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .financial-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+        }
+
+        .tips-section {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .tips-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .tips-list {
+            padding-left: 20px;
+        }
+
+        .tip-item {
+            margin-bottom: 8px;
+        }
+
+        .error-message {
+            color: #EF4444;
+            text-align: center;
+            padding: 15px;
+            background: #FEF2F2;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .rate-breakdown {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .financial-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .freelancer-type {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Daily Tools, All At One Place</h1>
+            <p class="subtitle">Calculate your ideal freelance hourly rate based on expenses, desired income, and business goals.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="calculator-section">
+                <h2 class="section-title"><i class="fas fa-calculator"></i> Freelancer Details</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Freelancer Type</label>
+                    <div class="freelancer-type">
+                        <div class="type-btn active" data-type="designer">
+                            <div class="type-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div>Designer</div>
+                        </div>
+                        <div class="type-btn" data-type="developer">
+                            <div class="type-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div>Developer</div>
+                        </div>
+                        <div class="type-btn" data-type="writer">
+                            <div class="type-icon">
+                                <i class="fas fa-pen-fancy"></i>
+                            </div>
+                            <div>Writer</div>
+                        </div>
+                        <div class="type-btn" data-type="marketer">
+                            <div class="type-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <div>Marketer</div>
+                        </div>
+                        <div class="type-btn" data-type="consultant">
+                            <div class="type-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div>Consultant</div>
+                        </div>
+                        <div class="type-btn" data-type="other">
+                            <div class="type-icon">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                            <div>Other</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Monthly Business Expenses</label>
+                    <div class="input-row">
+                        <div class="input-field">
+                            <input type="number" id="expenses" min="0" step="100" value="15000" placeholder="Expenses">
+                            <div class="unit">₹</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" min="0" max="100000" step="1000" value="15000" class="slider" id="expenses-slider">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Desired Annual Income</label>
+                    <div class="input-row">
+                        <div class="input-field">
+                            <input type="number" id="income" min="0" step="10000" value="600000" placeholder="Income">
+                            <div class="unit">₹</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" min="0" max="5000000" step="50000" value="600000" class="slider" id="income-slider">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Working Hours Per Week</label>
+                    <div class="input-row">
+                        <div class="input-field">
+                            <input type="number" id="hours" min="1" max="80" value="35" placeholder="Hours">
+                            <div class="unit">Hours</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="80" value="35" class="slider" id="hours-slider">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Vacation Weeks Per Year</label>
+                    <div class="input-row">
+                        <div class="input-field">
+                            <input type="number" id="vacation" min="0" max="12" value="4" placeholder="Vacation">
+                            <div class="unit">Weeks</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" min="0" max="12" value="4" class="slider" id="vacation-slider">
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" id="calculate-btn">Calculate Hourly Rate</button>
+                
+                <div class="error-message" id="error-message">
+                    Please enter valid freelancer details.
+                </div>
+                
+                <div class="tips-section">
+                    <div class="tips-title">Freelance Rate Tips</div>
+                    <ul class="tips-list">
+                        <li class="tip-item">Research industry rates for your specialty and experience level</li>
+                        <li class="tip-item">Consider value-based pricing for high-impact projects</li>
+                        <li class="tip-item">Account for taxes, insurance, and retirement savings</li>
+                        <li class="tip-item">Regularly review and adjust your rates based on market changes</li>
+                        <li class="tip-item">Don't undervalue your skills - clients often equate price with quality</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title"><i class="fas fa-rupee-sign"></i> Hourly Rate Results</h2>
+                
+                <div class="results-container">
+                    <div class="rate-display" id="hourly-rate">₹0.00</div>
+                    <p>Recommended Hourly Rate</p>
+                    
+                    <div class="rate-breakdown">
+                        <div class="breakdown-item">
+                            <div class="breakdown-icon">
+                                <i class="fas fa-receipt expenses-red-value"></i>
+                            </div>
+                            <div class="breakdown-value expenses-red-value" id="monthly-expenses">₹0.00</div>
+                            <div class="breakdown-label">Monthly Expenses</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-icon">
+                                <i class="fas fa-rupee-sign income-blue-value"></i>
+                            </div>
+                            <div class="breakdown-value income-blue-value" id="annual-income">₹0.00</div>
+                            <div class="breakdown-label">Annual Income</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-icon">
+                                <i class="fas fa-clock rate-green-value"></i>
+                            </div>
+                            <div class="breakdown-value rate-green-value" id="working-hours">0</div>
+                            <div class="breakdown-label">Working Hours/Year</div>
+                        </div>
+                    </div>
+                    
+                    <div class="rate-chart">
+                        <div class="chart-bar chart-expenses" id="expenses-bar" style="height: 0%;"></div>
+                        <div class="chart-bar chart-income" id="income-bar" style="height: 0%;"></div>
+                        <div class="chart-bar chart-rate" id="rate-bar" style="height: 0%;"></div>
+                        <div class="chart-labels">
+                            <div class="chart-label">
+                                <div class="label-color expenses-color"></div>
+                                <span>Expenses</span>
+                            </div>
+                            <div class="chart-label">
+                                <div class="label-color income-color"></div>
+                                <span>Income</span>
+                            </div>
+                            <div class="chart-label">
+                                <div class="label-color rate-color"></div>
+                                <span>Rate</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="financial-details">
+                        <div class="financial-title">Financial Breakdown</div>
+                        <div class="financial-grid">
+                            <div class="financial-item">
+                                <div class="financial-label">Weekly Earnings</div>
+                                <div class="financial-value income-blue-value" id="weekly-earnings">₹0.00</div>
+                            </div>
+                            <div class="financial-item">
+                                <div class="financial-label">Monthly Earnings</div>
+                                <div class="financial-value income-blue-value" id="monthly-earnings">₹0.00</div>
+                            </div>
+                            <div class="financial-item">
+                                <div class="financial-label">Hourly Profit</div>
+                                <div class="financial-value profit-purple-value" id="hourly-profit">₹0.00</div>
+                            </div>
+                            <div class="financial-item">
+                                <div class="financial-label">Utilization Rate</div>
+                                <div class="financial-value" id="utilization-rate">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Note: This calculator provides estimates only. Actual rates may vary based on market conditions and experience.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const typeButtons = document.querySelectorAll('.type-btn');
+            const expensesInput = document.getElementById('expenses');
+            const incomeInput = document.getElementById('income');
+            const hoursInput = document.getElementById('hours');
+            const vacationInput = document.getElementById('vacation');
+            const expensesSlider = document.getElementById('expenses-slider');
+            const incomeSlider = document.getElementById('income-slider');
+            const hoursSlider = document.getElementById('hours-slider');
+            const vacationSlider = document.getElementById('vacation-slider');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const errorMessage = document.getElementById('error-message');
+            const hourlyRate = document.getElementById('hourly-rate');
+            const monthlyExpenses = document.getElementById('monthly-expenses');
+            const annualIncome = document.getElementById('annual-income');
+            const workingHours = document.getElementById('working-hours');
+            const expensesBar = document.getElementById('expenses-bar');
+            const incomeBar = document.getElementById('income-bar');
+            const rateBar = document.getElementById('rate-bar');
+            const weeklyEarnings = document.getElementById('weekly-earnings');
+            const monthlyEarnings = document.getElementById('monthly-earnings');
+            const hourlyProfit = document.getElementById('hourly-profit');
+            const utilizationRate = document.getElementById('utilization-rate');
+            
+            // State variables
+            let freelancerType = 'designer';
+            
+            // Event Listeners
+            typeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    typeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    freelancerType = this.dataset.type;
+                });
+            });
+            
+            // Slider event listeners
+            expensesSlider.addEventListener('input', function() {
+                expensesInput.value = this.value;
+                calculateRate();
+            });
+            
+            incomeSlider.addEventListener('input', function() {
+                incomeInput.value = this.value;
+                calculateRate();
+            });
+            
+            hoursSlider.addEventListener('input', function() {
+                hoursInput.value = this.value;
+                calculateRate();
+            });
+            
+            vacationSlider.addEventListener('input', function() {
+                vacationInput.value = this.value;
+                calculateRate();
+            });
+            
+            // Input event listeners
+            expensesInput.addEventListener('input', function() {
+                expensesSlider.value = this.value;
+                calculateRate();
+            });
+            
+            incomeInput.addEventListener('input', function() {
+                incomeSlider.value = this.value;
+                calculateRate();
+            });
+            
+            hoursInput.addEventListener('input', function() {
+                hoursSlider.value = this.value;
+                calculateRate();
+            });
+            
+            vacationInput.addEventListener('input', function() {
+                vacationSlider.value = this.value;
+                calculateRate();
+            });
+            
+            calculateBtn.addEventListener('click', calculateRate);
+            
+            // Initialize
+            calculateRate();
+            
+            // Functions
+            function calculateRate() {
+                // Hide error message
+                errorMessage.style.display = 'none';
+                
+                // Get input values
+                const expenses = parseFloat(expensesInput.value) || 0;
+                const income = parseFloat(incomeInput.value) || 0;
+                const hours = parseFloat(hoursInput.value) || 0;
+                const vacation = parseFloat(vacationInput.value) || 0;
+                
+                // Validate inputs
+                if (hours <= 0 || hours > 168) { // 168 hours in a week
+                    showError();
+                    return;
+                }
+                
+                // Calculate working weeks per year
+                const workingWeeks = 52 - vacation;
+                
+                // Calculate total working hours per year
+                const totalHours = workingWeeks * hours;
+                
+                // Calculate total expenses per year
+                const totalExpenses = expenses * 12;
+                
+                // Calculate required annual revenue (income + expenses)
+                const requiredRevenue = income + totalExpenses;
+                
+                // Calculate hourly rate
+                const hourlyRateValue = totalHours > 0 ? requiredRevenue / totalHours : 0;
+                
+                // Calculate hourly profit
+                const hourlyProfitValue = hourlyRateValue - (totalExpenses / totalHours);
+                
+                // Calculate weekly and monthly earnings
+                const weeklyEarningsValue = hourlyRateValue * hours;
+                const monthlyEarningsValue = weeklyEarningsValue * 4.33; // Average weeks per month
+                
+                // Calculate utilization rate (assuming 100% is full capacity)
+                const utilizationRateValue = 100;
+                
+                // Update display
+                hourlyRate.textContent = formatCurrency(hourlyRateValue);
+                monthlyExpenses.textContent = formatCurrency(expenses);
+                annualIncome.textContent = formatCurrency(income);
+                workingHours.textContent = totalHours.toFixed(0);
+                weeklyEarnings.textContent = formatCurrency(weeklyEarningsValue);
+                monthlyEarnings.textContent = formatCurrency(monthlyEarningsValue);
+                hourlyProfit.textContent = formatCurrency(hourlyProfitValue);
+                utilizationRate.textContent = utilizationRateValue + '%';
+                
+                // Update chart
+                const maxValue = Math.max(expenses * 12, income, hourlyRateValue * 1000);
+                const expensesHeight = maxValue > 0 ? ((expenses * 12) / maxValue) * 100 : 0;
+                const incomeHeight = maxValue > 0 ? (income / maxValue) * 100 : 0;
+                const rateHeight = maxValue > 0 ? ((hourlyRateValue * 1000) / maxValue) * 100 : 0;
+                
+                expensesBar.style.height = expensesHeight + '%';
+                incomeBar.style.height = incomeHeight + '%';
+                rateBar.style.height = rateHeight + '%';
+            }
+            
+            function formatCurrency(amount) {
+                // Format as Indian currency (₹)
+                return '₹' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+            
+            function showError() {
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+
