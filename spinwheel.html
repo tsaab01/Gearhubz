@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinwheel Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f7ff, #ffffff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .wheel-container {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .wheel-section {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1/1;
+            margin: 0 auto;
+        }
+
+        #wheelCanvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.3);
+        }
+
+        .pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: #007BFF;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+        }
+
+        .spin-btn {
+            margin-top: 30px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+            font-weight: bold;
+        }
+
+        .spin-btn:hover {
+            background: #0069d9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+        }
+
+        .spin-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007BFF;
+            text-align: center;
+            min-height: 40px;
+        }
+
+        .settings-panel {
+            flex: 1;
+            min-width: 300px;
+            background: #f0f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.1);
+        }
+
+        .panel-title {
+            color: #007BFF;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+        }
+
+        .segment-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .segment-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .segment-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #ddd;
+        }
+
+        .segment-text {
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .segment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #007BFF;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #007BFF;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #28a745;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #007BFF;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .wheel-section {
+                max-width: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-sync-alt"></i> Spinwheel Tool</h1>
+            <p>Create custom spinwheels and spin for random results</p>
+        </header>
+        
+        <div class="content">
+            <div class="wheel-container">
+                <div class="wheel-section">
+                    <div class="pointer"></div>
+                    <canvas id="wheelCanvas" width="500" height="500"></canvas>
+                </div>
+                <button id="spinBtn" class="spin-btn">SPIN THE WHEEL</button>
+                <div class="result" id="result">Spin to get a result!</div>
+            </div>
+            
+            <div class="settings-panel">
+                <h2 class="panel-title">Wheel Settings</h2>
+                
+                <div class="form-group">
+                    <label for="segmentText">Add New Segment</label>
+                    <input type="text" id="segmentText" class="form-control" placeholder="Enter segment text">
+                </div>
+                
+                <div class="form-group">
+                    <label for="segmentColor">Segment Color</label>
+                    <input type="color" id="segmentColor" class="form-control" value="#007BFF">
+                </div>
+                
+                <button id="addSegmentBtn" class="btn btn-primary">Add Segment</button>
+                
+                <h3 style="margin: 25px 0 15px; color: #007BFF;">Wheel Segments</h3>
+                <div class="segment-list" id="segmentList">
+                    <!-- Segments will be added here dynamically -->
+                </div>
+                
+                <div class="form-group">
+                    <label for="spinDuration">Spin Duration (seconds)</label>
+                    <input type="range" id="spinDuration" class="form-control" min="2" max="10" value="5">
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <span>2s</span>
+                        <span id="durationValue">5s</span>
+                        <span>10s</span>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="clearBtn" class="btn btn-danger">Clear All</button>
+                    <button id="defaultBtn" class="btn btn-secondary">Default Segments</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Multi-Tool Website | Spinwheel Tool</p>
+        </footer>
+    </div>
+    
+    <div class="notification" id="notification">Segment added successfully!</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Canvas setup
+            const canvas = document.getElementById('wheelCanvas');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(centerX, centerY) - 10;
+            
+            // DOM Elements
+            const segmentText = document.getElementById('segmentText');
+            const segmentColor = document.getElementById('segmentColor');
+            const addSegmentBtn = document.getElementById('addSegmentBtn');
+            const segmentList = document.getElementById('segmentList');
+            const spinBtn = document.getElementById('spinBtn');
+            const result = document.getElementById('result');
+            const spinDuration = document.getElementById('spinDuration');
+            const durationValue = document.getElementById('durationValue');
+            const clearBtn = document.getElementById('clearBtn');
+            const defaultBtn = document.getElementById('defaultBtn');
+            const notification = document.getElementById('notification');
+            
+            // Wheel state
+            let segments = [
+                { text: "Prize 1", color: "#FF6B6B" },
+                { text: "Prize 2", color: "#4ECDC4" },
+                { text: "Prize 3", color: "#FFE66D" },
+                { text: "Prize 4", color: "#1A535C" },
+                { text: "Prize 5", color: "#FF9F1C" }
+            ];
+            let currentRotation = 0;
+            let isSpinning = false;
+            let spinTimeout;
+            
+            // Initialize
+            updateSegmentList();
+            drawWheel();
+            
+            // Event Listeners
+            addSegmentBtn.addEventListener('click', addSegment);
+            spinBtn.addEventListener('click', spinWheel);
+            spinDuration.addEventListener('input', function() {
+                durationValue.textContent = this.value + 's';
+            });
+            clearBtn.addEventListener('click', clearSegments);
+            defaultBtn.addEventListener('click', loadDefaultSegments);
+            
+            // Functions
+            function addSegment() {
+                const text = segmentText.value.trim();
+                const color = segmentColor.value;
+                
+                if (!text) {
+                    showNotification('Please enter segment text!', true);
+                    return;
+                }
+                
+                segments.push({ text, color });
+                segmentText.value = '';
+                updateSegmentList();
+                drawWheel();
+                showNotification('Segment added successfully!');
+            }
+            
+            function removeSegment(index) {
+                if (segments.length <= 1) {
+                    showNotification('Wheel must have at least one segment!', true);
+                    return;
+                }
+                
+                segments.splice(index, 1);
+                updateSegmentList();
+                drawWheel();
+                showNotification('Segment removed!');
+            }
+            
+            function updateSegmentList() {
+                segmentList.innerHTML = '';
+                
+                segments.forEach((segment, index) => {
+                    const segmentItem = document.createElement('div');
+                    segmentItem.className = 'segment-item';
+                    
+                    segmentItem.innerHTML = `
+                        <div class="segment-color" style="background-color: ${segment.color}"></div>
+                        <div class="segment-text">${segment.text}</div>
+                        <div class="segment-actions">
+                            <button class="action-btn remove-btn" data-index="${index}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    segmentList.appendChild(segmentItem);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        removeSegment(index);
+                    });
+                });
+            }
+            
+            function drawWheel() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                if (segments.length === 0) return;
+                
+                const arcSize = (2 * Math.PI) / segments.length;
+                
+                // Draw segments
+                segments.forEach((segment, i) => {
+                    const startAngle = i * arcSize + currentRotation;
+                    const endAngle = (i + 1) * arcSize + currentRotation;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                    ctx.closePath();
+                    ctx.fillStyle = segment.color;
+                    ctx.fill();
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    // Draw text
+                    ctx.save();
+                    ctx.translate(centerX, centerY);
+                    ctx.rotate(startAngle + arcSize / 2);
+                    ctx.textAlign = 'right';
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 16px Arial';
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                    ctx.shadowBlur = 2;
+                    ctx.shadowOffsetX = 1;
+                    ctx.shadowOffsetY = 1;
+                    
+                    // Adjust text position based on segment size
+                    const textRadius = radius * 0.7;
+                    ctx.fillText(segment.text, textRadius, 10);
+                    ctx.restore();
+                });
+                
+                // Draw center circle
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
+                ctx.fillStyle = '#007BFF';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+            
+            function spinWheel() {
+                if (isSpinning) return;
+                
+                if (segments.length < 2) {
+                    showNotification('Add at least 2 segments to spin!', true);
+                    return;
+                }
+                
+                isSpinning = true;
+                spinBtn.disabled = true;
+                result.textContent = 'Spinning...';
+                
+                // Calculate random spin parameters
+                const spins = 5 + Math.floor(Math.random() * 5); // 5-9 full spins
+                const extraRotation = Math.random() * 2 * Math.PI; // Random position
+                const totalRotation = spins * 2 * Math.PI + extraRotation;
+                
+                // Animation parameters
+                const duration = parseInt(spinDuration.value) * 1000;
+                const startTime = Date.now();
+                const startRotation = currentRotation;
+                
+                function animate() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Ease-out function
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    currentRotation = startRotation + totalRotation * ease;
+                    
+                    drawWheel();
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        finishSpin();
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            function finishSpin() {
+                isSpinning = false;
+                spinBtn.disabled = false;
+                
+                // Calculate result
+                const normalizedRotation = ((currentRotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+                const segmentIndex = Math.floor((2 * Math.PI - normalizedRotation) / (2 * Math.PI / segments.length)) % segments.length;
+                
+                result.textContent = `Result: ${segments[segmentIndex].text}`;
+                showNotification('Spin completed!');
+            }
+            
+            function clearSegments() {
+                if (confirm('Are you sure you want to clear all segments?')) {
+                    segments = [];
+                    updateSegmentList();
+                    drawWheel();
+                    result.textContent = 'Add segments to start!';
+                    showNotification('All segments cleared!');
+                }
+            }
+            
+            function loadDefaultSegments() {
+                segments = [
+                    { text: "Prize 1", color: "#FF6B6B" },
+                    { text: "Prize 2", color: "#4ECDC4" },
+                    { text: "Prize 3", color: "#FFE66D" },
+                    { text: "Prize 4", color: "#1A535C" },
+                    { text: "Prize 5", color: "#FF9F1C" }
+                ];
+                updateSegmentList();
+                drawWheel();
+                showNotification('Default segments loaded!');
+            }
+            
+            function showNotification(message, isError = false) {
+                notification.textContent = message;
+                notification.style.background = isError ? '#dc3545' : '#28a745';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+Features of the Spinwheel Tool:
+Interactive Spinwheel:
+Colorful wheel with customizable segments
+Smooth spinning animation with realistic physics
+Pointer indicator to show the result
+Customization Panel:
+Add custom segments with text and color
+Remove existing segments
+Clear all segments or load defaults
+Adjust spin duration (2-10 seconds)
+User-Friendly Interface:
+Bright blue and white theme as requested
+Responsive design that works on all devices
+Intuitive controls with visual feedback
+Notification system for user actions
+Visual Design:
+Modern gradient background
+Card-based layout with shadows
+Colorful segments with contrasting text
+Animated buttons with hover effects
+Functionality:
+Real-time wheel rendering as segments are added/removed
+Randomized spinning with easing animation
+Result display after spinning
+Prevention of multiple simultaneous spins
+To use the tool, simply add segments using the input fields, customize the spin duration, and click the "SPIN THE WHEEL" button. The result will be displayed after the wheel stops spinning.
+
