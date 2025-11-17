@@ -200,7 +200,6 @@
             color: var(--primary);
         }
 
-        /* Rest of your existing CSS remains exactly the same */
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -502,6 +501,18 @@
             background: var(--gradient-secondary);
             transform: translateY(-3px);
             box-shadow: 0 7px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Search Results Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Footer */
@@ -1223,21 +1234,121 @@
 
         // Setup event listeners
         function setupEventListeners() {
-            // Search functionality
+            // Enhanced Priority Search functionality
             document.getElementById('searchInput').addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase().trim();
-                const toolCards = document.querySelectorAll('.tool-card');
+                const toolSections = document.querySelectorAll('.tool-section');
+                const toolsContainer = document.querySelector('.tool-sections .container');
                 
-                toolCards.forEach(card => {
-                    const toolName = card.querySelector('.tool-name').textContent.toLowerCase();
-                    const toolDescription = card.querySelector('.tool-description').textContent.toLowerCase();
+                // Clear previous search results
+                let searchResultsContainer = document.getElementById('searchResultsContainer');
+                if (searchResultsContainer) {
+                    searchResultsContainer.remove();
+                }
+                
+                const noResults = document.getElementById('noResultsMessage');
+                if (noResults) {
+                    noResults.remove();
+                }
+                
+                // If search is empty, show everything normally
+                if (searchTerm === '') {
+                    toolSections.forEach(section => {
+                        section.style.display = 'block';
+                        const toolCards = section.querySelectorAll('.tool-card');
+                        toolCards.forEach(card => {
+                            card.style.display = 'flex';
+                        });
+                    });
+                    return;
+                }
+                
+                // Collect matching tools with relevance scoring
+                const matchingTools = [];
+                let totalMatches = 0;
+                
+                toolSections.forEach(section => {
+                    const toolCards = section.querySelectorAll('.tool-card');
+                    let sectionHasMatches = false;
                     
-                    if (toolName.includes(searchTerm) || toolDescription.includes(searchTerm)) {
-                        card.style.display = 'flex';
-                    } else {
+                    toolCards.forEach(card => {
+                        const toolName = card.querySelector('.tool-name').textContent.toLowerCase();
+                        const toolDescription = card.querySelector('.tool-description').textContent.toLowerCase();
+                        
+                        let relevanceScore = 0;
+                        
+                        // Name matches are most important
+                        if (toolName.includes(searchTerm)) relevanceScore += 3;
+                        if (toolName === searchTerm) relevanceScore += 2; // Exact match bonus
+                        
+                        // Description matches
+                        if (toolDescription.includes(searchTerm)) relevanceScore += 1;
+                        
+                        if (relevanceScore > 0) {
+                            const cardClone = card.cloneNode(true);
+                            matchingTools.push({
+                                card: cardClone,
+                                relevance: relevanceScore,
+                                sectionName: section.querySelector('.section-title').textContent
+                            });
+                            sectionHasMatches = true;
+                            totalMatches++;
+                        }
+                        
+                        // Hide original card
                         card.style.display = 'none';
-                    }
+                    });
+                    
+                    // Hide empty sections
+                    section.style.display = sectionHasMatches ? 'block' : 'none';
                 });
+                
+                // Show search results
+                if (totalMatches > 0) {
+                    // Sort by relevance
+                    matchingTools.sort((a, b) => b.relevance - a.relevance);
+                    
+                    // Create search results container
+                    searchResultsContainer = document.createElement('div');
+                    searchResultsContainer.id = 'searchResultsContainer';
+                    searchResultsContainer.style.marginBottom = '60px';
+                    searchResultsContainer.style.animation = 'fadeInUp 0.5s ease';
+                    
+                    // Add header
+                    const resultsHeader = document.createElement('div');
+                    resultsHeader.innerHTML = `
+                        <h2 class="section-title">
+                            <i class="fas fa-search"></i> Search Results
+                        </h2>
+                        <p class="section-subtitle">Found ${totalMatches} tool${totalMatches === 1 ? '' : 's'} matching "${searchTerm}"</p>
+                    `;
+                    searchResultsContainer.appendChild(resultsHeader);
+                    
+                    // Add matching tools
+                    const resultsGrid = document.createElement('div');
+                    resultsGrid.className = 'tools-grid';
+                    
+                    matchingTools.forEach(tool => {
+                        resultsGrid.appendChild(tool.card);
+                    });
+                    
+                    searchResultsContainer.appendChild(resultsGrid);
+                    toolsContainer.insertBefore(searchResultsContainer, toolsContainer.firstChild);
+                    
+                } else {
+                    // No results found
+                    const noResults = document.createElement('div');
+                    noResults.id = 'noResultsMessage';
+                    noResults.style.textAlign = 'center';
+                    noResults.style.padding = '80px 20px';
+                    noResults.style.color = '#666';
+                    noResults.innerHTML = `
+                        <i class="fas fa-search" style="font-size: 4rem; margin-bottom: 20px; color: #4361ee; opacity: 0.5;"></i>
+                        <h3 style="margin-bottom: 15px; font-size: 1.5rem;">No tools found</h3>
+                        <p style="font-size: 1.1rem;">Try searching with different keywords</p>
+                    `;
+                    toolsContainer.insertBefore(noResults, toolsContainer.firstChild);
+                }
             });
 
             // Mobile menu functionality
