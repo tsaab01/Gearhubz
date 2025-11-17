@@ -1,0 +1,34 @@
+{
+  "tools": [
+    {
+      "id": 1,
+      "name": "Image Converter",
+      "category": "image-tools", 
+      "description": "Convert images between formats",
+      "icon": "fas fa-exchange-alt",
+      "url": "image-converter.html",
+      "status": "active",
+      "featured": true
+    },
+    {
+      "id": 2, 
+      "name": "Catalytic Calculator",
+      "category": "calculator-tools",
+      "description": "Calculate catalytic converter values",
+      "icon": "fas fa-calculator",
+      "url": "catalytic-calculator.html",
+      "status": "active",
+      "featured": true
+    },
+    {
+      "id": 3,
+      "name": "TDEE Calculator", 
+      "category": "calculator-tools",
+      "description": "Calculate Total Daily Energy Expenditure",
+      "icon": "fas fa-heartbeat",
+      "url": "tdee-calculator.html",
+      "status": "active",
+      "featured": true
+    }
+  ]
+}
