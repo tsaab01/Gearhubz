@@ -1284,35 +1284,27 @@
 
                         // Calculate relevance score for sorting      
                         let relevanceScore = 0;
-                        
-                        // Name matches are most important
                         if (toolName.includes(searchTerm)) relevanceScore += 3;
                         if (toolName === searchTerm) relevanceScore += 2; // Exact match bonus
                         
                         // Description matches
                         if (toolDescription.includes(searchTerm)) relevanceScore += 1;
                         
-                        if (relevanceScore > 0) {
-                            const cardClone = card.cloneNode(true);
                             matchingTools.push({
-                                card: cardClone,
-                                relevance: relevanceScore,
-                                sectionName: section.querySelector('.section-title').textContent
+                                element: card.cloneNode(true),
+                                relevance: relevance,
                             });
-                            sectionHasMatches = true;
-                            totalMatches++;
-                        }
-                        
-                        // Hide original card
+                         } else {
                         card.style.display = 'none';
+                         }
                     });
                     
-                    // Hide empty sections
-                    section.style.display = sectionHasMatches ? 'block' : 'none';
+                    // Show/hide entire section based on whether it has visible tools
+                    section.style.display = sectionHasVisibleTools ? 'block' : 'none';
                 });
                 
-                // Show search results
-                if (totalMatches > 0) {
+                // If we have matches, show them in a dedicated search results section
+                if (hasAnyMatches && matchingTools.length > 0) {
                     // Sort by relevance
                     matchingTools.sort((a, b) => b.relevance - a.relevance);
                     
@@ -1322,28 +1314,31 @@
                     searchResultsContainer.style.marginBottom = '60px';
                     searchResultsContainer.style.animation = 'fadeInUp 0.5s ease';
                     
-                    // Add header
+                    // Create header
                     const resultsHeader = document.createElement('div');
                     resultsHeader.innerHTML = `
                         <h2 class="section-title">
                             <i class="fas fa-search"></i> Search Results
                         </h2>
-                        <p class="section-subtitle">Found ${totalMatches} tool${totalMatches === 1 ? '' : 's'} matching "${searchTerm}"</p>
+                        <p class="section-subtitle">Found ${matchingTools.length} tool${matchingTools.length === 1 ? '' : 's'} "${searchTerm}"</p>
                     `;
                     searchResultsContainer.appendChild(resultsHeader);
                     
-                    // Add matching tools
+                    // Create grid for results
                     const resultsGrid = document.createElement('div');
                     resultsGrid.className = 'tools-grid';
                     
+                    // Add all matching tools
                     matchingTools.forEach(tool => {
                         resultsGrid.appendChild(tool.card);
                     });
                     
                     searchResultsContainer.appendChild(resultsGrid);
+
+                    // Insert at the very top of the tools section
                     toolsContainer.insertBefore(searchResultsContainer, toolsContainer.firstChild);
                     
-                } else {
+                } else if (searchTerm.length > 0) {
                     // No results found
                     const noResults = document.createElement('div');
                     noResults.id = 'noResultsMessage';
