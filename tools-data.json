@@ -3,18 +3,18 @@
     {
       "id": 1,
       "name": "Image Converter",
-      "category": "image-tools", 
-      "description": "Convert images between formats",
+      "category": "image-tools",
+      "description": "Convert images between different formats",
       "icon": "fas fa-exchange-alt",
       "url": "image-converter.html",
       "status": "active",
       "featured": true
     },
     {
-      "id": 2, 
-      "name": "Catalytic Calculator",
+      "id": 2,
+      "name": "Catalytic Calculator", 
       "category": "calculator-tools",
-      "description": "Calculate catalytic converter values",
+      "description": "Calculate catalytic converter values and efficiency",
       "icon": "fas fa-calculator",
       "url": "catalytic-calculator.html",
       "status": "active",
@@ -22,13 +22,69 @@
     },
     {
       "id": 3,
-      "name": "TDEE Calculator", 
-      "category": "calculator-tools",
-      "description": "Calculate Total Daily Energy Expenditure",
+      "name": "TDEE Calculator",
+      "category": "calculator-tools", 
+      "description": "Calculate your Total Daily Energy Expenditure",
       "icon": "fas fa-heartbeat",
       "url": "tdee-calculator.html",
       "status": "active",
       "featured": true
+    }
+  ],
+  "categories": [
+    {
+      "id": "image-tools",
+      "name": "Image Tools",
+      "icon": "fas fa-image",
+      "description": "Edit, convert, and optimize your images"
+    },
+    {
+      "id": "document-tools", 
+      "name": "Document Tools",
+      "icon": "fas fa-file-alt",
+      "description": "Manage, convert, and secure your documents"
+    },
+    {
+      "id": "calculator-tools",
+      "name": "Calculator Tools",
+      "icon": "fas fa-calculator", 
+      "description": "Calculate everything from finances to health metrics"
+    },
+    {
+      "id": "text-tools",
+      "name": "Text Tools",
+      "icon": "fas fa-font",
+      "description": "Manipulate, analyze, and transform text"
+    },
+    {
+      "id": "web-tools",
+      "name": "Developer Tools",
+      "icon": "fas fa-code",
+      "description": "Essential tools for developers and web professionals"
+    },
+    {
+      "id": "color-tools",
+      "name": "Color Tools", 
+      "icon": "fas fa-palette",
+      "description": "Work with colors for design and accessibility"
+    },
+    {
+      "id": "convert-tools",
+      "name": "Convert Tools",
+      "icon": "fas fa-exchange-alt",
+      "description": "Convert between different formats and measurements"
+    },
+    {
+      "id": "seo-tools",
+      "name": "SEO & Marketing Tools",
+      "icon": "fas fa-chart-line",
+      "description": "Optimize your content and analyze marketing efforts"
+    },
+    {
+      "id": "utility-tools",
+      "name": "Utility Tools",
+      "icon": "fas fa-tools",
+      "description": "Everyday tools to simplify tasks and boost productivity"
     }
   ]
 }
