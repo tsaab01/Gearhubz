@@ -1234,7 +1234,7 @@
 
         // Setup event listeners
         function setupEventListeners() {
-            // Enhanced Priority Search functionality
+            // FIXED Search functionality
             document.getElementById('searchInput').addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase().trim();
                 const toolSections = document.querySelectorAll('.tool-section');
@@ -1251,7 +1251,7 @@
                     noResults.remove();
                 }
                 
-                // If search is empty, show everything normally
+                // Reset everything if search is empty
                 if (searchTerm === '') {
                     toolSections.forEach(section => {
                         section.style.display = 'block';
@@ -1263,18 +1263,26 @@
                     return;
                 }
                 
-                // Collect matching tools with relevance scoring
+                let hasAnyMatches = false;
                 const matchingTools = [];
-                let totalMatches = 0;
                 
+             // Search through all tools
                 toolSections.forEach(section => {
                     const toolCards = section.querySelectorAll('.tool-card');
-                    let sectionHasMatches = false;
+                    let sectionHasVisibleTools = false;
                     
                     toolCards.forEach(card => {
                         const toolName = card.querySelector('.tool-name').textContent.toLowerCase();
                         const toolDescription = card.querySelector('.tool-description').textContent.toLowerCase();
+
+                        const matchesSearch = toolName.includes(searchTerm) || toolDescription.includes(searchTerm);
                         
+                         if (matchesSearch) {
+                            card.style.display = 'flex';
+                            sectionHasVisibleTools = true;
+                            hasAnyMatches = true;
+
+                        // Calculate relevance score for sorting      
                         let relevanceScore = 0;
                         
                         // Name matches are most important
