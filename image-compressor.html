@@ -572,8 +572,84 @@
             }
             
             function downloadCompressedImage() {
-                // In a real implementation, this would download the actual compressed image
-                alert('In a real implementation, this would download your compressed image. For this demo, we\'re showing a simulation.');
+                function downloadYourToolFunction() {
+    // Your tool-specific processing here
+    
+    // Instead of: alert('In a real implementation...');
+    
+    // Use this approach:
+    const data = yourProcessedData; // Whatever your tool creates
+    const filename = 'your-file-name.extension';
+    const mimeType = 'appropriate/mime-type'; // e.g., 'text/plain', 'image/png'
+    
+    // Download the data
+    downloadData(data, filename, mimeType);
+    
+    // Show success message
+    showSuccessMessage(`✓ Downloaded: ${filename}`);
+}
+
+// Universal download helper (add this once to each tool)
+function downloadData(data, filename, mimeType) {
+    try {
+        if (data instanceof HTMLCanvasElement) {
+            data.toBlob(function(blob) {
+                if (blob) {
+                    const url = URL.createObjectURL(blob);
+                    triggerDownload(url, filename);
+                    setTimeout(() => URL.revokeObjectURL(url), 100);
+                }
+            }, mimeType);
+        } else if (data instanceof Blob) {
+            const url = URL.createObjectURL(data);
+            triggerDownload(url, filename);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+        } else {
+            const blob = new Blob([data], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            triggerDownload(url, filename);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+        }
+    } catch (error) {
+        console.error('Download failed:', error);
+        alert('Download failed. Please try again.');
+    }
+}
+
+function triggerDownload(href, filename) {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = href;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Success message function (add this once to each tool)
+function showSuccessMessage(message) {
+    const successMessage = document.createElement('div');
+    successMessage.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4CAF50;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 1000;
+        font-weight: 500;
+    `;
+    successMessage.textContent = message;
+    document.body.appendChild(successMessage);
+
+    setTimeout(() => {
+        if (successMessage.parentNode) {
+            successMessage.parentNode.removeChild(successMessage);
+        }
+    }, 3000);
+}
             }
             
             function formatFileSize(bytes) {
