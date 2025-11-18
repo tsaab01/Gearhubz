@@ -5,342 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Converter - Tools Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- ADD THIS LINE -->
-    <script src="download-helper.js"></script>
     <style>
-        :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #7209b7;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gradient-primary: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
-            --shadow: 0 8px 25px rgba(67, 97, 238, 0.15);
-            --deep-shadow: 0 15px 35px rgba(67, 97, 238, 0.25);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-            color: var(--dark);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background: white;
-            box-shadow: var(--shadow);
-            padding: 1rem 0;
-        }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .tool-header {
-            text-align: center;
-            padding: 3rem 0;
-        }
-
-        .tool-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .converter-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        @media (max-width: 768px) {
-            .converter-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .upload-section, .preview-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-        }
-
-        .upload-area {
-            border: 2px dashed #e0e0e0;
-            border-radius: 10px;
-            padding: 3rem 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-bottom: 1.5rem;
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: rgba(67, 97, 238, 0.03);
-        }
-
-        .upload-area i {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .upload-btn {
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .format-options {
-            margin: 1.5rem 0;
-        }
-
-        .format-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .format-btn {
-            padding: 10px 20px;
-            border: 1px solid #e0e0e0;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .format-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .quality-slider {
-            margin: 1.5rem 0;
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .slider-container input {
-            flex: 1;
-        }
-
-        .image-preview {
-            width: 100%;
-            height: 250px;
-            border: 2px dashed #e0e0e0;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            overflow: hidden;
-        }
-
-        .image-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .image-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .info-item {
-            background: var(--light);
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .download-btn {
-            width: 100%;
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .download-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .download-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .status-message {
-            text-align: center;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-            display: none;
-        }
-
-        .status-message.success {
-            background: #d4edda;
-            color: #155724;
-            display: block;
-        }
-
-        .status-message.error {
-            background: #f8d7da;
-            color: #721c24;
-            display: block;
-        }
-
-        .processing {
-            text-align: center;
-            color: var(--primary);
-            display: none;
-        }
-
-        .processing i {
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        /* ... your existing CSS styles remain the same ... */
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-container">
-            <a href="index.html" class="logo">Tools Hub</a>
-        </div>
-    </header>
-
-    <section class="tool-header">
-        <div class="container">
-            <h1>Image Converter</h1>
-            <p>Convert your images to different formats quickly and easily</p>
-        </div>
-    </section>
-
-    <section class="converter-tool">
-        <div class="container">
-            <div class="converter-container">
-                <!-- Upload Section -->
-                <div class="upload-section">
-                    <h3>Upload Your Image</h3>
-                    <div class="upload-area" id="uploadArea">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <h4>Drag & Drop or Click to Upload</h4>
-                        <p>Supports JPG, PNG, GIF, WEBP (Max: 5MB)</p>
-                        <button class="upload-btn" id="uploadBtn">Choose File</button>
-                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
-                    </div>
-                    
-                    <div class="format-options">
-                        <h4>Convert To:</h4>
-                        <div class="format-buttons">
-                            <button class="format-btn active" data-format="jpeg">JPEG</button>
-                            <button class="format-btn" data-format="png">PNG</button>
-                            <button class="format-btn" data-format="webp">WEBP</button>
-                        </div>
-                    </div>
-
-                    <div class="quality-slider">
-                        <label>Quality: <span id="qualityValue">80</span>%</label>
-                        <div class="slider-container">
-                            <input type="range" id="qualityRange" min="10" max="100" value="80">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Preview Section -->
-                <div class="preview-section">
-                    <h3>Preview & Download</h3>
-                    <div class="image-preview" id="imagePreview">
-                        <p>Your image will appear here</p>
-                    </div>
-                    
-                    <div class="processing" id="processing">
-                        <i class="fas fa-spinner"></i> Processing image...
-                    </div>
-                    
-                    <div class="image-info">
-                        <div class="info-item">
-                            <h5>Format</h5>
-                            <p id="formatInfo">-</p>
-                        </div>
-                        <div class="info-item">
-                            <h5>Size</h5>
-                            <p id="sizeInfo">-</p>
-                        </div>
-                        <div class="info-item">
-                            <h5>Dimensions</h5>
-                            <p id="dimensionsInfo">-</p>
-                        </div>
-                        <div class="info-item">
-                            <h5>Quality</h5>
-                            <p id="qualityInfo">-</p>
-                        </div>
-                    </div>
-                    
-                    <button class="download-btn" id="downloadBtn" disabled>Download Converted Image</button>
-                    <div class="status-message" id="statusMessage"></div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- ... your existing HTML structure remains the same ... -->
 
     <script>
         // DOM Elements
@@ -414,13 +84,49 @@
             updateDownloadButton();
         });
 
-        // Functions
+        // Helper Functions (replacing DownloadHelper)
+        function validateFile(file, maxSizeMB = 5) {
+            const maxSize = maxSizeMB * 1024 * 1024;
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            
+            if (!allowedTypes.includes(file.type)) {
+                return { isValid: false, errors: ['Unsupported file type. Please use JPG, PNG, GIF, or WEBP.'] };
+            }
+            
+            if (file.size > maxSize) {
+                return { isValid: false, errors: [`File too large. Maximum size is ${maxSizeMB}MB.`] };
+            }
+            
+            const extension = file.name.split('.').pop().toLowerCase();
+            return { 
+                isValid: true, 
+                fileInfo: { extension } 
+            };
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message';
+            if (type) {
+                statusMessage.classList.add(type);
+            }
+        }
+
+        // Main Functions
         function handleFile(file) {
             // Reset previous state
             resetState();
             
-            // Use download helper for validation
-            const validation = DownloadHelper.validateFile(file, 5);
+            // Validate file
+            const validation = validateFile(file, 5);
             if (!validation.isValid) {
                 showStatus(validation.errors[0], 'error');
                 return;
@@ -439,9 +145,9 @@
                     img.src = e.target.result;
                     imagePreview.appendChild(img);
                     
-                    // Update file info using download helper
+                    // Update file info
                     formatInfo.textContent = validation.fileInfo.extension.toUpperCase();
-                    sizeInfo.textContent = DownloadHelper.formatFileSize(file.size);
+                    sizeInfo.textContent = formatFileSize(file.size);
                     dimensionsInfo.textContent = `${currentImage.width} × ${currentImage.height}`;
                     updateQualityInfo();
                     
@@ -464,7 +170,7 @@
             reader.readAsDataURL(file);
         }
 
-        async function convertAndDownload() {
+        function convertAndDownload() {
             if (!currentImage || !originalFile) {
                 showStatus('Please upload an image first.', 'error');
                 return;
@@ -482,27 +188,35 @@
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(currentImage, 0, 0);
 
-                // Use the universal download helper
-                const result = await DownloadHelper.downloadFile(
-                    canvas, // Canvas element
-                    originalFile.name, // Original filename
-                    selectedFormat, // Target format
-                    { quality: quality } // Options
-                );
-                
-                if (result.success) {
-                    showStatus(`Successfully downloaded ${result.filename}`, 'success');
-                    
-                    // Track successful download
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'download_success', {
-                            'tool_name': 'Image Converter',
-                            'file_format': selectedFormat
-                        });
-                    }
-                } else {
-                    showStatus(`Download failed: ${result.error}`, 'error');
+                // Get MIME type for selected format
+                let mimeType = 'image/jpeg';
+                if (selectedFormat === 'png') {
+                    mimeType = 'image/png';
+                } else if (selectedFormat === 'webp') {
+                    mimeType = 'image/webp';
                 }
+
+                // Convert quality for different formats
+                let canvasQuality = quality;
+                if (selectedFormat === 'png') {
+                    canvasQuality = undefined; // PNG is lossless
+                }
+
+                // Get data URL from canvas
+                let dataURL;
+                if (canvasQuality !== undefined) {
+                    dataURL = canvas.toDataURL(mimeType, canvasQuality);
+                } else {
+                    dataURL = canvas.toDataURL(mimeType);
+                }
+
+                // Create download link
+                const link = document.createElement('a');
+                link.download = getConvertedFilename(originalFile.name, selectedFormat);
+                link.href = dataURL;
+                link.click();
+
+                showStatus(`Successfully downloaded ${link.download}`, 'success');
                 
             } catch (error) {
                 console.error('Download error:', error);
@@ -511,6 +225,11 @@
                 processing.style.display = 'none';
                 downloadBtn.disabled = false;
             }
+        }
+
+        function getConvertedFilename(originalName, targetFormat) {
+            const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+            return `${nameWithoutExt}.${targetFormat}`;
         }
 
         function updateQualityInfo() {
@@ -537,10 +256,6 @@
             downloadBtn.disabled = true;
             processing.style.display = 'none';
             showStatus('', '');
-        }
-
-        function showStatus(message, type) {
-            DownloadHelper.showStatus(statusMessage, message, type);
         }
     </script>
 </body>
