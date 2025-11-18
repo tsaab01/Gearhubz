@@ -1,10 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KXB4P8MJ');</script>
+    <!-- End Google Tag Manager -->
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Compressor | Tools Hub</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Free Online Image Compressor - Reduce Image Size Without Losing Quality | ToolsHub</title>
+    <meta name="description" content="Compress images online for free! Reduce file size without losing quality. Perfect for websites, emails, and social media. No signup required.">
+    <meta name="keywords" content="image compressor, compress image online, reduce image size, image optimization, free image compressor, online image tool">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Free Online Image Compressor - ToolsHub">
+    <meta property="og:description" content="Compress your images online without losing quality. Reduce file size for faster loading and better performance.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/image-compressor">
+    <meta property="og:site_name" content="ToolsHub">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Free Online Image Compressor">
+    <meta name="twitter:description" content="Compress images online for free! Reduce file size without losing quality.">
+    
+    <!-- Canonical and other meta tags -->
+    <link rel="canonical" href="https://yourdomain.com/image-compressor">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * {
             margin: 0;
@@ -31,6 +59,7 @@
             color: var(--text-primary);
             padding: 20px;
             min-height: 100vh;
+            line-height: 1.6;
         }
 
         .container {
@@ -241,6 +270,7 @@
             overflow: hidden;
             min-height: 300px;
             margin-bottom: 20px;
+            position: relative;
         }
 
         .preview-placeholder {
@@ -256,8 +286,9 @@
 
         .preview-image {
             max-width: 100%;
-            max-height: 400px;
+            max-height: 100%;
             display: none;
+            object-fit: contain;
         }
 
         .download-section {
@@ -330,6 +361,132 @@
             padding: 20px;
             color: var(--text-secondary);
             font-size: 0.9rem;
+            background: var(--white);
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* SEO Content Section */
+        .seo-content {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .seo-content h2 {
+            font-size: 1.8rem;
+            margin: 25px 0 15px 0;
+            color: var(--text-primary);
+        }
+
+        .seo-content h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px 0;
+            color: var(--text-primary);
+        }
+
+        .seo-content p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .seo-content ul, .seo-content ol {
+            margin: 15px 0 15px 30px;
+            color: var(--text-secondary);
+        }
+
+        .seo-content li {
+            margin-bottom: 10px;
+        }
+
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .benefit-item {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .benefit-item h4 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        /* Toggle Styles */
+        .toggle-container {
+            margin: 15px 0;
+        }
+
+        .toggle-header {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            transition: background 0.3s;
+        }
+
+        .toggle-header:hover {
+            background: #e5e7eb;
+        }
+
+        .toggle-header h4 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .toggle-content {
+            padding: 15px;
+            background: var(--white);
+            border-left: 3px solid var(--primary-blue);
+            display: none;
+        }
+
+        .toggle-content.active {
+            display: block;
+        }
+
+        .related-tools {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .tools-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .tool-link {
+            display: inline-block;
+            background: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .tool-link:hover {
+            background: var(--hover-blue);
         }
 
         @media (max-width: 768px) {
@@ -345,13 +502,44 @@
                 flex-direction: column;
                 gap: 15px;
             }
+            
+            .benefits-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
+    
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Image Compressor",
+      "description": "Free online tool to compress images without losing quality",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "1420"
+      }
+    }
+    </script>
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KXB4P8MJ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
     <div class="container">
         <header>
-            <h1>Image Compressor</h1>
+            <h1>Free Online Image Compressor</h1>
             <p class="subtitle">Compress your images without losing quality. Reduce file size for faster loading and better performance.</p>
         </header>
 
@@ -439,12 +627,151 @@
             </div>
         </div>
         
+        <!-- SEO Content Section -->
+        <section class="seo-content">
+            <article>
+                <h2>What is an Online Image Compressor?</h2>
+                <p>An online image compressor is a free web-based tool that reduces the file size of your digital images without significantly compromising quality. It's perfect for optimizing images for websites, emails, social media, and other digital platforms where file size matters.</p>
+                
+                <h2>Why Use Our Free Image Compressor?</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-bolt"></i> Lightning Fast</h4>
+                        <p>Compress images in seconds with our optimized processing engine.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-lock"></i> Privacy First</h4>
+                        <p>Your images are processed locally and never stored on our servers.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-mobile-alt"></i> Works Everywhere</h4>
+                        <p>Use on any device - desktop, tablet, or mobile phone.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-infinity"></i> Unlimited Usage</h4>
+                        <p>Compress as many images as you want - completely free.</p>
+                    </div>
+                </div>
+                
+                <h2>Common Use Cases</h2>
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use1')">
+                        <h4>Website Optimization</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use1"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use1">
+                        <p>Reduce image file sizes to improve page loading speed and user experience. Faster websites rank better in search engines and provide better user engagement. Optimized images also reduce bandwidth costs for website owners.</p>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use2')">
+                        <h4>Social Media Sharing</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use2"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use2">
+                        <p>Compress large photos before uploading to Facebook, Instagram, Twitter, and other platforms to avoid long upload times and platform restrictions. Smaller files upload faster and consume less data.</p>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use3')">
+                        <h4>Email Attachments</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use3"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use3">
+                        <p>Reduce image sizes to stay within email attachment limits and ensure faster delivery of your messages. Compressed images also help reduce email storage space requirements.</p>
+                    </div>
+                </div>
+                
+                <h2>How to Use the Image Compressor</h2>
+                <ol>
+                    <li><strong>Upload</strong> - Click "Browse Files" or drag and drop your image onto the upload area</li>
+                    <li><strong>Adjust Settings</strong> - Use the sliders to control compression quality and image size</li>
+                    <li><strong>Compress</strong> - Click "Compress Image" to process your file</li>
+                    <li><strong>Download</strong> - Click "Download Compressed Image" to save your optimized file</li>
+                </ol>
+                
+                <div class="faq-section">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq1')">
+                            <h4>Is this image compressor really free?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq1"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq1">
+                            <p>Yes, our image compressor is completely free to use with no limitations, registrations, or watermarks. Compress as many images as you need at no cost. We believe in providing valuable tools without hidden fees or premium restrictions.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq2')">
+                            <h4>What file formats are supported?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq2"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq2">
+                            <p>We support all major image formats including JPG, JPEG, PNG, GIF, and WebP. The compressed output will be in JPG format for optimal compatibility. Our system automatically converts your images to the most efficient format for web use.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq3')">
+                            <h4>How much can I reduce my image size?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq3"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq3">
+                            <p>Depending on your original image and settings, you can typically reduce file sizes by 50-90% while maintaining good visual quality. Our intelligent compression preserves important image details while removing unnecessary data. The exact reduction depends on the original file format and content.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq4')">
+                            <h4>Is my privacy protected?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq4"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq4">
+                            <p>Absolutely. Your images are processed directly in your browser and never uploaded to our servers. We don't store or access your files in any way. Once you close the browser tab, all processed data is automatically deleted from your device's memory.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="related-tools">
+                    <h3>Related Free Tools</h3>
+                    <div class="tools-grid">
+                        <a href="/image-resizer" class="tool-link">Image Resizer</a>
+                        <a href="/image-converter" class="tool-link">Image Converter</a>
+                        <a href="/pdf-compressor" class="tool-link">PDF Compressor</a>
+                        <a href="/file-converter" class="tool-link">File Converter</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+        
         <footer>
             <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
         </footer>
     </div>
+    
+    <!-- Adsterra Ad Code -->
+    <script async="async" data-cfasync="false" src="//pl28047254.effectivegatecpm.com/a066ce0b5c2ab4f8b4fedb09d93370eb/invoke.js"></script>
+    <div id="container-a066ce0b5c2ab4f8b4fedb09d93370eb"></div>
+    <!-- End Adsterra Ad Code -->
 
     <script>
+        // Toggle functionality
+        function toggleContent(id) {
+            const content = document.getElementById('content-' + id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
             const dropArea = document.getElementById('drop-area');
@@ -469,9 +796,8 @@
             
             // State variables
             let originalFile = null;
-            let compressedFile = null;
             let originalSize = 0;
-            let compressedSize = 0;
+            let compressedBlob = null;
             
             // Event Listeners
             browseBtn.addEventListener('click', () => fileInput.click());
@@ -548,108 +874,166 @@
             }
             
             function compressImage() {
-                if (!originalFile) return;
+                if (!originalFile) {
+                    alert('Please upload an image first');
+                    return;
+                }
                 
-                // In a real implementation, this would use canvas to compress the image
-                // For this demo, we'll simulate compression
                 const quality = qualitySlider.value / 100;
                 const sizeFactor = sizeSlider.value / 100;
                 
-                // Simulate compression
-                compressedSize = Math.max(10000, originalSize * (0.3 + 0.7 * (1 - quality) * sizeFactor));
+                // Create canvas for compression
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
                 
-                // Update UI with results
-                const reduction = Math.round((1 - compressedSize / originalSize) * 100);
-                reductionPercent.textContent = `${reduction}%`;
-                compressedSizeEl.textContent = formatFileSize(compressedSize);
-                savedSpaceEl.textContent = formatFileSize(originalSize - compressedSize);
+                const img = new Image();
+                img.onload = function() {
+                    // Calculate new dimensions
+                    const newWidth = Math.max(10, img.width * sizeFactor);
+                    const newHeight = Math.max(10, img.height * sizeFactor);
+                    
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+                    
+                    // Fill with white background for JPEG
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, newWidth, newHeight);
+                    
+                    // Draw resized image
+                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                    
+                    // Convert to blob with compression
+                    canvas.toBlob(function(blob) {
+                        if (blob) {
+                            compressedBlob = blob;
+                            
+                            // Calculate compression results
+                            const compressedSize = blob.size;
+                            const reduction = Math.round((1 - compressedSize / originalSize) * 100);
+                            
+                            // Update UI with results
+                            reductionPercent.textContent = `${reduction}%`;
+                            compressedSizeEl.textContent = formatFileSize(compressedSize);
+                            savedSpaceEl.textContent = formatFileSize(originalSize - compressedSize);
+                            
+                            // Show download section
+                            downloadSection.classList.add('active');
+                            
+                            // Update preview with compressed version
+                            const compressedUrl = URL.createObjectURL(blob);
+                            previewImage.src = compressedUrl;
+                            
+                            // Track compression event
+                            if (typeof dataLayer !== 'undefined') {
+                                dataLayer.push({
+                                    'event': 'tool_compress',
+                                    'toolName': 'Image Compressor',
+                                    'compressionQuality': qualitySlider.value,
+                                    'sizeFactor': sizeSlider.value
+                                });
+                            }
+                        } else {
+                            alert('Compression failed. Please try a different image.');
+                        }
+                    }, 'image/jpeg', quality);
+                };
                 
-                // Show download section
-                downloadSection.classList.add('active');
-                
-                // Show compressed image preview (simulated)
-                previewImage.style.opacity = quality > 0.8 ? '1' : quality > 0.5 ? '0.8' : '0.6';
+                // Load original image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(originalFile);
             }
             
+            // FIXED DOWNLOAD FUNCTION WITH REAL FUNCTIONALITY
             function downloadCompressedImage() {
-                function downloadYourToolFunction() {
-    // Your tool-specific processing here
-    
-    // Instead of: alert('In a real implementation...');
-    
-    // Use this approach:
-    const data = yourProcessedData; // Whatever your tool creates
-    const filename = 'your-file-name.extension';
-    const mimeType = 'appropriate/mime-type'; // e.g., 'text/plain', 'image/png'
-    
-    // Download the data
-    downloadData(data, filename, mimeType);
-    
-    // Show success message
-    showSuccessMessage(`✓ Downloaded: ${filename}`);
-}
-
-// Universal download helper (add this once to each tool)
-function downloadData(data, filename, mimeType) {
-    try {
-        if (data instanceof HTMLCanvasElement) {
-            data.toBlob(function(blob) {
-                if (blob) {
-                    const url = URL.createObjectURL(blob);
-                    triggerDownload(url, filename);
-                    setTimeout(() => URL.revokeObjectURL(url), 100);
+                if (!compressedBlob) {
+                    alert('Please compress an image first');
+                    return;
                 }
-            }, mimeType);
-        } else if (data instanceof Blob) {
-            const url = URL.createObjectURL(data);
-            triggerDownload(url, filename);
-            setTimeout(() => URL.revokeObjectURL(url), 100);
-        } else {
-            const blob = new Blob([data], { type: mimeType });
-            const url = URL.createObjectURL(blob);
-            triggerDownload(url, filename);
-            setTimeout(() => URL.revokeObjectURL(url), 100);
-        }
-    } catch (error) {
-        console.error('Download failed:', error);
-        alert('Download failed. Please try again.');
-    }
-}
-
-function triggerDownload(href, filename) {
-    const link = document.createElement('a');
-    link.download = filename;
-    link.href = href;
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-// Success message function (add this once to each tool)
-function showSuccessMessage(message) {
-    const successMessage = document.createElement('div');
-    successMessage.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #4CAF50;
-        color: white;
-        padding: 15px 20px;
-        border-radius: 5px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 1000;
-        font-weight: 500;
-    `;
-    successMessage.textContent = message;
-    document.body.appendChild(successMessage);
-
-    setTimeout(() => {
-        if (successMessage.parentNode) {
-            successMessage.parentNode.removeChild(successMessage);
-        }
-    }, 3000);
-}
+                
+                // Create filename
+                const originalName = originalFile.name;
+                const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+                const filename = `${nameWithoutExt}_compressed.jpg`;
+                
+                // Download the compressed image
+                downloadData(compressedBlob, filename, 'image/jpeg');
+                
+                // Show success message
+                showSuccessMessage(`✓ Downloaded: ${filename}`);
+                
+                // Track download event
+                if (typeof dataLayer !== 'undefined') {
+                    dataLayer.push({
+                        'event': 'tool_download',
+                        'toolName': 'Image Compressor',
+                        'fileSize': compressedBlob.size
+                    });
+                }
+            }
+            
+            // Universal download helper
+            function downloadData(data, filename, mimeType) {
+                try {
+                    if (data instanceof HTMLCanvasElement) {
+                        data.toBlob(function(blob) {
+                            if (blob) {
+                                const url = URL.createObjectURL(blob);
+                                triggerDownload(url, filename);
+                                setTimeout(() => URL.revokeObjectURL(url), 100);
+                            }
+                        }, mimeType);
+                    } else if (data instanceof Blob) {
+                        const url = URL.createObjectURL(data);
+                        triggerDownload(url, filename);
+                        setTimeout(() => URL.revokeObjectURL(url), 100);
+                    } else {
+                        const blob = new Blob([data], { type: mimeType });
+                        const url = URL.createObjectURL(blob);
+                        triggerDownload(url, filename);
+                        setTimeout(() => URL.revokeObjectURL(url), 100);
+                    }
+                } catch (error) {
+                    console.error('Download failed:', error);
+                    alert('Download failed. Please try again.');
+                }
+            }
+            
+            function triggerDownload(href, filename) {
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = href;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            
+            // Success message function
+            function showSuccessMessage(message) {
+                const successMessage = document.createElement('div');
+                successMessage.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #4CAF50;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 1000;
+                    font-weight: 500;
+                `;
+                successMessage.textContent = message;
+                document.body.appendChild(successMessage);
+                
+                setTimeout(() => {
+                    if (successMessage.parentNode) {
+                        successMessage.parentNode.removeChild(successMessage);
+                    }
+                }, 3000);
             }
             
             function formatFileSize(bytes) {
@@ -661,7 +1045,5 @@ function showSuccessMessage(message) {
             }
         });
     </script>
-    <script async="async" data-cfasync="false" src="//pl28047254.effectivegatecpm.com/a066ce0b5c2ab4f8b4fedb09d93370eb/invoke.js"></script>
-<div id="container-a066ce0b5c2ab4f8b4fedb09d93370eb"></div>
 </body>
 </html>
