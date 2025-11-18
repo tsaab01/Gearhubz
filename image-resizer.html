@@ -457,256 +457,281 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // DOM Elements
-        const dropArea = document.getElementById('drop-area');
-        const fileInput = document.getElementById('file-input');
-        const browseBtn = document.querySelector('.browse-btn');
-        const fileInfo = document.getElementById('file-info');
-        const fileName = document.getElementById('file-name');
-        const fileSize = document.getElementById('file-size');
-        const widthInput = document.getElementById('width-input');
-        const heightInput = document.getElementById('height-input');
-        const aspectRatioCheckbox = document.getElementById('aspect-ratio');
-        const resizeBtn = document.getElementById('resize-btn');
-        const previewPlaceholder = document.getElementById('preview-placeholder');
-        const previewImage = document.getElementById('preview-image');
-        const dimensionsDisplay = document.getElementById('dimensions-display');
-        const downloadSection = document.getElementById('download-section');
-        const downloadBtn = document.getElementById('download-btn');
-        const newDimensions = document.getElementById('new-dimensions');
-        const originalSizeEl = document.getElementById('original-size');
-        const resizedSizeEl = document.getElementById('resized-size');
-        const savedSpaceEl = document.getElementById('saved-space');
-        
-        // State variables
-        let originalFile = null;
-        let originalSize = 0;
-        let originalWidth = 0;
-        let originalHeight = 0;
-        let resizedSize = 0;
-        let aspectRatio = 1;
-        
-        // Event Listeners
-        browseBtn.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', handleFileSelect);
-        
-        dropArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropArea.style.borderColor = '#4F46E5';
-            dropArea.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
-        });
-        
-        dropArea.addEventListener('dragleave', () => {
-            dropArea.style.borderColor = '#E5E7EB';
-            dropArea.style.backgroundColor = '#F9FAFB';
-        });
-        
-        dropArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropArea.style.borderColor = '#E5E7EB';
-            dropArea.style.backgroundColor = '#F9FAFB';
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const dropArea = document.getElementById('drop-area');
+            const fileInput = document.getElementById('file-input');
+            const browseBtn = document.querySelector('.browse-btn');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            const fileSize = document.getElementById('file-size');
+            const widthInput = document.getElementById('width-input');
+            const heightInput = document.getElementById('height-input');
+            const aspectRatioCheckbox = document.getElementById('aspect-ratio');
+            const resizeBtn = document.getElementById('resize-btn');
+            const previewPlaceholder = document.getElementById('preview-placeholder');
+            const previewImage = document.getElementById('preview-image');
+            const dimensionsDisplay = document.getElementById('dimensions-display');
+            const downloadSection = document.getElementById('download-section');
+            const downloadBtn = document.getElementById('download-btn');
+            const newDimensions = document.getElementById('new-dimensions');
+            const originalSizeEl = document.getElementById('original-size');
+            const resizedSizeEl = document.getElementById('resized-size');
+            const savedSpaceEl = document.getElementById('saved-space');
             
-            if (e.dataTransfer.files.length) {
-                handleFiles(e.dataTransfer.files);
-            }
-        });
-        
-        // Handle dimension inputs
-        widthInput.addEventListener('input', handleWidthChange);
-        heightInput.addEventListener('input', handleHeightChange);
-        
-        resizeBtn.addEventListener('click', resizeImage);
-        downloadBtn.addEventListener('click', downloadResizedImage);
-        
-        // Functions
-        function handleFileSelect(e) {
-            if (e.target.files.length) {
-                handleFiles(e.target.files);
-            }
-        }
-        
-        function handleFiles(files) {
-            const file = files[0];
-            if (!file.type.match('image.*')) {
-                alert('Please select an image file (JPEG, PNG, etc.)');
-                return;
-            }
+            // State variables
+            let originalFile = null;
+            let originalSize = 0;
+            let originalWidth = 0;
+            let originalHeight = 0;
+            let resizedSize = 0;
+            let aspectRatio = 1;
             
-            originalFile = file;
-            originalSize = file.size;
-            updateFileInfo(file);
-            loadImageDimensions(file);
-            displayImagePreview(file);
-            resizeBtn.disabled = false;
-        }
-        
-        function updateFileInfo(file) {
-            fileName.textContent = file.name;
-            fileSize.textContent = formatFileSize(file.size);
-            fileInfo.classList.add('active');
-            originalSizeEl.textContent = formatFileSize(file.size);
-        }
-        
-        function loadImageDimensions(file) {
-            const img = new Image();
-            img.onload = function() {
-                originalWidth = this.width;
-                originalHeight = this.height;
-                aspectRatio = originalWidth / originalHeight;
+            // Event Listeners
+            browseBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#4F46E5';
+                dropArea.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+            });
+            
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.style.borderColor = '#E5E7EB';
+                dropArea.style.backgroundColor = '#F9FAFB';
+            });
+            
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#E5E7EB';
+                dropArea.style.backgroundColor = '#F9FAFB';
                 
-                // Set default values to original dimensions
-                widthInput.value = originalWidth;
-                heightInput.value = originalHeight;
-                updateDimensionsDisplay();
-            };
-            img.src = URL.createObjectURL(file);
-        }
-        
-        function displayImagePreview(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImage.src = e.target.result;
-                previewImage.style.display = 'block';
-                previewPlaceholder.style.display = 'none';
-                updateDimensionsDisplay();
-            };
-            reader.readAsDataURL(file);
-        }
-        
-        function handleWidthChange() {
-            if (aspectRatioCheckbox.checked && originalWidth > 0) {
-                const newWidth = parseInt(widthInput.value) || 0;
-                if (newWidth > 0) {
-                    const newHeight = Math.round(newWidth / aspectRatio);
-                    heightInput.value = newHeight;
+                if (e.dataTransfer.files.length) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            // Handle dimension inputs
+            widthInput.addEventListener('input', handleWidthChange);
+            heightInput.addEventListener('input', handleHeightChange);
+            
+            resizeBtn.addEventListener('click', resizeImage);
+            downloadBtn.addEventListener('click', downloadResizedImage);
+            
+            // Functions
+            function handleFileSelect(e) {
+                if (e.target.files.length) {
+                    handleFiles(e.target.files);
                 }
             }
-            updateDimensionsDisplay();
-        }
-        
-        function handleHeightChange() {
-            if (aspectRatioCheckbox.checked && originalHeight > 0) {
-                const newHeight = parseInt(heightInput.value) || 0;
-                if (newHeight > 0) {
-                    const newWidth = Math.round(newHeight * aspectRatio);
-                    widthInput.value = newWidth;
+            
+            function handleFiles(files) {
+                const file = files[0];
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file (JPEG, PNG, etc.)');
+                    return;
                 }
-            }
-            updateDimensionsDisplay();
-        }
-        
-        function updateDimensionsDisplay() {
-            const width = widthInput.value || 0;
-            const height = heightInput.value || 0;
-            dimensionsDisplay.textContent = `${width} × ${height} px`;
-        }
-        
-        function resizeImage() {
-            if (!originalFile) return;
-            
-            const newWidth = parseInt(widthInput.value) || 0;
-            const newHeight = parseInt(heightInput.value) || 0;
-            
-            if (newWidth <= 0 || newHeight <= 0) {
-                alert('Please enter valid dimensions');
-                return;
-            }
-            
-            // In a real implementation, this would use canvas to resize the image
-            // For this demo, we'll simulate resizing
-            const sizeFactor = (newWidth * newHeight) / (originalWidth * originalHeight);
-            resizedSize = Math.max(10000, originalSize * sizeFactor);
-            
-            // Update UI with results
-            newDimensions.textContent = `${newWidth} × ${newHeight} px`;
-            resizedSizeEl.textContent = formatFileSize(resizedSize);
-            savedSpaceEl.textContent = formatFileSize(Math.max(0, originalSize - resizedSize));
-            
-            // Show download section
-            downloadSection.classList.add('active');
-            
-            // Update preview with new dimensions
-            dimensionsDisplay.textContent = `${newWidth} × ${newHeight} px`;
-        }
-        
-        // FIXED DOWNLOAD FUNCTION - REPLACES THE OLD ONE
-        function downloadResizedImage() {
-            // Remove the demo alert and implement real download functionality
-            
-            if (!originalFile) {
-                alert('Please upload an image first');
-                return;
-            }
-            
-            const newWidth = parseInt(widthInput.value) || 0;
-            const newHeight = parseInt(heightInput.value) || 0;
-            
-            if (newWidth <= 0 || newHeight <= 0) {
-                alert('Please enter valid dimensions');
-                return;
-            }
-            
-            // Create a hidden canvas to resize the image
-            const canvas = document.createElement('canvas');
-            canvas.width = newWidth;
-            canvas.height = newHeight;
-            const ctx = canvas.getContext('2d');
-            
-            // Draw the resized image on canvas
-            const img = new Image();
-            img.onload = function() {
-                // Fill with white background for JPEG
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, newWidth, newHeight);
                 
-                // Draw the resized image
-                ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                
-                // Convert to blob and download
-                canvas.toBlob(function(blob) {
-                    if (blob) {
-                        const url = URL.createObjectURL(blob);
-                        const link = document.createElement('a');
-                        const filename = getResizedFilename(originalFile.name, newWidth, newHeight);
-                        link.download = filename;
-                        link.href = url;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        URL.revokeObjectURL(url);
-                        
-                        // Show success message
-                        alert(`Successfully downloaded: ${filename}`);
-                    } else {
-                        alert('Download failed. Please try again.');
+                originalFile = file;
+                originalSize = file.size;
+                updateFileInfo(file);
+                loadImageDimensions(file);
+                displayImagePreview(file);
+                resizeBtn.disabled = false;
+            }
+            
+            function updateFileInfo(file) {
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileInfo.classList.add('active');
+                originalSizeEl.textContent = formatFileSize(file.size);
+            }
+            
+            function loadImageDimensions(file) {
+                const img = new Image();
+                img.onload = function() {
+                    originalWidth = this.width;
+                    originalHeight = this.height;
+                    aspectRatio = originalWidth / originalHeight;
+                    
+                    // Set default values to original dimensions
+                    widthInput.value = originalWidth;
+                    heightInput.value = originalHeight;
+                    updateDimensionsDisplay();
+                };
+                img.src = URL.createObjectURL(file);
+            }
+            
+            function displayImagePreview(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    previewPlaceholder.style.display = 'none';
+                    updateDimensionsDisplay();
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            function handleWidthChange() {
+                if (aspectRatioCheckbox.checked && originalWidth > 0) {
+                    const newWidth = parseInt(widthInput.value) || 0;
+                    if (newWidth > 0) {
+                        const newHeight = Math.round(newWidth / aspectRatio);
+                        heightInput.value = newHeight;
                     }
-                }, 'image/jpeg', 0.9);
-            };
+                }
+                updateDimensionsDisplay();
+            }
             
-            // Load the original image to resize
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(originalFile);
-        }
-        
-        // HELPER FUNCTION - ADD THIS TOO
-        function getResizedFilename(originalName, width, height) {
-            const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
-            return `${nameWithoutExt}_${width}x${height}.jpg`;
-        }
-        
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-    });
-</script>
+            function handleHeightChange() {
+                if (aspectRatioCheckbox.checked && originalHeight > 0) {
+                    const newHeight = parseInt(heightInput.value) || 0;
+                    if (newHeight > 0) {
+                        const newWidth = Math.round(newHeight * aspectRatio);
+                        widthInput.value = newWidth;
+                    }
+                }
+                updateDimensionsDisplay();
+            }
+            
+            function updateDimensionsDisplay() {
+                const width = widthInput.value || 0;
+                const height = heightInput.value || 0;
+                dimensionsDisplay.textContent = `${width} × ${height} px`;
+            }
+            
+            function resizeImage() {
+                if (!originalFile) return;
+                
+                const newWidth = parseInt(widthInput.value) || 0;
+                const newHeight = parseInt(heightInput.value) || 0;
+                
+                if (newWidth <= 0 || newHeight <= 0) {
+                    alert('Please enter valid dimensions');
+                    return;
+                }
+                
+                // In a real implementation, this would use canvas to resize the image
+                // For this demo, we'll simulate resizing
+                const sizeFactor = (newWidth * newHeight) / (originalWidth * originalHeight);
+                resizedSize = Math.max(10000, originalSize * sizeFactor);
+                
+                // Update UI with results
+                newDimensions.textContent = `${newWidth} × ${newHeight} px`;
+                resizedSizeEl.textContent = formatFileSize(resizedSize);
+                savedSpaceEl.textContent = formatFileSize(Math.max(0, originalSize - resizedSize));
+                
+                // Show download section
+                downloadSection.classList.add('active');
+                
+                // Update preview with new dimensions
+                dimensionsDisplay.textContent = `${newWidth} × ${newHeight} px`;
+            }
+            
+            // FIXED DOWNLOAD FUNCTION WITH UI SUCCESS MESSAGE
+            function downloadResizedImage() {
+                if (!originalFile) {
+                    alert('Please upload an image first');
+                    return;
+                }
+                
+                const newWidth = parseInt(widthInput.value) || 0;
+                const newHeight = parseInt(heightInput.value) || 0;
+                
+                if (newWidth <= 0 || newHeight <= 0) {
+                    alert('Please enter valid dimensions');
+                    return;
+                }
+                
+                // Create a hidden canvas to resize the image
+                const canvas = document.createElement('canvas');
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the resized image on canvas
+                const img = new Image();
+                img.onload = function() {
+                    // Fill with white background for JPEG
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, newWidth, newHeight);
+                    
+                    // Draw the resized image
+                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                    
+                    // Convert to blob and download
+                    canvas.toBlob(function(blob) {
+                        if (blob) {
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            const filename = getResizedFilename(originalFile.name, newWidth, newHeight);
+                            link.download = filename;
+                            link.href = url;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            URL.revokeObjectURL(url);
+                            
+                            // SHOW SUCCESS IN UI INSTEAD OF ALERT
+                            showSuccessMessage(`✓ Downloaded: ${filename}`);
+                        } else {
+                            alert('Download failed. Please try again.');
+                        }
+                    }, 'image/jpeg', 0.9);
+                };
+                
+                // Load the original image to resize
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(originalFile);
+            }
+            
+            // NEW FUNCTION: Show success message in UI
+            function showSuccessMessage(message) {
+                // Create success message element
+                const successMessage = document.createElement('div');
+                successMessage.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #4CAF50;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 1000;
+                    font-weight: 500;
+                `;
+                successMessage.textContent = message;
+                document.body.appendChild(successMessage);
+
+                // Auto-remove after 3 seconds
+                setTimeout(() => {
+                    if (successMessage.parentNode) {
+                        successMessage.parentNode.removeChild(successMessage);
+                    }
+                }, 3000);
+            }
+            
+            // NEW FUNCTION: Generate filename for resized image
+            function getResizedFilename(originalName, width, height) {
+                const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+                return `${nameWithoutExt}_${width}x${height}.jpg`;
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
     <script async="async" data-cfasync="false" src="//pl28047254.effectivegatecpm.com/a066ce0b5c2ab4f8b4fedb09d93370eb/invoke.js"></script>
 <div id="container-a066ce0b5c2ab4f8b4fedb09d93370eb"></div>
 </body>
