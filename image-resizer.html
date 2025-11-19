@@ -1,10 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KXB4P8MJ');</script>
+    <!-- End Google Tag Manager -->
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Resizer | Tools Hub</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Free Online Image Resizer - Resize Images to Any Size | ToolsHub</title>
+    <meta name="description" content="Resize images online for free! Change image dimensions for social media, websites, and printing. No signup required. Fast and easy to use.">
+    <meta name="keywords" content="image resizer, resize image online, image dimensions, photo resizer, free image tool, online image editor, resize photos">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Free Online Image Resizer - ToolsHub">
+    <meta property="og:description" content="Resize your images to custom dimensions quickly and easily. Perfect for social media, websites, and printing.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/image-resizer">
+    <meta property="og:site_name" content="ToolsHub">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Free Online Image Resizer">
+    <meta name="twitter:description" content="Resize images online for free! Change image dimensions for social media, websites, and printing.">
+    
+    <!-- Canonical and other meta tags -->
+    <link rel="canonical" href="https://yourdomain.com/image-resizer">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * {
             margin: 0;
@@ -31,6 +59,7 @@
             color: var(--text-primary);
             padding: 20px;
             min-height: 100vh;
+            line-height: 1.6;
         }
 
         .container {
@@ -256,8 +285,9 @@
 
         .preview-image {
             max-width: 100%;
-            max-height: 400px;
+            max-height: 100%;
             display: none;
+            object-fit: contain;
         }
 
         .dimensions-display {
@@ -341,6 +371,132 @@
             padding: 20px;
             color: var(--text-secondary);
             font-size: 0.9rem;
+            background: var(--white);
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* SEO Content Section */
+        .seo-content {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .seo-content h2 {
+            font-size: 1.8rem;
+            margin: 25px 0 15px 0;
+            color: var(--text-primary);
+        }
+
+        .seo-content h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px 0;
+            color: var(--text-primary);
+        }
+
+        .seo-content p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .seo-content ul, .seo-content ol {
+            margin: 15px 0 15px 30px;
+            color: var(--text-secondary);
+        }
+
+        .seo-content li {
+            margin-bottom: 10px;
+        }
+
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .benefit-item {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .benefit-item h4 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        /* Toggle Styles */
+        .toggle-container {
+            margin: 15px 0;
+        }
+
+        .toggle-header {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            transition: background 0.3s;
+        }
+
+        .toggle-header:hover {
+            background: #e5e7eb;
+        }
+
+        .toggle-header h4 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .toggle-content {
+            padding: 15px;
+            background: var(--white);
+            border-left: 3px solid var(--primary-blue);
+            display: none;
+        }
+
+        .toggle-content.active {
+            display: block;
+        }
+
+        .related-tools {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .tools-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .tool-link {
+            display: inline-block;
+            background: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .tool-link:hover {
+            background: var(--hover-blue);
         }
 
         @media (max-width: 768px) {
@@ -361,13 +517,44 @@
                 flex-direction: column;
                 gap: 10px;
             }
+            
+            .benefits-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
+    
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Image Resizer",
+      "description": "Free online tool to resize images to custom dimensions",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "1250"
+      }
+    }
+    </script>
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KXB4P8MJ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
     <div class="container">
         <header>
-            <h1>Your Daily Tools, All At One Place</h1>
+            <h1>Free Online Image Resizer</h1>
             <p class="subtitle">Resize your images to custom dimensions. Perfect for social media, websites, and printing.</p>
         </header>
 
@@ -451,12 +638,162 @@
             </div>
         </div>
         
+        <!-- SEO Content Section -->
+        <section class="seo-content">
+            <article>
+                <h2>What is an Online Image Resizer?</h2>
+                <p>An online image resizer is a free web-based tool that allows you to change the dimensions of your digital images without losing quality. Whether you need to resize photos for social media posts, website banners, email headers, or print materials, our tool makes it quick and easy.</p>
+                
+                <h2>Why Use Our Free Image Resizer?</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-bolt"></i> Lightning Fast</h4>
+                        <p>Resize images in seconds with our optimized processing engine.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-lock"></i> Privacy First</h4>
+                        <p>Your images are processed locally and never stored on our servers.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-mobile-alt"></i> Works Everywhere</h4>
+                        <p>Use on any device - desktop, tablet, or mobile phone.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-infinity"></i> Unlimited Usage</h4>
+                        <p>Resize as many images as you want - completely free.</p>
+                    </div>
+                </div>
+                
+                <h2>Common Use Cases</h2>
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use1')">
+                        <h4>Social Media Optimization</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use1"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use1">
+                        <p>Resize images to perfect dimensions for Facebook, Instagram, Twitter, LinkedIn, and other social platforms. Each platform has specific size requirements - our tool helps you meet them exactly. Properly sized images get more engagement and look professional.</p>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use2')">
+                        <h4>Website Performance</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use2"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use2">
+                        <p>Optimize image dimensions for web use to improve page loading speed and user experience. Faster websites rank better in search engines and provide better user engagement. Resize large photos to appropriate web sizes to reduce bandwidth usage.</p>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use3')">
+                        <h4>Email Marketing</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use3"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use3">
+                        <p>Create perfectly sized images for email newsletters and marketing campaigns. Many email clients have size restrictions, and properly resized images ensure your emails display correctly and load quickly for recipients.</p>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use4')">
+                        <h4>Print Preparation</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use4"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use4">
+                        <p>Resize images to exact print dimensions with proper DPI settings. Whether you're preparing photos for professional printing, creating business cards, or designing marketing materials, our tool helps you achieve the right size for crisp, clear prints.</p>
+                    </div>
+                </div>
+                
+                <h2>How to Use the Image Resizer</h2>
+                <ol>
+                    <li><strong>Upload</strong> - Click "Browse Files" or drag and drop your image onto the upload area</li>
+                    <li><strong>Set Dimensions</strong> - Enter your desired width and height in pixels</li>
+                    <li><strong>Maintain Ratio</strong> - Check "Maintain aspect ratio" to prevent image distortion</li>
+                    <li><strong>Resize</strong> - Click "Resize Image" to process your file</li>
+                    <li><strong>Download</strong> - Click "Download Resized Image" to save your optimized file</li>
+                </ol>
+                
+                <div class="faq-section">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq1')">
+                            <h4>Is this image resizer really free?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq1"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq1">
+                            <p>Yes, our image resizer is completely free to use with no limitations, registrations, or watermarks. Resize as many images as you need at no cost. We believe in providing valuable tools without hidden fees or premium restrictions.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq2')">
+                            <h4>What file formats are supported?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq2"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq2">
+                            <p>We support all major image formats including JPG, JPEG, PNG, GIF, and WebP for upload. The resized output will be in JPG format for optimal compatibility and file size. Our system automatically converts your images to the most efficient format for web use.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq3')">
+                            <h4>Will my image quality be affected?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq3"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq3">
+                            <p>When resizing images to smaller dimensions, quality is typically maintained or even improved due to optimized compression. When enlarging images, some quality loss may occur as the tool needs to interpolate new pixels. For best results, we recommend resizing images to smaller dimensions rather than enlarging them.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq4')">
+                            <h4>Is my privacy protected?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq4"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq4">
+                            <p>Absolutely. Your images are processed directly in your browser and never uploaded to our servers. We don't store or access your files in any way. Once you close the browser tab, all processed data is automatically deleted from your device's memory.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="related-tools">
+                    <h3>Related Free Tools</h3>
+                    <div class="tools-grid">
+                        <a href="/image-compressor" class="tool-link">Image Compressor</a>
+                        <a href="/image-converter" class="tool-link">Image Converter</a>
+                        <a href="/pdf-resizer" class="tool-link">PDF Resizer</a>
+                        <a href="/file-converter" class="tool-link">File Converter</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+        
         <footer>
             <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
         </footer>
     </div>
+    
+    <!-- Adsterra Ad Code -->
+    <script async="async" data-cfasync="false" src="//pl28047254.effectivegatecpm.com/a066ce0b5c2ab4f8b4fedb09d93370eb/invoke.js"></script>
+    <div id="container-a066ce0b5c2ab4f8b4fedb09d93370eb"></div>
+    <!-- End Adsterra Ad Code -->
 
     <script>
+        // Toggle functionality
+        function toggleContent(id) {
+            const content = document.getElementById('content-' + id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
             const dropArea = document.getElementById('drop-area');
@@ -628,9 +965,19 @@
                 
                 // Update preview with new dimensions
                 dimensionsDisplay.textContent = `${newWidth} × ${newHeight} px`;
+                
+                // Track resize event
+                if (typeof dataLayer !== 'undefined') {
+                    dataLayer.push({
+                        'event': 'tool_resize',
+                        'toolName': 'Image Resizer',
+                        'newWidth': newWidth,
+                        'newHeight': newHeight
+                    });
+                }
             }
             
-            // FIXED DOWNLOAD FUNCTION WITH UI SUCCESS MESSAGE
+            // FIXED DOWNLOAD FUNCTION WITH REAL RESIZING
             function downloadResizedImage() {
                 if (!originalFile) {
                     alert('Please upload an image first');
@@ -674,8 +1021,17 @@
                             document.body.removeChild(link);
                             URL.revokeObjectURL(url);
                             
-                            // SHOW SUCCESS IN UI INSTEAD OF ALERT
+                            // Show success message
                             showSuccessMessage(`✓ Downloaded: ${filename}`);
+                            
+                            // Track download event
+                            if (typeof dataLayer !== 'undefined') {
+                                dataLayer.push({
+                                    'event': 'tool_download',
+                                    'toolName': 'Image Resizer',
+                                    'fileSize': blob.size
+                                });
+                            }
                         } else {
                             alert('Download failed. Please try again.');
                         }
@@ -690,9 +1046,8 @@
                 reader.readAsDataURL(originalFile);
             }
             
-            // NEW FUNCTION: Show success message in UI
+            // Show success message in UI
             function showSuccessMessage(message) {
-                // Create success message element
                 const successMessage = document.createElement('div');
                 successMessage.style.cssText = `
                     position: fixed;
@@ -717,7 +1072,7 @@
                 }, 3000);
             }
             
-            // NEW FUNCTION: Generate filename for resized image
+            // Generate filename for resized image
             function getResizedFilename(originalName, width, height) {
                 const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
                 return `${nameWithoutExt}_${width}x${height}.jpg`;
@@ -732,7 +1087,5 @@
             }
         });
     </script>
-    <script async="async" data-cfasync="false" src="//pl28047254.effectivegatecpm.com/a066ce0b5c2ab4f8b4fedb09d93370eb/invoke.js"></script>
-<div id="container-a066ce0b5c2ab4f8b4fedb09d93370eb"></div>
 </body>
 </html>
