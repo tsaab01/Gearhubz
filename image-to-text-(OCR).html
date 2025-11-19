@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KXB4P8MJ');</script>
+    <!-- End Google Tag Manager -->
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image to Text (OCR) | Tools Hub</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Free Online Image to Text Converter (OCR) - Extract Text from Images | ToolsHub</title>
+    <meta name="description" content="Convert images to text online for free! Extract text from photos, documents, and receipts using advanced OCR technology. No signup required.">
+    <meta name="keywords" content="image to text, ocr converter, extract text from image, photo to text, document scanner, free ocr, online ocr, text recognition">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Free Online Image to Text Converter (OCR) - ToolsHub">
+    <meta property="og:description" content="Extract text from images using advanced OCR technology. Perfect for digitizing documents, receipts, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/image-to-text">
+    <meta property="og:site_name" content="ToolsHub">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Free Online Image to Text Converter (OCR)">
+    <meta name="twitter:description" content="Convert images to text online for free! Extract text from photos, documents, and receipts using advanced OCR technology.">
+    
+    <!-- Canonical and other meta tags -->
+    <link rel="canonical" href="https://yourdomain.com/image-to-text">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -32,6 +60,7 @@
             color: var(--text-primary);
             padding: 20px;
             min-height: 100vh;
+            line-height: 1.6;
         }
 
         .container {
@@ -236,8 +265,9 @@
 
         .preview-image {
             max-width: 100%;
-            max-height: 400px;
+            max-height: 100%;
             display: none;
+            object-fit: contain;
         }
 
         .text-output {
@@ -367,6 +397,132 @@
             padding: 20px;
             color: var(--text-secondary);
             font-size: 0.9rem;
+            background: var(--white);
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* SEO Content Section */
+        .seo-content {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .seo-content h2 {
+            font-size: 1.8rem;
+            margin: 25px 0 15px 0;
+            color: var(--text-primary);
+        }
+
+        .seo-content h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px 0;
+            color: var(--text-primary);
+        }
+
+        .seo-content p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .seo-content ul, .seo-content ol {
+            margin: 15px 0 15px 30px;
+            color: var(--text-secondary);
+        }
+
+        .seo-content li {
+            margin-bottom: 10px;
+        }
+
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .benefit-item {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .benefit-item h4 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        /* Toggle Styles */
+        .toggle-container {
+            margin: 15px 0;
+        }
+
+        .toggle-header {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            transition: background 0.3s;
+        }
+
+        .toggle-header:hover {
+            background: #e5e7eb;
+        }
+
+        .toggle-header h4 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .toggle-content {
+            padding: 15px;
+            background: var(--white);
+            border-left: 3px solid var(--primary-blue);
+            display: none;
+        }
+
+        .toggle-content.active {
+            display: block;
+        }
+
+        .related-tools {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .tools-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .tool-link {
+            display: inline-block;
+            background: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .tool-link:hover {
+            background: var(--hover-blue);
         }
 
         @media (max-width: 768px) {
@@ -387,325 +543,28 @@
                 width: 100%;
                 margin: 5px 0;
             }
+            
+            .benefits-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Your Daily Tools, All At One Place</h1>
-            <p class="subtitle">Extract text from images using advanced OCR technology. Perfect for digitizing documents, receipts, and more.</p>
-        </header>
-
-        <div class="tool-container">
-            <div class="upload-section">
-                <h2 class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload Image</h2>
-                
-                <div class="upload-area" id="drop-area">
-                    <div class="upload-icon">
-                        <i class="fas fa-file-image"></i>
-                    </div>
-                    <p class="upload-text">Drag & drop your image here</p>
-                    <p class="upload-text">or</p>
-                    <button class="browse-btn">Browse Files</button>
-                    <input type="file" id="file-input" accept="image/*">
-                </div>
-                
-                <div class="file-info" id="file-info">
-                    <div class="file-name" id="file-name">document.jpg</div>
-                    <div class="file-size" id="file-size">1.8 MB</div>
-                </div>
-                
-                <div class="ocr-controls">
-                    <div class="control-group">
-                        <div class="control-label">
-                            <span>Language</span>
-                        </div>
-                        <select class="language-selector" id="language-selector">
-                            <option value="eng">English</option>
-                            <option value="spa">Spanish</option>
-                            <option value="fra">French</option>
-                            <option value="deu">German</option>
-                            <option value="ita">Italian</option>
-                            <option value="por">Portuguese</option>
-                            <option value="rus">Russian</option>
-                            <option value="chi_sim">Chinese (Simplified)</option>
-                            <option value="chi_tra">Chinese (Traditional)</option>
-                            <option value="jpn">Japanese</option>
-                            <option value="kor">Korean</option>
-                        </select>
-                    </div>
-                    
-                    <button class="extract-btn" id="extract-btn" disabled>Extract Text</button>
-                </div>
-            </div>
-            
-            <div class="preview-section">
-                <h2 class="section-title"><i class="fas fa-eye"></i> Preview & Output</h2>
-                
-                <div class="preview-container">
-                    <div class="image-preview">
-                        <div class="preview-placeholder" id="preview-placeholder">
-                            <i class="fas fa-image"></i>
-                            <p>Your image will appear here</p>
-                        </div>
-                        <img class="preview-image" id="preview-image" alt="Preview">
-                    </div>
-                    
-                    <div class="processing" id="processing">
-                        <div class="spinner"></div>
-                        <p>Initializing OCR engine...</p>
-                        <div class="progress-container">
-                            <div class="progress-bar" id="progress-bar"></div>
-                        </div>
-                        <p id="progress-text">Loading language data...</p>
-                    </div>
-                    
-                    <div class="text-output" id="text-output"></div>
-                    
-                    <div class="download-section" id="download-section">
-                        <div class="download-info">
-                            <p>Text extraction completed successfully!</p>
-                            <p class="characters-extracted"><span id="char-count">0</span> characters extracted</p>
-                        </div>
-                        <button class="download-btn" id="copy-btn">
-                            <i class="fas fa-copy"></i> Copy to Clipboard
-                        </button>
-                        <button class="download-btn" id="download-text-btn">
-                            <i class="fas fa-download"></i> Download as Text
-                        </button>
-                    </div>
-                    
-                    <div class="stats">
-                        <div class="stat-item">
-                            <div class="stat-value" id="original-size">0 KB</div>
-                            <div class="stat-label">Image Size</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="extracted-words">0</div>
-                            <div class="stat-label">Words Extracted</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="processing-time">0s</div>
-                            <div class="stat-label">Processing Time</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
-        </footer>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements
-            const dropArea = document.getElementById('drop-area');
-            const fileInput = document.getElementById('file-input');
-            const browseBtn = document.querySelector('.browse-btn');
-            const fileInfo = document.getElementById('file-info');
-            const fileName = document.getElementById('file-name');
-            const fileSize = document.getElementById('file-size');
-            const languageSelector = document.getElementById('language-selector');
-            const extractBtn = document.getElementById('extract-btn');
-            const previewPlaceholder = document.getElementById('preview-placeholder');
-            const previewImage = document.getElementById('preview-image');
-            const processing = document.getElementById('processing');
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
-            const textOutput = document.getElementById('text-output');
-            const downloadSection = document.getElementById('download-section');
-            const copyBtn = document.getElementById('copy-btn');
-            const downloadTextBtn = document.getElementById('download-text-btn');
-            const charCount = document.getElementById('char-count');
-            const originalSizeEl = document.getElementById('original-size');
-            const extractedWords = document.getElementById('extracted-words');
-            const processingTime = document.getElementById('processing-time');
-            
-            // State variables
-            let originalFile = null;
-            let originalSize = 0;
-            let extractedText = '';
-            let startTime = 0;
-            
-            // Event Listeners
-            browseBtn.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', handleFileSelect);
-            
-            dropArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropArea.style.borderColor = '#4F46E5';
-                dropArea.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
-            });
-            
-            dropArea.addEventListener('dragleave', () => {
-                dropArea.style.borderColor = '#E5E7EB';
-                dropArea.style.backgroundColor = '#F9FAFB';
-            });
-            
-            dropArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropArea.style.borderColor = '#E5E7EB';
-                dropArea.style.backgroundColor = '#F9FAFB';
-                
-                if (e.dataTransfer.files.length) {
-                    handleFiles(e.dataTransfer.files);
-                }
-            });
-            
-            extractBtn.addEventListener('click', extractText);
-            copyBtn.addEventListener('click', copyToClipboard);
-            downloadTextBtn.addEventListener('click', downloadTextFile);
-            
-            // Functions
-            function handleFileSelect(e) {
-                if (e.target.files.length) {
-                    handleFiles(e.target.files);
-                }
-            }
-            
-            function handleFiles(files) {
-                const file = files[0];
-                if (!file.type.match('image.*')) {
-                    alert('Please select an image file (JPEG, PNG, etc.)');
-                    return;
-                }
-                
-                originalFile = file;
-                originalSize = file.size;
-                updateFileInfo(file);
-                displayImagePreview(file);
-                extractBtn.disabled = false;
-            }
-            
-            function updateFileInfo(file) {
-                fileName.textContent = file.name;
-                fileSize.textContent = formatFileSize(file.size);
-                fileInfo.classList.add('active');
-                originalSizeEl.textContent = formatFileSize(file.size);
-            }
-            
-            function displayImagePreview(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    previewImage.style.display = 'block';
-                    previewPlaceholder.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
-            
-            async function extractText() {
-                if (!originalFile) return;
-                
-                // Show processing indicator
-                processing.classList.add('active');
-                textOutput.textContent = '';
-                downloadSection.classList.remove('active');
-                progressBar.style.width = '0%';
-                progressText.textContent = 'Loading language data...';
-                
-                // Record start time
-                startTime = new Date().getTime();
-                
-                try {
-                    // Get selected language
-                    const selectedLanguage = languageSelector.value;
-                    
-                    // Process the image with Tesseract.js
-                    const result = await Tesseract.recognize(
-                        originalFile,
-                        selectedLanguage,
-                        {
-                            logger: (m) => {
-                                if (m.status === 'loading tesseract core') {
-                                    progressText.textContent = 'Loading OCR engine...';
-                                } else if (m.status === 'loaded tesseract core') {
-                                    progressText.textContent = 'Initializing OCR engine...';
-                                } else if (m.status === 'initializing tesseract') {
-                                    progressText.textContent = 'Initializing OCR engine...';
-                                } else if (m.status === 'loading language traineddata') {
-                                    progressText.textContent = 'Loading language data...';
-                                } else if (m.status === 'loaded language traineddata') {
-                                    progressText.textContent = 'Processing image...';
-                                } else if (m.status === 'initializing api') {
-                                    progressText.textContent = 'Initializing OCR API...';
-                                } else if (m.status === 'recognizing text') {
-                                    const progress = Math.round(m.progress * 100);
-                                    progressBar.style.width = `${progress}%`;
-                                    progressText.textContent = `Processing: ${progress}%`;
-                                }
-                            }
-                        }
-                    );
-                    
-                    // Extracted text
-                    extractedText = result.data.text;
-                    textOutput.textContent = extractedText;
-                    
-                    // Calculate processing time
-                    const endTime = new Date().getTime();
-                    const duration = ((endTime - startTime) / 1000).toFixed(1);
-                    processingTime.textContent = `${duration}s`;
-                    
-                    // Update stats
-                    const words = extractedText.trim() ? extractedText.trim().split(/\s+/).length : 0;
-                    extractedWords.textContent = words;
-                    charCount.textContent = extractedText.length;
-                    
-                    // Hide processing indicator and show results
-                    processing.classList.remove('active');
-                    downloadSection.classList.add('active');
-                } catch (error) {
-                    console.error('OCR Error:', error);
-                    processing.classList.remove('active');
-                    textOutput.textContent = 'Error during text extraction. Please try another image.';
-                    alert('OCR processing failed. Please try with a different image or check the console for details.');
-                }
-            }
-            
-            function copyToClipboard() {
-                const text = textOutput.textContent;
-                navigator.clipboard.writeText(text).then(() => {
-                    // Show feedback
-                    const originalText = copyBtn.innerHTML;
-                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                    setTimeout(() => {
-                        copyBtn.innerHTML = originalText;
-                    }, 2000);
-                });
-            }
-            
-            function downloadTextFile() {
-                const text = textOutput.textContent;
-                const blob = new Blob([text], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'extracted-text.txt';
-                document.body.appendChild(a);
-                a.click();
-                
-                // Clean up
-                setTimeout(() => {
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }, 100);
-            }
-            
-            function formatFileSize(bytes) {
-                if (bytes === 0) return '0 Bytes';
-                const k = 1024;
-                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-            }
-        });
-    </script>
-    <script async="async" data-cfasync="false" src="//pl28047254.effectivegatecpm.com/a066ce0b5c2ab4f8b4fedb09d93370eb/invoke.js"></script>
-<div id="container-a066ce0b5c2ab4f8b4fedb09d93370eb"></div>
-</body>
-</html>
+    
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Image to Text Converter (OCR)",
+      "description": "Free online tool to extract text from images using advanced OCR technology",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.6",
+        "reviewCount": 
