@@ -14,7 +14,7 @@
     
     <!-- SEO Meta Tags -->
     <title>Free Online Image to Text Converter (OCR) - Extract Text from Images | ToolsHub</title>
-    <meta name="description" content="Convert images to text online for free! Extract text from photos, documents, and receipts using advanced OCR technology. No signup required.">
+    <meta name="description" content="Convert images to text online for free! Extract text from photos, documents, and screenshots using advanced OCR technology. No signup required.">
     <meta name="keywords" content="image to text, ocr converter, extract text from image, photo to text, document scanner, free ocr, online ocr, text recognition">
     
     <!-- Open Graph -->
@@ -27,7 +27,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Free Online Image to Text Converter (OCR)">
-    <meta name="twitter:description" content="Convert images to text online for free! Extract text from photos, documents, and receipts using advanced OCR technology.">
+    <meta name="twitter:description" content="Convert images to text online for free! Extract text from photos, documents, and screenshots using advanced OCR technology.">
     
     <!-- Canonical and other meta tags -->
     <link rel="canonical" href="https://yourdomain.com/image-to-text">
@@ -567,4 +567,548 @@
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.6",
-        "reviewCount": 
+        "reviewCount": "1320"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KXB4P8MJ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <div class="container">
+        <header>
+            <h1>Free Online Image to Text Converter (OCR)</h1>
+            <p class="subtitle">Extract text from images using advanced OCR technology. Perfect for digitizing documents, receipts, and more.</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="upload-section">
+                <h2 class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload Image</h2>
+                
+                <div class="upload-area" id="drop-area">
+                    <div class="upload-icon">
+                        <i class="fas fa-file-image"></i>
+                    </div>
+                    <p class="upload-text">Drag & drop your image here</p>
+                    <p class="upload-text">or</p>
+                    <button class="browse-btn">Browse Files</button>
+                    <input type="file" id="file-input" accept="image/*">
+                </div>
+                
+                <div class="file-info" id="file-info">
+                    <div class="file-name" id="file-name">document.jpg</div>
+                    <div class="file-size" id="file-size">1.8 MB</div>
+                </div>
+                
+                <div class="ocr-controls">
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Language</span>
+                        </div>
+                        <select class="language-selector" id="language-selector">
+                            <option value="eng">English</option>
+                            <option value="spa">Spanish</option>
+                            <option value="fra">French</option>
+                            <option value="deu">German</option>
+                            <option value="ita">Italian</option>
+                            <option value="por">Portuguese</option>
+                            <option value="rus">Russian</option>
+                            <option value="chi_sim">Chinese (Simplified)</option>
+                            <option value="chi_tra">Chinese (Traditional)</option>
+                            <option value="jpn">Japanese</option>
+                            <option value="kor">Korean</option>
+                        </select>
+                    </div>
+                    
+                    <button class="extract-btn" id="extract-btn" disabled>Extract Text</button>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h2 class="section-title"><i class="fas fa-eye"></i> Preview & Output</h2>
+                
+                <div class="preview-container">
+                    <div class="image-preview">
+                        <div class="preview-placeholder" id="preview-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Your image will appear here</p>
+                        </div>
+                        <img class="preview-image" id="preview-image" alt="Preview">
+                    </div>
+                    
+                    <div class="processing" id="processing">
+                        <div class="spinner"></div>
+                        <p>Initializing OCR engine...</p>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progress-bar"></div>
+                        </div>
+                        <p id="progress-text">Loading language data...</p>
+                    </div>
+                    
+                    <div class="text-output" id="text-output"></div>
+                    
+                    <div class="download-section" id="download-section">
+                        <div class="download-info">
+                            <p>Text extraction completed successfully!</p>
+                            <p class="characters-extracted"><span id="char-count">0</span> characters extracted</p>
+                        </div>
+                        <button class="download-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy to Clipboard
+                        </button>
+                        <button class="download-btn" id="download-text-btn">
+                            <i class="fas fa-download"></i> Download as Text
+                        </button>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="original-size">0 KB</div>
+                            <div class="stat-label">Image Size</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="extracted-words">0</div>
+                            <div class="stat-label">Words Extracted</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="processing-time">0s</div>
+                            <div class="stat-label">Processing Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SEO Content Section -->
+        <section class="seo-content">
+            <article>
+                <h2>What is an Online Image to Text Converter (OCR)?</h2>
+                <p>An online image to text converter, also known as OCR (Optical Character Recognition), is a free web-based tool that extracts readable text from images containing printed or handwritten content. Whether you need to digitize documents, extract text from photos, or convert scanned PDFs to editable text, our tool makes it quick and easy using advanced AI-powered recognition technology.</p>
+                
+                <h2>Why Use Our Free Image to Text Converter?</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-bolt"></i> Advanced OCR Technology</h4>
+                        <p>Powered by Tesseract.js for accurate text recognition across multiple languages.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-lock"></i> Privacy First</h4>
+                        <p>Your images are processed locally and never stored on our servers.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-globe"></i> Multi-Language Support</h4>
+                        <p>Recognize text in 10+ languages including English, Spanish, French, and Asian languages.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-infinity"></i> Unlimited Usage</h4>
+                        <p>Convert as many images as you want - completely free with no restrictions.</p>
+                    </div>
+                </div>
+                
+                <h2>Common Use Cases</h2>
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use1')">
+                        <h4>Document Digitization</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use1"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use1">
+                        <p>Convert printed documents, contracts, and paperwork into editable digital text. Perfect for creating searchable archives, extracting information for databases, or sharing content that was previously locked in image format. Our OCR tool maintains formatting and recognizes various fonts and document layouts.</p>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use2')">
+                        <h4>Business & Productivity</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use2"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use2">
+                        <p>Extract text from business cards, receipts, invoices, and forms to save time on data entry. Convert handwritten notes to digital text for better organization and searchability. Process large volumes of documents quickly without manual typing, improving workflow efficiency and reducing errors.</p>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use3')">
+                        <h4>Education & Research</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use3"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use3">
+                        <p>Students and researchers can extract text from textbooks, academic papers, and library materials for quoting, referencing, and note-taking. Convert images of whiteboard notes, presentation slides, or handwritten assignments to digital format for easy editing and sharing with classmates or colleagues.</p>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <div class="toggle-header" onclick="toggleContent('use4')">
+                        <h4>Accessibility & Translation</h4>
+                        <i class="fas fa-chevron-down toggle-icon" id="icon-use4"></i>
+                    </div>
+                    <div class="toggle-content" id="content-use4">
+                        <p>Help visually impaired users access printed content by converting images to text that can be read by screen readers. Extract text for translation services, content analysis, or integration with other digital tools. Create accessible versions of documents for people with different needs and preferences.</p>
+                    </div>
+                </div>
+                
+                <h2>How to Use the Image to Text Converter</h2>
+                <ol>
+                    <li><strong>Upload</strong> - Click "Browse Files" or drag and drop your image onto the upload area</li>
+                    <li><strong>Select Language</strong> - Choose the appropriate language for best recognition accuracy</li>
+                    <li><strong>Extract</strong> - Click "Extract Text" to process your image using OCR technology</li>
+                    <li><strong>Review</strong> - Check the extracted text in the output area and make any necessary corrections</li>
+                    <li><strong>Download/Copy</strong> - Copy to clipboard or download as a text file for further use</li>
+                </ol>
+                
+                <div class="faq-section">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq1')">
+                            <h4>Is this image to text converter really free?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq1"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq1">
+                            <p>Yes, our image to text converter is completely free to use with no limitations, registrations, or watermarks. Convert as many images as you need at no cost. We believe in providing valuable tools without hidden fees or premium restrictions. All processing happens directly in your browser for maximum privacy.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq2')">
+                            <h4>What file formats are supported?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq2"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq2">
+                            <p>We support all major image formats including JPG, JPEG, PNG, GIF, and WebP for upload. The extracted text output will be in plain text format (.txt). For best OCR results, use high-resolution images with clear, well-lit text. Scanned documents and photos of printed materials work best, though we can also process handwritten text with reasonable accuracy.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq3')">
+                            <h4>How accurate is the text extraction?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq3"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq3">
+                            <p>Our OCR technology achieves 95%+ accuracy for clear, printed text in supported languages. Accuracy may vary based on image quality, font type, text size, and language complexity. For best results, use high-resolution images with good contrast and minimal distortion. Handwritten text recognition is available but may have lower accuracy depending on handwriting style and clarity.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-header" onclick="toggleContent('faq4')">
+                            <h4>Is my privacy protected?</h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="icon-faq4"></i>
+                        </div>
+                        <div class="toggle-content" id="content-faq4">
+                            <p>Absolutely. Your images are processed directly in your browser using client-side JavaScript and never uploaded to our servers. We don't store or access your files in any way. All OCR processing happens locally on your device, ensuring complete privacy and security. Once you close the browser tab, all processed data is automatically deleted from your device's memory.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="related-tools">
+                    <h3>Related Free Tools</h3>
+                    <div class="tools-grid">
+                        <a href="/pdf-to-text" class="tool-link">PDF to Text</a>
+                        <a href="/image-converter" class="tool-link">Image Converter</a>
+                        <a href="/document-scanner" class="tool-link">Document Scanner</a>
+                        <a href="/text-editor" class="tool-link">Text Editor</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+        
+        <footer>
+            <p>© 2023 Tools Hub - Your Daily Tools, All At One Place</p>
+        </footer>
+    </div>
+    
+    <!-- Adsterra Ad Code -->
+    <script async="async" data-cfasync="false" src="//pl28047254.effectivegatecpm.com/a066ce0b5c2ab4f8b4fedb09d93370eb/invoke.js"></script>
+    <div id="container-a066ce0b5c2ab4f8b4fedb09d93370eb"></div>
+    <!-- End Adsterra Ad Code -->
+
+    <script>
+        // Toggle functionality
+        function toggleContent(id) {
+            const content = document.getElementById('content-' + id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const dropArea = document.getElementById('drop-area');
+            const fileInput = document.getElementById('file-input');
+            const browseBtn = document.querySelector('.browse-btn');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            const fileSize = document.getElementById('file-size');
+            const languageSelector = document.getElementById('language-selector');
+            const extractBtn = document.getElementById('extract-btn');
+            const previewPlaceholder = document.getElementById('preview-placeholder');
+            const previewImage = document.getElementById('preview-image');
+            const processing = document.getElementById('processing');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const textOutput = document.getElementById('text-output');
+            const downloadSection = document.getElementById('download-section');
+            const copyBtn = document.getElementById('copy-btn');
+            const downloadTextBtn = document.getElementById('download-text-btn');
+            const charCount = document.getElementById('char-count');
+            const originalSizeEl = document.getElementById('original-size');
+            const extractedWords = document.getElementById('extracted-words');
+            const processingTime = document.getElementById('processing-time');
+            
+            // State variables
+            let originalFile = null;
+            let originalSize = 0;
+            let extractedText = '';
+            let startTime = 0;
+            
+            // Event Listeners
+            browseBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#4F46E5';
+                dropArea.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+            });
+            
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.style.borderColor = '#E5E7EB';
+                dropArea.style.backgroundColor = '#F9FAFB';
+            });
+            
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#E5E7EB';
+                dropArea.style.backgroundColor = '#F9FAFB';
+                
+                if (e.dataTransfer.files.length) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            extractBtn.addEventListener('click', extractText);
+            copyBtn.addEventListener('click', copyToClipboard);
+            downloadTextBtn.addEventListener('click', downloadTextFile);
+            
+            // Functions
+            function handleFileSelect(e) {
+                if (e.target.files.length) {
+                    handleFiles(e.target.files);
+                }
+            }
+            
+            function handleFiles(files) {
+                const file = files[0];
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file (JPEG, PNG, etc.)');
+                    return;
+                }
+                
+                originalFile = file;
+                originalSize = file.size;
+                updateFileInfo(file);
+                displayImagePreview(file);
+                extractBtn.disabled = false;
+            }
+            
+            function updateFileInfo(file) {
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileInfo.classList.add('active');
+                originalSizeEl.textContent = formatFileSize(file.size);
+            }
+            
+            function displayImagePreview(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    previewPlaceholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            async function extractText() {
+                if (!originalFile) return;
+                
+                // Show processing indicator
+                processing.classList.add('active');
+                textOutput.textContent = '';
+                downloadSection.classList.remove('active');
+                progressBar.style.width = '0%';
+                progressText.textContent = 'Loading language data...';
+                
+                // Record start time
+                startTime = new Date().getTime();
+                
+                try {
+                    // Get selected language
+                    const selectedLanguage = languageSelector.value;
+                    
+                    // Process the image with Tesseract.js
+                    const result = await Tesseract.recognize(
+                        originalFile,
+                        selectedLanguage,
+                        {
+                            logger: (m) => {
+                                if (m.status === 'loading tesseract core') {
+                                    progressText.textContent = 'Loading OCR engine...';
+                                } else if (m.status === 'loaded tesseract core') {
+                                    progressText.textContent = 'Initializing OCR engine...';
+                                } else if (m.status === 'initializing tesseract') {
+                                    progressText.textContent = 'Initializing OCR engine...';
+                                } else if (m.status === 'loading language traineddata') {
+                                    progressText.textContent = 'Loading language data...';
+                                } else if (m.status === 'loaded language traineddata') {
+                                    progressText.textContent = 'Processing image...';
+                                } else if (m.status === 'initializing api') {
+                                    progressText.textContent = 'Initializing OCR API...';
+                                } else if (m.status === 'recognizing text') {
+                                    const progress = Math.round(m.progress * 100);
+                                    progressBar.style.width = `${progress}%`;
+                                    progressText.textContent = `Processing: ${progress}%`;
+                                }
+                            }
+                        }
+                    );
+                    
+                    // Extracted text
+                    extractedText = result.data.text;
+                    textOutput.textContent = extractedText;
+                    
+                    // Calculate processing time
+                    const endTime = new Date().getTime();
+                    const duration = ((endTime - startTime) / 1000).toFixed(1);
+                    processingTime.textContent = `${duration}s`;
+                    
+                    // Update stats
+                    const words = extractedText.trim() ? extractedText.trim().split(/\s+/).length : 0;
+                    extractedWords.textContent = words;
+                    charCount.textContent = extractedText.length;
+                    
+                    // Hide processing indicator and show results
+                    processing.classList.remove('active');
+                    downloadSection.classList.add('active');
+                    
+                    // Track OCR event
+                    if (typeof dataLayer !== 'undefined') {
+                        dataLayer.push({
+                            'event': 'tool_ocr',
+                            'toolName': 'Image to Text (OCR)',
+                            'language': selectedLanguage,
+                            'characters': extractedText.length,
+                            'processingTime': duration
+                        });
+                    }
+                } catch (error) {
+                    console.error('OCR Error:', error);
+                    processing.classList.remove('active');
+                    textOutput.textContent = 'Error during text extraction. Please try another image.';
+                    alert('OCR processing failed. Please try with a different image or check the console for details.');
+                }
+            }
+            
+            function copyToClipboard() {
+                const text = textOutput.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    // Show feedback
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                    }, 2000);
+                    
+                    // Track copy event
+                    if (typeof dataLayer !== 'undefined') {
+                        dataLayer.push({
+                            'event': 'tool_copy',
+                            'toolName': 'Image to Text (OCR)',
+                            'characters': text.length
+                        });
+                    }
+                }).catch(err => {
+                    console.error('Copy failed:', err);
+                    alert('Failed to copy text. Please try manually selecting and copying.');
+                });
+            }
+            
+            function downloadTextFile() {
+                const text = textOutput.textContent;
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = getDownloadFilename();
+                document.body.appendChild(a);
+                a.click();
+                
+                // Clean up
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                
+                // Show success message
+                showSuccessMessage(`✓ Downloaded: ${getDownloadFilename()}`);
+                
+                // Track download event
+                if (typeof dataLayer !== 'undefined') {
+                    dataLayer.push({
+                        'event': 'tool_download',
+                        'toolName': 'Image to Text (OCR)',
+                        'characters': text.length
+                    });
+                }
+            }
+            
+            // Generate download filename
+            function getDownloadFilename() {
+                const originalName = originalFile.name;
+                const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+                return `${nameWithoutExt}_extracted.txt`;
+            }
+            
+            // Show success message in UI
+            function showSuccessMessage(message) {
+                const successMessage = document.createElement('div');
+                successMessage.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #4CAF50;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 1000;
+                    font-weight: 500;
+                `;
+                successMessage.textContent = message;
+                document.body.appendChild(successMessage);
+
+                // Auto-remove after 3 seconds
+                setTimeout(() => {
+                    if (successMessage.parentNode) {
+                        successMessage.parentNode.removeChild(successMessage);
+                    }
+                }, 3000);
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+</body>
+</html>
